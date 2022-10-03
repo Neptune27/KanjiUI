@@ -1,0 +1,181 @@
+﻿<Page
+    x:Class="KanjiUI.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KanjiUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
+    xmlns:viewmodels ="using:KanjiUI.ViewModels"
+    xmlns:models ="using:KBE.Models"
+    
+    mc:Ignorable="d"
+    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}">
+
+    <Page.DataContext>
+        <viewmodels:HomePageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20 20 20 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Grid.Column="0"
+                            QueryIcon="Find"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Margin="8 0 0 0"/>
+            <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
+                <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneWay}" Icon="List" Label="Multi-line Search"/>
+            </CommandBar>
+            <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
+                <AppBarButton Command="{x:Bind EditCommand, Mode=OneWay}" Icon="Edit" IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Edit"/>
+            </CommandBar>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0"
+                      ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.Current, Mode=TwoWay}"
+                      FontSize="32"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:KanjiWord">
+                        <RelativePanel>
+                            <TextBlock>
+                            <Run Text="{x:Bind Kanji, Mode=OneWay}"/>
+                            <Run Text="{x:Bind FirstEnglish, Mode=OneWay}"/>
+                            </TextBlock>
+                        </RelativePanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <Grid Grid.Column="1" Visibility="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+
+                <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="150">
+                <Run Text="{x:Bind ViewModel.Current.Kanji, Mode=OneWay}"/>
+                </TextBlock>
+
+
+                <ScrollViewer Grid.Row="1">
+                    <RichTextBlock FontSize="32"  TextWrapping="Wrap">
+                        <Paragraph>
+                            Bộ:
+                            <Run Text="{x:Bind ViewModel.Current.Kanji, Mode=OneWay}"/>
+                            -
+                            <Run Text="{x:Bind ViewModel.Current.SinoVietnamese, Mode=OneWay}"/>
+                        </Paragraph>
+
+                        <Paragraph>
+                            English:
+                            <Run Text="{x:Bind ViewModel.Current.English, Mode=OneWay}"/>
+                        </Paragraph>
+
+                        <Paragraph>
+                            訓:
+                            <Run Text="{x:Bind ViewModel.Current.OnYumi, Mode=OneWay}"/>
+                        </Paragraph>
+
+                        <Paragraph>
+                            音:
+                            <Run Text="{x:Bind ViewModel.Current.KunYumi, Mode=OneWay}"/>
+                        </Paragraph>
+
+                        <Paragraph>
+                            Strokes:
+                            <Run Text="{x:Bind ViewModel.Current.Strokes, Mode=OneWay}"/>
+                        </Paragraph>
+                        <Paragraph>
+                            Radicals:
+                            <Run Text="{x:Bind ViewModel.Current.Radicals, Mode=OneWay}"/>
+                        </Paragraph>
+
+
+                        <Paragraph>
+                            Level:
+                            <Run Text="{x:Bind ViewModel.Current.Level, Mode=OneWay}"/>
+                        </Paragraph>
+                        <Paragraph/>
+
+                        <Paragraph FontSize="22">
+                            Vietnamese:
+                            <Run Text="{x:Bind ViewModel.Current.Vietnamese, Mode=OneWay}"/>
+                        </Paragraph>
+
+                        <Paragraph FontSize="22">
+                            Taught:
+                            <Run Text="{x:Bind ViewModel.Current.Taught, Mode=OneWay}"/>
+                        </Paragraph>
+                    </RichTextBlock>
+
+                </ScrollViewer>
+
+
+            </Grid>
+        </Grid>
+
+        <ContentDialog x:Name="EditDialog" 
+                       PrimaryButtonText="Update" 
+                       CloseButtonText="Cancel" 
+                       >
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBox x:Name="English" Header="English:" Text="{Binding English, Mode=TwoWay}" Margin="4"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="SinoVietnamese" Header="Hán Việt:" Text="{Binding SinoVietnamese, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="0"/>
+                        <TextBox x:Name="Level" Header="Level:" Text="{Binding Level, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="0"/>
+
+                        <TextBox x:Name="OnYumi" Header="訓:" Text="{Binding OnYumi, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="1"/>
+                        <TextBox x:Name="KunYumi" Header="音:" Text="{Binding KunYumi, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="1"/>
+
+                        <TextBox x:Name="Strokes" Header="Strokes:" Text="{Binding Strokes, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="2"/>
+                        <TextBox x:Name="Radicals" Header="Radicals:" Text="{Binding Radicals, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="2"/>
+                    </Grid>
+                    <TextBox x:Name="Taught" Header="Taught:" Text="{Binding Taught, Mode=TwoWay}" Margin="4"/>
+
+                    <TextBox x:Name="Vietnamese" Header="Vietnamese:" Text="{Binding Vietnamese, Mode=TwoWay}" Margin="4" TextWrapping="Wrap"/>
+                </StackPanel>
+
+            </ScrollViewer>
+        </ContentDialog>
+
+        <ContentDialog x:Name="FindDialog"
+                       PrimaryButtonText="Search"
+                       CloseButtonText="Cancel">
+            <ScrollViewer MinWidth="2500">
+                <TextBox x:Name="SearchContent" TextWrapping="Wrap" AcceptsReturn="True"/>
+            </ScrollViewer>
+        </ContentDialog>
+    </Grid>
+    
+    
+</Page>

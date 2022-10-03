@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "KanjiUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "KanjiUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
