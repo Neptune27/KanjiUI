@@ -7,6 +7,10 @@ using KBE.Models;
 using KBE.Components;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using System.Security.Cryptography.X509Certificates;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace KanjiUI.ViewModels
 {
@@ -14,6 +18,7 @@ namespace KanjiUI.ViewModels
     {
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get; } = Setting.GetSetting();
+        private static DataPackage DataPackage { get; set; } = new();
 
 
         private readonly ObservableCollection<KanjiWord> items = ShellViewModel.KanjiWords;
@@ -22,20 +27,9 @@ namespace KanjiUI.ViewModels
         ? items
         : new ObservableCollection<KanjiWord>(items.Where(i => ApplyFilter(i, filter)));
 
+        public ICommand CopyMaziiLinkCommand => new RelayCommand(CopyMaziiLinkCommand_Executed);
+        public ICommand CopyJishoLinkCommand => new RelayCommand(CopyJishoLinkCommand_Executed);
 
-        private async Task GetFiltered()
-        {
-            if (await KanjiController.GetKanjiNotInDatabaseFromInternet(filter))
-            {
-                var res = await KanjiController.GetKanjiFromDatabaseAsync();
-                OnPropertyChanging(nameof(items));
-                items.Clear();
-                foreach (var kanji in res)
-                {
-                    items.Add(kanji);
-                }
-            }
-        }
 
         public static HomePageViewModel GetInstance()
         {
@@ -51,52 +45,10 @@ namespace KanjiUI.ViewModels
         }
 
 
-        //public new string Filter
-        //{
-        //    get => filter;
-        //    set
-        //    {
-        //        var current = Current;
-
-        //        SetProperty(ref filter, value);
-        //        OnPropertyChanged(nameof(Items));
-
-        //        if (current is not null && Items.Contains(current))
-        //        {
-        //            Current = current;
-        //        }
-        //    }
-        //}
-
         public override KanjiWord UpdateItem(KanjiWord item, KanjiWord original)
         {
             KanjiController.UpdateKanji(item);
             return original.UpdateFrom(item);
-            //var hasCurrent = HasCurrent;
-
-            //var index = -1;
-            //for (int i = 0; i < items.Count; i++)
-            //{
-            //    if (items[i].Kanji == original.Kanji)
-            //    {
-            //        index = i;
-            //        break;
-            //    }
-            //}
-            //Debug.WriteLine($"Ah {item == original}");
-            //Debug.WriteLine($"Ahh {items[index] == item}");
-            //var _ = Items;
-            //items[index] = new KanjiWord(); // Raises CollectionChanged.
-
-            //if (hasCurrent && !HasCurrent)
-            //{
-            //    // Restore Current.
-            //    Current = item;
-            //}
-
-            ////KanjiController.UpdateKanji(item);
-
-            //return item;
         }
 
         public override bool ApplyFilter(KanjiWord item, string filter)
@@ -113,22 +65,68 @@ namespace KanjiUI.ViewModels
 
         public async Task SetFilter(string value)
         {
+            Filter = value;
             var current = Current;
-
-
-            SetProperty(ref filter, value);
-
             await GetFiltered();
-
             OnPropertyChanged(nameof(Items));
 
-            if (current is not null && Items.Contains(current))
+            if (current is null)
             {
-                Current = current;
+                return;
             }
 
+            foreach (var item in Items)
+            {
+                if (current.Kanji.CompareTo(item.Kanji) == 0)
+                {
+                    current = item;
+                    break;
+                }
+            }
 
+            Current = current;
+        }
 
+        private async Task GetFiltered()
+        {
+            if (Filter == "")
+            {
+                return;
+            }
+            if (await KanjiController.GetKanjiNotInDatabaseFromInternet(filter))
+            {
+                var res = await KanjiController.GetKanjiFromDatabaseAsync();
+                OnPropertyChanging(nameof(Items));
+                items.Clear();
+                
+                foreach (var kanji in res)
+                {
+                    items.Add(kanji);
+                }
+
+                OnPropertyChanged(nameof(Items));
+            }
+        }
+
+        public void CopyMaziiLinkCommand_Executed()
+        {
+            DataPackage.RequestedOperation = DataPackageOperation.Copy;
+            DataPackage.SetText(value: $"https://mazii.net/search/kanji?dict=javi&query={Current.Kanji}&hl=vi-VN");
+            SetClipboardContent(DataPackage);
+
+        }
+
+        public void CopyJishoLinkCommand_Executed()
+        {
+            DataPackage.RequestedOperation = DataPackageOperation.Copy;
+            DataPackage.SetText(value:$"https://jisho.org/search/{Current.Kanji}%20%23kanji");
+            SetClipboardContent(DataPackage);
+
+        }
+
+        private static void SetClipboardContent(DataPackage dataPackage)
+        {
+            Clipboard.SetContent(dataPackage);
         }
 
     }

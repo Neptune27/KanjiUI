@@ -16,6 +16,11 @@
         <viewmodels:HomePageViewModel x:Name="ViewModel"/>
     </Page.DataContext>
 
+    <Page.Resources>
+        <XamlUICommand x:Name="CopyMaziiLinkCommand" Command="{x:Bind ViewModel.CopyMaziiLinkCommand}" Description="Copy Mazii link of the current item" Label="Copy Mazii"/>
+        <XamlUICommand x:Name="CopyJishoLinkCommand" Command="{x:Bind ViewModel.CopyJishoLinkCommand}" Description="Copy Mazii link of the current item" Label="Copy Jisho"/>
+    </Page.Resources>
+
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20 20 20 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,7 +45,17 @@
                 <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneWay}" Icon="List" Label="Multi-line Search"/>
             </CommandBar>
             <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
+                <AppBarButton Icon="Link" Label="Copy Link" IsEnabled="{x:Bind ViewModel.HasCurrent,Mode=OneWay}">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Mazii" Tag="mazii" Command="{StaticResource CopyMaziiLinkCommand}"/>
+                            <MenuFlyoutItem Text="Jisho" Tag="jisho" Command="{StaticResource CopyJishoLinkCommand}"/>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <AppBarSeparator/>
                 <AppBarButton Command="{x:Bind EditCommand, Mode=OneWay}" Icon="Edit" IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Edit"/>
+
             </CommandBar>
         </Grid>
         
@@ -138,8 +153,7 @@
 
         <ContentDialog x:Name="EditDialog" 
                        PrimaryButtonText="Update" 
-                       CloseButtonText="Cancel" 
-                       >
+                       CloseButtonText="Cancel" >
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <TextBox x:Name="English" Header="English:" Text="{Binding English, Mode=TwoWay}" Margin="4"/>
