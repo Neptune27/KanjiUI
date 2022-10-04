@@ -33,10 +33,7 @@ namespace KanjiUI.Views
             NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            _ = ViewModel.SetFilter(args.QueryText);
-        }
+
 
         public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
         public ICommand SearchCommand => new AsyncRelayCommand(OpenSearchDialog);
@@ -71,5 +68,19 @@ namespace KanjiUI.Views
             var _ = ViewModel.SetFilter(SearchContent.Text);
         }
 
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            //ViewModel.Filter = args.QueryText;
+            _ = ViewModel.SetFilter(args.QueryText);
+        }
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                ViewModel.Filter = sender.Text;
+            }
+
+        }
     }
 }

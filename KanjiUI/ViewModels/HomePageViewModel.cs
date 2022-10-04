@@ -50,30 +50,53 @@ namespace KanjiUI.ViewModels
             Instance = this;
         }
 
+
+        //public new string Filter
+        //{
+        //    get => filter;
+        //    set
+        //    {
+        //        var current = Current;
+
+        //        SetProperty(ref filter, value);
+        //        OnPropertyChanged(nameof(Items));
+
+        //        if (current is not null && Items.Contains(current))
+        //        {
+        //            Current = current;
+        //        }
+        //    }
+        //}
+
         public override KanjiWord UpdateItem(KanjiWord item, KanjiWord original)
         {
-            var hasCurrent = HasCurrent;
-
-            var index = -1;
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].Kanji == original.Kanji)
-                {
-                    index = i;
-                    break; 
-                }
-            }
-            items[index] = item; // Raises CollectionChanged.
-
-            if (hasCurrent && !HasCurrent)
-            {
-                // Restore Current.
-                Current = item;
-            }
-
             KanjiController.UpdateKanji(item);
+            return original.UpdateFrom(item);
+            //var hasCurrent = HasCurrent;
 
-            return item;
+            //var index = -1;
+            //for (int i = 0; i < items.Count; i++)
+            //{
+            //    if (items[i].Kanji == original.Kanji)
+            //    {
+            //        index = i;
+            //        break;
+            //    }
+            //}
+            //Debug.WriteLine($"Ah {item == original}");
+            //Debug.WriteLine($"Ahh {items[index] == item}");
+            //var _ = Items;
+            //items[index] = new KanjiWord(); // Raises CollectionChanged.
+
+            //if (hasCurrent && !HasCurrent)
+            //{
+            //    // Restore Current.
+            //    Current = item;
+            //}
+
+            ////KanjiController.UpdateKanji(item);
+
+            //return item;
         }
 
         public override bool ApplyFilter(KanjiWord item, string filter)

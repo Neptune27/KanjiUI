@@ -29,7 +29,9 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" Grid.Column="0"
+            <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" 
+                            TextChanged="AutoSuggestBox_TextChanged"
+                            Grid.Column="0"
                             QueryIcon="Find"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"

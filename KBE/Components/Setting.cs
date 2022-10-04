@@ -26,13 +26,12 @@ namespace KBE.Components
         public SQLKanjiOptions SQLKanjiOption { get; set; } = new();
 
         public bool LossySearch { get; set; } = true;
-        public string ABCDE { get; set; } = "Nam";
 
-        static readonly Setting setting = MakeSetting();
+        public static Setting Instance { get; private set; } = MakeSetting();
 
         public static Setting GetSetting()
         {
-            return setting;
+            return Instance;
         }
 
         static string ReadFromFile()
@@ -98,6 +97,7 @@ namespace KBE.Components
                 var str = JsonSerializer.Serialize(defaultSetting, SaveOptions);
                 sw.Write(str);
             }
+            Instance = defaultSetting;
         }
 
         public void SaveSetting()

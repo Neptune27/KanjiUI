@@ -21,6 +21,7 @@ namespace KanjiUI.ViewModels
 
 
         public ICommand SaveCommand => new RelayCommand<string>(SaveCommand_Executed);
+        public ICommand ResetCommand => new RelayCommand<string>(ResetCommand_Executed);
 
         public override bool ApplyFilter(SettingModel item, string filter)
         {
@@ -30,6 +31,13 @@ namespace KanjiUI.ViewModels
         private void SaveCommand_Executed(String parm)
         {
             Items[0].Save();
+        }
+
+        private void ResetCommand_Executed(String parm)
+        {
+            OnPropertyChanging(nameof(Items));
+            Items[0].SetDefault();
+            OnPropertyChanged(nameof(Items));
         }
 
     }

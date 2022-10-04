@@ -11,7 +11,7 @@ namespace KBE.Models
 {
     public partial class SettingModel : ObservableObject
     {
-        private readonly Setting setting = Setting.GetSetting();
+        private readonly Setting setting = Setting.Instance;
 
 
         public int FetchSize
@@ -50,7 +50,7 @@ namespace KBE.Models
             }
         }
 
-        #region SearchOptions
+        #region Search Types
         public bool Kanji
         {
             get => setting.SQLKanjiOption.Kanji;
@@ -192,7 +192,7 @@ namespace KBE.Models
 
         #endregion
 
-        #region Search Option
+        #region Search Options
         public bool LossySearch
         {
             get => setting.LossySearch;
@@ -212,6 +212,13 @@ namespace KBE.Models
         public void Save()
         {
             setting.SaveSetting();
+        }
+
+        public void SetDefault()
+        {
+            OnPropertyChanging(nameof(Kanji));
+            Setting.ResetToAndSaveDefaultSetting();
+            OnPropertyChanged(nameof(Kanji));
         }
 
     }

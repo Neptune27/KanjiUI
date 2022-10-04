@@ -75,7 +75,8 @@ namespace KBE.Components
             try
             {
                 jlpt = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[2]")
-    .InnerText.ToString().Replace("\n", "").Trim();
+    .InnerText.ToString().Replace("\n", "");
+                jlpt = jlpt.Trim();
             }
             catch (NullReferenceException ex)
             {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,8 @@ namespace KanjiUI.ViewModels
 
         public T Current { 
             get => current;
-            set { 
+            set {
+                Debug.WriteLine(value);
                 SetProperty(ref current, value);
                 OnPropertyChanged(nameof(HasCurrent));
             }

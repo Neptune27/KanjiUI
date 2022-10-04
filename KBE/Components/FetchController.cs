@@ -109,12 +109,6 @@ namespace KBE.Components
             return await fetcher.FetchURLs();
         }
 
-        //public static async Task GetKanjiImg(IEnumerable<string> strings)
-        //{
-        //    var fetcher = new Fetching();
-
-        //}
-
         static async public Task<Dictionary<string, string[]>> FetchAll(IEnumerable<string> strings)
         {
             var JishoTask = GetJisho(strings);

@@ -18,6 +18,11 @@
                        Description="Save for later use."
                        Label="Save"
                        />
+
+        <StandardUICommand x:Name="ResetCommand"
+                           Command="{x:Bind ViewModel.ResetCommand}" 
+                           Description="Reset to Default"
+                           Label="Reset to Default"/>
         <XamlUICommand x:Name="FileBrowser"
                        Command="{x:Bind FileBrowserCommand, Mode=OneTime}"
                        Description="Open folder picker"
@@ -42,6 +47,7 @@
         <Grid Grid.Row="0">
             <CommandBar DefaultLabelPosition="Right" Background="Transparent">
                 <AppBarButton Command="{x:Bind SaveCommand}" Icon="Save" Label="Save"/>
+                <AppBarButton Command="{x:Bind ResetCommand}" Icon="Refresh" Label="Reset to Defalut"/>
             </CommandBar>
         </Grid>
             

@@ -34,6 +34,7 @@ namespace KanjiUI
 
         public Shell()
         {
+            Title = "Kanji UI";
             this.InitializeComponent();
 
 
@@ -82,6 +83,7 @@ namespace KanjiUI
                 return;
             }
 
+
             if (item.Tag.ToString() == "Settings")
             {
                 ContentFrame.Navigate(typeof(Settings));
@@ -100,6 +102,8 @@ namespace KanjiUI
         private void NavigationView_Loaded(object sender, RoutedEventArgs e)
         {
             SetCurrentNavigationViewItem(GetNavigationViewItems(typeof(HomePage)).First());
+            var settings = NavView.SettingsItem as NavigationViewItem;
+            settings.Tag = "Settings";
         }
 
         public void SetCurrentNavigationViewItem(NavigationViewItem item)

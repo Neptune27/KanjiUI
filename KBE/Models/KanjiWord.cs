@@ -89,16 +89,16 @@ namespace KBE.Models
         
         public KanjiWord UpdateFrom(KanjiWord kanji)
         {
-            english = kanji.english;
-            this.kanji = kanji.kanji;
-            sinoVietnamese = kanji.sinoVietnamese;
-            onYumi = kanji.onYumi;
-            kunYumi = kanji.kunYumi;
-            level = kanji.level;
-            vietnamese = kanji.vietnamese;
-            strokes = kanji.strokes;
-            radicals = kanji.radicals;
-            taught = kanji.taught;
+            English = kanji.english;
+            Kanji = kanji.kanji;
+            SinoVietnamese = kanji.sinoVietnamese;
+            OnYumi = kanji.onYumi;
+            KunYumi = kanji.kunYumi;
+            Level = kanji.level;
+            Vietnamese = kanji.vietnamese;
+            Strokes = kanji.strokes;
+            Radicals = kanji.radicals;
+            Taught = kanji.taught;
 
             return this;
         }
