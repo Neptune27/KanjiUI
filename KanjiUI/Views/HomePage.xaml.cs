@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using KBE.Enums;
 using KBE.Models;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -16,6 +17,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using WinRT.Interop;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,6 +42,8 @@ namespace KanjiUI.Views
 
         public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
         public ICommand SearchCommand => new AsyncRelayCommand(OpenSearchDialog);
+        public ICommand CreateDocxCommand => new AsyncRelayCommand(CreateDocxCommand_Executed);
+        public ICommand CreateTextCommand => new AsyncRelayCommand(CreateTextCommand_Executed);
 
         public ICommand UpdateCommand => new RelayCommand(Update);
         public ICommand FilterCommand => new RelayCommand(Filter);
@@ -56,6 +63,69 @@ namespace KanjiUI.Views
             FindDialog.Title = "Search";
             FindDialog.PrimaryButtonCommand = FilterCommand;
             await FindDialog.ShowAsync();
+        }
+
+        private async Task OpenErrorDialog(string title, string content)
+        {
+            ErrorDialog.Title = title;
+            ErrorRun.Text = content;
+            await ErrorDialog.ShowAsync();
+        }
+
+        private async Task CreateDocxCommand_Executed()
+        {
+            var file = await OpenFileSave("Word Document", ".docx");
+            if (file is null)
+            {
+                return;
+            }
+            Debug.WriteLine($"File name: {file.Path}");
+            var resId = await ViewModel.CreateDocxCommand_Executed($"{file.Path}");
+            await ShowError(resId);
+        }
+
+        private async Task CreateTextCommand_Executed()
+        {
+            var file = await OpenFileSave("Text Document", ".txt");
+            if (file is null)
+            {
+                return;
+            }
+
+            Debug.WriteLine($"File name: {file.Path}");
+            var resId = await ViewModel.CreateTextCommand_Executed($"{file.Path}");
+            await ShowError(resId);
+        }
+
+
+        private async Task ShowError(EErrorType resId)
+        {
+            if (resId == EErrorType.NORMAL)
+            {
+                await OpenErrorDialog("Export successfully", "File has been save successfully!");
+            }
+            if (resId == EErrorType.FILE_IN_USE)
+            {
+                await OpenErrorDialog("File is currently in use by another app", content: "Please close the file and try again.");
+            }
+        }
+
+        private async Task<StorageFile> OpenFileSave(string name, string extension)
+        {
+            var savePicker = new FileSavePicker();
+
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WindowNative.GetWindowHandle(App.Window);
+
+            // Associate the HWND with the file picker
+            InitializeWithWindow.Initialize(savePicker, hwnd);
+
+            // Use file picker like normal!
+            //folderPicker.FileTypeFilter.Add("*");
+            savePicker.FileTypeChoices.Add($"{name}", new List<string>() { $"{extension}"});
+            savePicker.SuggestedFileName = "New Document";
+
+            return await savePicker.PickSaveFileAsync();
         }
 
         private void Update()
@@ -81,6 +151,11 @@ namespace KanjiUI.Views
                 ViewModel.Filter = sender.Text;
             }
 
+        }
+
+        private void AutoSuggestKBA_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            AutoSuggest.Focus(FocusState.Programmatic);
         }
     }
 }

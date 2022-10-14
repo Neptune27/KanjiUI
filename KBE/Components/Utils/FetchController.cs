@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KBE.Components.Settings;
 
-namespace KBE.Components
+namespace KBE.Components.Utils
 {
 
     enum FetchingOptions
@@ -24,10 +26,9 @@ namespace KBE.Components
             Values
         { get; set; } = new();
 
+        static Setting Setting => Setting.Instance;
 
-        readonly Setting setting = Setting.GetSetting();
-
-        public int Size { get => setting.FetchSize; set => setting.FetchSize = value; }
+        public int Size { get => Setting.FetchSize; set => Setting.FetchSize = value; }
         private int offset = 0;
         public FetchingOptions options;
 
@@ -59,7 +60,7 @@ namespace KBE.Components
             offset += Size;
         }
 
-        public async Task<List<string>> FetchURLs()
+        public async Task<List<string>> FetchURLs(IProgress<int>? progress)
         {
             var lst = new List<string>();
 
@@ -76,24 +77,24 @@ namespace KBE.Components
                 {
                     lst.Add(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                 }
-
+                progress?.Report(lst.Count / Urls.Count * 100);
                 QueueRequest();
             }
 
             return lst;
         }
 
-        static async Task<List<string>> GetJisho(IEnumerable<string> strings)
+        static async Task<List<string>> GetJisho(IEnumerable<string> strings, IProgress<int>? progress)
         {
             var fetcher = new Fetching();
             foreach (var str in strings)
             {
                 fetcher.Urls.Add($"https://jisho.org/search/{str}%20%23kanji");
             }
-            return await fetcher.FetchURLs();
+            return await fetcher.FetchURLs(progress);
         }
 
-        static async Task<List<string>> GetMazii(IEnumerable<string> strings)
+        static async Task<List<string>> GetMazii(IEnumerable<string> strings, IProgress<int>? progress)
         {
             var fetcher = new Fetching(options: FetchingOptions.POST);
             foreach (var str in strings)
@@ -106,16 +107,16 @@ namespace KBE.Components
                 dict.Add("type", "kanji");
                 fetcher.Values.Add(dict);
             }
-            return await fetcher.FetchURLs();
+            return await fetcher.FetchURLs(progress);
         }
 
-        static async public Task<Dictionary<string, string[]>> FetchAll(IEnumerable<string> strings)
+        static async public Task<Dictionary<string, string[]>> FetchAll(IEnumerable<string> strings, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
-            var JishoTask = GetJisho(strings);
-            var MaziiTask = GetMazii(strings);
+            var JishoTask = GetJisho(strings, JishoProgress);
+            var MaziiTask = GetMazii(strings, MaziiProgress);
 
-            var Jisho = await JishoTask;
-            var Mazii = await MaziiTask;
+            var Jisho = await JishoTask.ConfigureAwait(false);
+            var Mazii = await MaziiTask.ConfigureAwait(false);
 
             var dict = strings.Select((chr, index) => new { chr, index })
                 .ToDictionary(pair => pair.chr, pair => new string[2] { Jisho[pair.index], Mazii[pair.index] });

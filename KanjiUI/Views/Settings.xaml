@@ -123,15 +123,57 @@
                                 <CheckBox x:Name="SinoVietnamese" Content="SinoVietnamese" IsChecked="{x:Bind ViewModel.Items[0].SinoVietnamese, Mode=TwoWay}" Grid.Column="1" Grid.Row="0"/>
                                 <CheckBox x:Name="Onyumi" Content="Onyumi" IsChecked="{x:Bind ViewModel.Items[0].Onyumi, Mode=TwoWay}" Grid.Column="1" Grid.Row="1"/>
                                 <CheckBox x:Name="Kunyumi" Content="Kunyumi" IsChecked="{x:Bind ViewModel.Items[0].Kunyumi, Mode=TwoWay}" Grid.Column="1" Grid.Row="2"/>
-                                <CheckBox x:Name="Radical" Content="Radical" IsChecked="{x:Bind ViewModel.Items[0].Radical, Mode=TwoWay}" Grid.Column="2" Grid.Row="0"/>
+                                <CheckBox x:Name="Radicals" Content="Radical" IsChecked="{x:Bind ViewModel.Items[0].Radicals, Mode=TwoWay}" Grid.Column="2" Grid.Row="0"/>
                                 <CheckBox x:Name="Strokes" Content="Strokes" IsChecked="{x:Bind ViewModel.Items[0].Strokes, Mode=TwoWay}" Grid.Column="2" Grid.Row="1"/>
                                 <CheckBox x:Name="Level" Content="Level" IsChecked="{x:Bind ViewModel.Items[0].Level, Mode=TwoWay}" Grid.Column="2" Grid.Row="2"/>
                             </Grid>
-
                         </Grid>
-     
                     </Expander.Content>
                 </Expander>
+
+                <Expander x:Name="SExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Save Options:</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ToggleButton Content="Color" Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                                          IsChecked="{x:Bind ViewModel.Items[0].ColorSave, Mode=TwoWay}"/>
+                            <Grid HorizontalAlignment="Stretch" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <CheckBox x:Name="KanjiSave" Content="Kanji" IsChecked="{x:Bind ViewModel.Items[0].KanjiSave, Mode=TwoWay}" Grid.Column="0" Grid.Row="0"/>
+                                <CheckBox x:Name="EnglishSave" Content="English" IsChecked="{x:Bind ViewModel.Items[0].EnglishSave, Mode=TwoWay}" Grid.Column="0" Grid.Row="1"/>
+                                <CheckBox x:Name="VietnameseSave" Content="Vietnamese" IsChecked="{x:Bind ViewModel.Items[0].VietnameseSave, Mode=TwoWay}" Grid.Column="0" Grid.Row="2"/>
+                                <CheckBox x:Name="SinoVietnameseSave" Content="SinoVietnamese" IsChecked="{x:Bind ViewModel.Items[0].SinoVietnameseSave, Mode=TwoWay}" Grid.Column="1" Grid.Row="0"/>
+                                <CheckBox x:Name="OnyumiSave" Content="Onyumi" IsChecked="{x:Bind ViewModel.Items[0].OnyumiSave, Mode=TwoWay}" Grid.Column="1" Grid.Row="1"/>
+                                <CheckBox x:Name="KunyumiSave" Content="Kunyumi" IsChecked="{x:Bind ViewModel.Items[0].KunyumiSave, Mode=TwoWay}" Grid.Column="1" Grid.Row="2"/>
+                                <CheckBox x:Name="RadicalsSave" Content="Radical" IsChecked="{x:Bind ViewModel.Items[0].RadicalsSave, Mode=TwoWay}" Grid.Column="2" Grid.Row="0"/>
+                                <CheckBox x:Name="StrokesSave" Content="Strokes" IsChecked="{x:Bind ViewModel.Items[0].StrokesSave, Mode=TwoWay}" Grid.Column="2" Grid.Row="1"/>
+                                <CheckBox x:Name="LevelSave" Content="Level" IsChecked="{x:Bind ViewModel.Items[0].LevelSave, Mode=TwoWay}" Grid.Column="2" Grid.Row="2"/>
+                            </Grid>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
 
             </ItemsControl>
         </ScrollViewer>

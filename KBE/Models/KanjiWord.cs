@@ -1,5 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KBE.Components;
+using KBE.Components.Settings;
+using KBE.Components.SQL;
+using KBE.Components.Utils;
+using KBE.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,10 +24,10 @@ namespace KBE.Models
         private string sinoVietnamese = "";
         
         [ObservableProperty]
-        private string onYumi = "";
+        private string onyumi = "";
         
         [ObservableProperty]
-        private string kunYumi = "";
+        private string kunyumi = "";
         
         [ObservableProperty]
         private string level = "";
@@ -46,6 +50,25 @@ namespace KBE.Models
         [ObservableProperty]
         private string taught = "";
 
+        private string color = EKanjiColor.DEFAULT;
+
+        public string Color { 
+            get { return color; }
+            set {
+                switch (value)
+                {
+                    case EKanjiColor.DEFAULT:
+                    case EKanjiColor.RED:
+                    case EKanjiColor.GREEN:
+                        SetProperty(ref color, value);
+                        break;
+                    default:
+                        return;
+                }
+            } 
+        }
+
+
         public string FirstEnglish => english.Split(",")[0];
 
         public KanjiWord(string kanji = "", string sinoVietnamese = "", string on = "", string kun = "", string level = "",
@@ -53,8 +76,8 @@ namespace KBE.Models
         {
             this.kanji = kanji;
             this.sinoVietnamese = sinoVietnamese;
-            onYumi = on;
-            kunYumi = kun;
+            onyumi = on;
+            kunyumi = kun;
             this.level = level;
             this.english = english;
             this.vietnamese = vietnamese;
@@ -68,7 +91,7 @@ namespace KBE.Models
         public static List<KanjiWord> GenerateDummy()
         {
             return new() {
-                new() {english= "one, one radical (no.1)", kanji= "一", level="5", sinoVietnamese="NHẤT",strokes="1 strokes", taught="Jōyō kanji, taught in grade 1", radicals="one 一", parts="一", onYumi="ひと- ひと.つ", kunYumi="イチ イツ" ,vietnamese="Một, là số đứng đầu các số đếm. Phàm vật gì chỉ có một đều gọi là Nhất cả.##Cùng. Như sách Trung Dung nói : Cập kì thành công nhất dã [及其成工一也] nên công cùng như nhau vậy.##Dùng về lời nói hoặc giả thế chăng. Như vạn nhất [萬一] muôn một, nhất đán [一旦] một mai, v.v.##Bao quát hết thẩy. Như nhất thiết [一切] hết thẩy, nhất khái [一概] một mực như thế cả, v.v.##Chuyên môn về một mặt. Như nhất vị [一味] một mặt, nhất ý [一意] một ý, v.v." },
+                new() {english= "one, one radical (no.1)", kanji= "一", level="5", sinoVietnamese="NHẤT",strokes="1 strokes", taught="Jōyō kanji, taught in grade 1", radicals="one 一", parts="一", onyumi="ひと- ひと.つ", kunyumi="イチ イツ" ,vietnamese="Một, là số đứng đầu các số đếm. Phàm vật gì chỉ có một đều gọi là Nhất cả.##Cùng. Như sách Trung Dung nói : Cập kì thành công nhất dã [及其成工一也] nên công cùng như nhau vậy.##Dùng về lời nói hoặc giả thế chăng. Như vạn nhất [萬一] muôn một, nhất đán [一旦] một mai, v.v.##Bao quát hết thẩy. Như nhất thiết [一切] hết thẩy, nhất khái [一概] một mực như thế cả, v.v.##Chuyên môn về một mặt. Như nhất vị [一味] một mặt, nhất ý [一意] một ý, v.v." },
                 new() {english= "seven", kanji= "七" }
             };
         }
@@ -78,8 +101,8 @@ namespace KBE.Models
             english = english,
             kanji = kanji,
             sinoVietnamese = sinoVietnamese,
-            onYumi = onYumi,
-            kunYumi = kunYumi,
+            onyumi = onyumi,
+            kunyumi = kunyumi,
             level = level,
             vietnamese = vietnamese,
             strokes = strokes,
@@ -92,8 +115,8 @@ namespace KBE.Models
             English = kanji.english;
             Kanji = kanji.kanji;
             SinoVietnamese = kanji.sinoVietnamese;
-            OnYumi = kanji.onYumi;
-            KunYumi = kanji.kunYumi;
+            Onyumi = kanji.onyumi;
+            Kunyumi = kanji.kunyumi;
             Level = kanji.level;
             Vietnamese = kanji.vietnamese;
             Strokes = kanji.strokes;
@@ -105,7 +128,7 @@ namespace KBE.Models
 
         public string[] ToList()
         {
-            return new string[11] { kanji, sinoVietnamese, onYumi, kunYumi, level, english, vietnamese, strokes, radicals, parts, taught };
+            return new string[11] { kanji, sinoVietnamese, onyumi, kunyumi, level, english, vietnamese, strokes, radicals, parts, taught };
         }
 
         public static KanjiWord ToKanjiWord(string[] strings)
@@ -121,10 +144,10 @@ namespace KBE.Models
 
         }
 
-        public bool ApplyFilter(List<string> filters, SQLKanjiOptions sqlKanjiOption, bool isLossySearch = true)
+        public Dictionary<string,string?> GetProperties(SearchOptions sqlKanjiOption)
         {
             var sqlMember = sqlKanjiOption.GetType().GetProperties();
-
+            Dictionary<string,string?> properties = new();   
 
             foreach (var item in sqlMember)
             {
@@ -158,9 +181,25 @@ namespace KBE.Models
                 }
 
 
-                string propVal = (string)prop.GetValue(this, null);
+                string? propVal = prop.GetValue(this, null) as string;
+                properties.Add(name, propVal);
+            }
+            return properties;
+        }
 
-                var res = Search(propVal, filters);
+        public bool ApplyFilter(List<string> filters, SearchOptions sqlKanjiOption, bool isLossySearch = true)
+        {
+            var properties = GetProperties(sqlKanjiOption);
+
+            foreach (var (_, value) in properties)
+            {
+
+                if (value is null)
+                {
+                    continue;
+                }
+
+                var res = Search(value, filters);
 
                 if (res)
                 {
@@ -183,6 +222,21 @@ namespace KBE.Models
             return false;
         }
 
+        public string ToString(SearchOptions sqlKanjiOptions)
+        {
+            var properties = GetProperties(sqlKanjiOptions);
+            StringBuilder stringBuilder = new();
+
+            foreach (var (name, value) in properties)
+            {
+                if (value is null)
+                {
+                    continue;
+                }
+                stringBuilder.Append($"{name}: {value}\n");
+            }
+            return stringBuilder.ToString();
+        }
 
     }
 

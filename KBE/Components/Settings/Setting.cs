@@ -6,24 +6,43 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace KBE.Components
+namespace KBE.Components.Settings
 {
+
+    public class SearchOptions
+    {
+        public bool Kanji { get; set; } = true;
+        public bool SinoVietnamese { get; set; } = true;
+        public bool Onyumi { get; set; } = true;
+        public bool Kunyumi { get; set; } = true;
+        public bool English { get; set; } = true;
+        public bool Vietnamese { get; set; } = false;
+        public bool Strokes { get; set; } = true;
+        public bool Radicals { get; set; } = false;
+        public bool Level { get; set; } = false;
+    }
+
+    public class SaveOptions : SearchOptions
+    {
+        public bool Color { get; set; } = true;
+    }
 
     public class Setting
     {
 
 #if !DEBUG
-        static string Directory = ".";
-        static string FilePath = $"{Directory}\\Setting\\setting.json";
+        public static string Directory = ".";
+        public static string FilePath = $"{Directory}\\Setting\\setting.json";
 #elif DEBUG
-        static string Directory { get; set; } = "..\\..\\..\\..\\..";
-        static string FilePath { get; set; } = $"{Directory}\\Setting\\setting.json";
+        public static string Directory { get; set; } = "..\\..\\..\\..\\..";
+        public static string FilePath { get; set; } = $"{Directory}\\Setting\\setting.json";
 #endif
         public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
 
         public int FetchSize { get; set; }
         public string DatabaseConnectDirectory { get; set; } = "";
-        public SQLKanjiOptions SQLKanjiOption { get; set; } = new();
+        public SearchOptions SearchOptions { get; set; } = new();
+        public SaveOptions SaveOption { get; set; } = new();
 
         public bool LossySearch { get; set; } = true;
 
@@ -84,13 +103,15 @@ namespace KBE.Components
             {
                 FetchSize = 100,
                 DatabaseConnectDirectory = $"{Directory}\\Data\\DefaultDatabase.db",
-                SQLKanjiOption = new SQLKanjiOptions(),
+                SearchOptions = new SearchOptions(),
+                SaveOption = new(),
                 LossySearch = true
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");
             System.IO.Directory.CreateDirectory($"{Directory}\\Data");
             System.IO.Directory.CreateDirectory($"{Directory}\\Data\\Img");
+            System.IO.Directory.CreateDirectory($"{Directory}\\Data\\Template");
 
             using (StreamWriter sw = new($"{FilePath}"))
             {

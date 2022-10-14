@@ -38,6 +38,8 @@
             IsPaneOpen="False"
             Loaded="NavigationView_Loaded"
             x:Name="NavView"
+            PaneDisplayMode="LeftCompact"
+            IsBackButtonVisible="Collapsed"
             Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Kanji View" Tag="KanjiUI.Views.HomePage" Icon="Home"></NavigationViewItem>

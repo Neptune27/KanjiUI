@@ -7,27 +7,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KBE.Components.Kanji;
+using KBE.Components.Settings;
 
-namespace KBE.Components
+namespace KBE.Components.SQL
 {
-    public class SQLKanjiOptions
-    {
-        public bool Kanji { get; set; } = true;
-        public bool SinoVietnamese { get; set; } = true;
-        public bool Onyumi { get; set; } = true;
-        public bool Kunyumi { get; set; } = true;
-        public bool English { get; set; } = true;
-        public bool Vietnamese { get; set; } = false;
-        public bool Strokes { get; set; } = true;
-        public bool Radical { get; set; } = false;
-        public bool Level { get; set; } = false;
-    }
 
 
     public class SQLController
     {
         #region Field
-        static Setting Setting { get; } = Setting.GetSetting();
+        static Setting Setting => Setting.Instance;
         static readonly SqliteConnection _connection = new($"Data Source={Setting.DatabaseConnectDirectory}");
         static readonly SQLController _controller = new();
         #endregion
@@ -146,7 +136,7 @@ namespace KBE.Components
 
         public static async Task<bool> CheckExistAsync(string kanji)
         {
-            return await CheckExistAsync(new KanjiWord() { Kanji = kanji});
+            return await CheckExistAsync(new KanjiWord() { Kanji = kanji });
         }
 
         public static async Task<bool> CheckExistAsync(KanjiWord kanji)
@@ -197,17 +187,17 @@ namespace KBE.Components
 
                 var pOn = command.CreateParameter();
                 pOn.ParameterName = "$ONYUMI";
-                kanji.OnYumi = kanji.OnYumi is null ? "" : kanji.OnYumi;
+                kanji.Onyumi = kanji.Onyumi is null ? "" : kanji.Onyumi;
 
-                pOn.Value = kanji.OnYumi;
+                pOn.Value = kanji.Onyumi;
                 command.Parameters.Add(pOn);
 
 
                 var pKun = command.CreateParameter();
                 pKun.ParameterName = "$KUNYUMI";
-                kanji.KunYumi = kanji.KunYumi is null ? "" : kanji.KunYumi;
+                kanji.Kunyumi = kanji.Kunyumi is null ? "" : kanji.Kunyumi;
 
-                pKun.Value = kanji.KunYumi;
+                pKun.Value = kanji.Kunyumi;
                 command.Parameters.Add(pKun);
 
 
@@ -309,9 +299,9 @@ namespace KBE.Components
         public static async Task<SortedSet<KanjiWord>> GetAllKanjiWordsAsync()
         {
 
-            foreach (var item in Setting.SQLKanjiOption.GetType().GetProperties())
+            foreach (var item in Setting.SearchOptions.GetType().GetProperties())
             {
-                Console.WriteLine(item.GetValue(Setting.SQLKanjiOption));
+                Console.WriteLine(item.GetValue(Setting.SearchOptions));
                 Console.WriteLine(item);
             }
 
@@ -323,7 +313,7 @@ namespace KBE.Components
             SortedSet<KanjiWord> kanjis = new(new KanjiWordComparer());
             using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                var obj = new String[11];
+                var obj = new string[11];
 
                 while (reader.Read())
                 {
@@ -346,7 +336,7 @@ namespace KBE.Components
             SortedSet<KanjiWord> kanjis = new(new KanjiWordComparer());
             using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                var obj = new String[11];
+                var obj = new string[11];
 
                 while (reader.Read())
                 {
@@ -359,7 +349,7 @@ namespace KBE.Components
 
         public static async Task<SortedSet<KanjiWord>> SearchKanjiAsync(string word)
         {
-            var SQLSetting = Setting.SQLKanjiOption;
+            var SQLSetting = Setting.SearchOptions;
             SortedSet<KanjiWord> kanjis = new(new KanjiWordComparer());
             foreach (var property in SQLSetting.GetType().GetProperties())
             {
@@ -426,17 +416,17 @@ namespace KBE.Components
 
                 var pOn = command.CreateParameter();
                 pOn.ParameterName = "$ONYUMI";
-                kanji.OnYumi = kanji.OnYumi is null ? "" : kanji.OnYumi;
+                kanji.Onyumi = kanji.Onyumi is null ? "" : kanji.Onyumi;
 
-                pOn.Value = kanji.OnYumi;
+                pOn.Value = kanji.Onyumi;
                 command.Parameters.Add(pOn);
 
 
                 var pKun = command.CreateParameter();
                 pKun.ParameterName = "$KUNYUMI";
-                kanji.KunYumi = kanji.KunYumi is null ? "" : kanji.KunYumi;
+                kanji.Kunyumi = kanji.Kunyumi is null ? "" : kanji.Kunyumi;
 
-                pKun.Value = kanji.KunYumi;
+                pKun.Value = kanji.Kunyumi;
                 command.Parameters.Add(pKun);
 
 

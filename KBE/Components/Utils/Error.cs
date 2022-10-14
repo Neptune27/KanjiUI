@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KBE.Components
+namespace KBE.Components.Utils
 {
     [Serializable]
     public class IncorrectLengthError : Exception

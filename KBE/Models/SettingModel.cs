@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using KBE.Components;
+using KBE.Components.Settings;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ namespace KBE.Models
 {
     public partial class SettingModel : ObservableObject
     {
-        private readonly Setting setting = Setting.Instance;
+        private Setting setting => Setting.Instance;
 
 
         public int FetchSize
@@ -19,10 +19,10 @@ namespace KBE.Models
             get => setting.FetchSize;
             set
             {
-                if (FetchSize == value)
-                {
-                    return;
-                }
+                //if (FetchSize == value)
+                //{
+                //    return;
+                //}
                 OnPropertyChanging(nameof(FetchSize));
 
                 setting.FetchSize = value;
@@ -53,7 +53,7 @@ namespace KBE.Models
         #region Search Types
         public bool Kanji
         {
-            get => setting.SQLKanjiOption.Kanji;
+            get => setting.SearchOptions.Kanji;
             set
             {
                 if (Kanji == value)
@@ -61,14 +61,14 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(Kanji));
-                setting.SQLKanjiOption.Kanji = value;
+                setting.SearchOptions.Kanji = value;
                 OnPropertyChanged(nameof(Kanji));
             }
         }
 
         public bool SinoVietnamese
         {
-            get => setting.SQLKanjiOption.SinoVietnamese;
+            get => setting.SearchOptions.SinoVietnamese;
             set
             {
                 if (SinoVietnamese == value)
@@ -76,14 +76,14 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(SinoVietnamese));
-                setting.SQLKanjiOption.SinoVietnamese = value;
+                setting.SearchOptions.SinoVietnamese = value;
                 OnPropertyChanged(nameof(SinoVietnamese));
             }
         }
 
         public bool Onyumi
         {
-            get => setting.SQLKanjiOption.Onyumi;
+            get => setting.SearchOptions.Onyumi;
             set
             {
                 if (Onyumi == value)
@@ -92,14 +92,14 @@ namespace KBE.Models
                 }
 
                 OnPropertyChanging(nameof(Onyumi));
-                setting.SQLKanjiOption.Onyumi = value;
+                setting.SearchOptions.Onyumi = value;
                 OnPropertyChanged(nameof(Onyumi));
             }
         }
 
         public bool Kunyumi
         {
-            get => setting.SQLKanjiOption.Kunyumi;
+            get => setting.SearchOptions.Kunyumi;
             set
             {
                 if (Kunyumi == value)
@@ -107,7 +107,7 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(Kunyumi));
-                setting.SQLKanjiOption.Kunyumi = value;
+                setting.SearchOptions.Kunyumi = value;
                 OnPropertyChanged(nameof(Kunyumi));
 
             }
@@ -115,7 +115,7 @@ namespace KBE.Models
 
         public bool English
         {
-            get => setting.SQLKanjiOption.English;
+            get => setting.SearchOptions.English;
             set
             {
                 if (English == value)
@@ -123,7 +123,7 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(English));
-                setting.SQLKanjiOption.English = value;
+                setting.SearchOptions.English = value;
                 OnPropertyChanged(nameof(English));
 
             }
@@ -131,7 +131,7 @@ namespace KBE.Models
 
         public bool Vietnamese
         {
-            get => setting.SQLKanjiOption.Vietnamese;
+            get => setting.SearchOptions.Vietnamese;
             set
             {
                 if (Vietnamese == value)
@@ -139,7 +139,7 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(Vietnamese));
-                setting.SQLKanjiOption.Vietnamese = value;
+                setting.SearchOptions.Vietnamese = value;
                 OnPropertyChanged(nameof(Vietnamese));
 
             }
@@ -147,7 +147,7 @@ namespace KBE.Models
 
         public bool Strokes
         {
-            get => setting.SQLKanjiOption.Strokes;
+            get => setting.SearchOptions.Strokes;
             set
             {
                 if (Strokes == value)
@@ -155,29 +155,29 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(Strokes));
-                setting.SQLKanjiOption.Strokes = value;
+                setting.SearchOptions.Strokes = value;
                 OnPropertyChanged(nameof(Strokes));
             }
         }
 
-        public bool Radical
+        public bool Radicals
         {
-            get => setting.SQLKanjiOption.Radical;
+            get => setting.SearchOptions.Radicals;
             set
             {
-                if (Radical == value)
+                if (Radicals == value)
                 {
                     return;
                 }
-                OnPropertyChanging(nameof(Radical));
-                setting.SQLKanjiOption.Radical = value;
-                OnPropertyChanged(nameof(Radical));
+                OnPropertyChanging(nameof(Radicals));
+                setting.SearchOptions.Radicals = value;
+                OnPropertyChanged(nameof(Radicals));
             }
         }
 
         public bool Level
         {
-            get => setting.SQLKanjiOption.Level;
+            get => setting.SearchOptions.Level;
             set
             {
                 if (Level == value)
@@ -185,7 +185,7 @@ namespace KBE.Models
                     return;
                 }
                 OnPropertyChanging(nameof(Level));
-                setting.SQLKanjiOption.Level = value;
+                setting.SearchOptions.Level = value;
                 OnPropertyChanged(nameof(Level));
             }
         }
@@ -209,6 +209,160 @@ namespace KBE.Models
         }
         #endregion
 
+        #region Save Type
+        public bool KanjiSave
+        {
+            get => setting.SaveOption.Kanji;
+            set
+            {
+                if (KanjiSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(KanjiSave));
+                setting.SaveOption.Kanji = value;
+                OnPropertyChanged(nameof(KanjiSave));
+            }
+        }
+
+        public bool SinoVietnameseSave
+        {
+            get => setting.SaveOption.SinoVietnamese;
+            set
+            {
+                if (SinoVietnameseSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(SinoVietnameseSave));
+                setting.SaveOption.SinoVietnamese = value;
+                OnPropertyChanged(nameof(SinoVietnameseSave));
+            }
+        }
+
+        public bool OnyumiSave
+        {
+            get => setting.SaveOption.Onyumi;
+            set
+            {
+                if (OnyumiSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(OnyumiSave));
+                setting.SaveOption.Onyumi = value;
+                OnPropertyChanged(nameof(OnyumiSave));
+            }
+        }
+
+        public bool KunyumiSave
+        {
+            get => setting.SaveOption.Kunyumi;
+            set
+            {
+                if (KunyumiSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(KunyumiSave));
+                setting.SaveOption.Kunyumi = value;
+                OnPropertyChanged(nameof(KunyumiSave));
+            }
+        }
+
+
+        public bool EnglishSave
+        {
+            get => setting.SaveOption.English;
+            set
+            {
+                if (EnglishSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(EnglishSave));
+                setting.SaveOption.English = value;
+                OnPropertyChanged(nameof(EnglishSave));
+            }
+        }
+
+        public bool VietnameseSave
+        {
+            get => setting.SaveOption.Vietnamese;
+            set
+            {
+                if (VietnameseSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(VietnameseSave));
+                setting.SaveOption.Vietnamese = value;
+                OnPropertyChanged(nameof(VietnameseSave));
+            }
+        }
+
+        public bool StrokesSave
+        {
+            get => setting.SaveOption.Strokes;
+            set
+            {
+                if (StrokesSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(StrokesSave));
+                setting.SaveOption.Strokes = value;
+                OnPropertyChanged(nameof(StrokesSave));
+            }
+        }
+
+        public bool RadicalsSave
+        {
+            get => setting.SaveOption.Radicals;
+            set
+            {
+                if (RadicalsSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(RadicalsSave));
+                setting.SaveOption.Radicals = value;
+                OnPropertyChanged(nameof(RadicalsSave));
+            }
+        }
+        public bool LevelSave
+        {
+            get => setting.SaveOption.Level;
+            set
+            {
+                if (LevelSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(LevelSave));
+                setting.SaveOption.Level = value;
+                OnPropertyChanged(nameof(LevelSave));
+            }
+        }
+
+        public bool ColorSave
+        {
+            get => setting.SaveOption.Color;
+            set
+            {
+                if (ColorSave == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(ColorSave));
+                setting.SaveOption.Color = value;
+                OnPropertyChanged(nameof(ColorSave));
+            }
+        }
+
+
+        #endregion
+
         public void Save()
         {
             setting.SaveSetting();
@@ -216,9 +370,7 @@ namespace KBE.Models
 
         public void SetDefault()
         {
-            OnPropertyChanging(nameof(Kanji));
             Setting.ResetToAndSaveDefaultSetting();
-            OnPropertyChanged(nameof(Kanji));
         }
 
     }

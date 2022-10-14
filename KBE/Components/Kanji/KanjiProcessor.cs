@@ -7,9 +7,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace KBE.Components
+namespace KBE.Components.Kanji
 {
-    public class FilterProcessingOption{
+    public class FilterProcessingOption
+    {
         public bool isKanjiEnable = true;
         public bool isLossySearch = true;
         public bool isOnlyKanj = false;

@@ -17,14 +17,22 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <XamlUICommand x:Name="CopyMaziiLinkCommand" Command="{x:Bind ViewModel.CopyMaziiLinkCommand}" Description="Copy Mazii link of the current item" Label="Copy Mazii"/>
-        <XamlUICommand x:Name="CopyJishoLinkCommand" Command="{x:Bind ViewModel.CopyJishoLinkCommand}" Description="Copy Mazii link of the current item" Label="Copy Jisho"/>
+        <XamlUICommand x:Name="OpenMaziiLinkCommand" Command="{x:Bind ViewModel.OpenMaziiLinkCommand}" 
+                       Description="Open Mazii link of the current item (Control + M)" Label="Goto Mazii"/>
+        <XamlUICommand x:Name="OpenJishoLinkCommand" Command="{x:Bind ViewModel.OpenJishoLinkCommand}" 
+                       Description="Open Jisho link of the current item (Control + J)" Label="Goto Jisho"/>
+        <XamlUICommand x:Name="ResetKanjiCommand" Command="{x:Bind ViewModel.ResetKanjiCommand}" 
+                       Description="Reset current kanji (Control + R)" Label="Reset"/>
+
+        <!--<XamlUICommand x:Name="CreateDocxCommand" Command="{x:Bind ViewModel.CreateDocxCommand}" Description="" Label="Create Docx"/>-->
     </Page.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20 20 20 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -40,25 +48,74 @@
                             QueryIcon="Find"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            Margin="8 0 0 0"/>
+                            Margin="8 0 0 0"
+                            ToolTipService.ToolTip="Search Kanji (Control + S)"
+                            x:Name="AutoSuggest">
+                <AutoSuggestBox.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="S" x:Name="AutoSuggestKBA" Invoked="AutoSuggestKBA_Invoked"/>
+                </AutoSuggestBox.KeyboardAccelerators>
+            </AutoSuggestBox>
             <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
-                <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneWay}" Icon="List" Label="Multi-line Search"/>
+                
+                <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneWay}"
+                              Icon="List" Label="Multi-line Search" 
+                              ToolTipService.ToolTip="Control + F"
+                              AccessKey="Control + F">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="F"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
             </CommandBar>
             <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
-                <AppBarButton Icon="Link" Label="Copy Link" IsEnabled="{x:Bind ViewModel.HasCurrent,Mode=OneWay}">
+
+                <AppBarButton Label="Save" Icon="SaveLocal">
                     <AppBarButton.Flyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Mazii" Tag="mazii" Command="{StaticResource CopyMaziiLinkCommand}"/>
-                            <MenuFlyoutItem Text="Jisho" Tag="jisho" Command="{StaticResource CopyJishoLinkCommand}"/>
+                            <MenuFlyoutItem Text="Save as Text" Tag="txt" Command="{x:Bind CreateTextCommand}"/>
+                            <MenuFlyoutItem Text="Save as Word Document" Tag="docx" Command="{x:Bind CreateDocxCommand}"/>
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
+
+                <AppBarButton Icon="Globe" Label="Goto" IsEnabled="{x:Bind ViewModel.HasCurrent,Mode=OneWay}">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Icon="Go" Text="Mazii" Tag="mazii" 
+                                            Command="{StaticResource OpenMaziiLinkCommand}">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" Key="M"/>
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem Icon="Go" Text="Jisho" Tag="jisho" 
+                                            Command="{StaticResource OpenJishoLinkCommand}">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" Key="J"/>
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                
                 <AppBarSeparator/>
-                <AppBarButton Command="{x:Bind EditCommand, Mode=OneWay}" Icon="Edit" IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Edit"/>
+                <AppBarButton Command="{x:Bind EditCommand, Mode=OneTime}" Icon="Edit" 
+                              IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Edit" ToolTipService.ToolTip="Edit (Control + E)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="E"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
+                <AppBarButton Command="{StaticResource ResetKanjiCommand}" Icon="Refresh" 
+                              IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Reset" ToolTipService.ToolTip="Reset (Control + E)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="R"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
+
 
             </CommandBar>
         </Grid>
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -81,7 +138,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
+
             <Grid Grid.Column="1" Visibility="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -110,12 +167,12 @@
 
                         <Paragraph>
                             訓:
-                            <Run Text="{x:Bind ViewModel.Current.OnYumi, Mode=OneWay}"/>
+                            <Run Text="{x:Bind ViewModel.Current.Onyumi, Mode=OneWay}"/>
                         </Paragraph>
 
                         <Paragraph>
                             音:
-                            <Run Text="{x:Bind ViewModel.Current.KunYumi, Mode=OneWay}"/>
+                            <Run Text="{x:Bind ViewModel.Current.Kunyumi, Mode=OneWay}"/>
                         </Paragraph>
 
                         <Paragraph>
@@ -151,6 +208,14 @@
             </Grid>
         </Grid>
 
+
+        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="2" Margin="0 8"
+                     Value="{x:Bind ViewModel.MaziiProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+        <ProgressBar x:Name="JishoProgressBar" Grid.Row="3" Margin="0 8"
+                     Value="{x:Bind ViewModel.JishoProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+
         <ContentDialog x:Name="EditDialog" 
                        PrimaryButtonText="Update" 
                        CloseButtonText="Cancel" >
@@ -167,11 +232,12 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="SinoVietnamese" Header="Hán Việt:" Text="{Binding SinoVietnamese, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="0"/>
+                        <TextBox x:Name="SinoVietnamese" Header="Hán Việt:" 
+                                 Text="{Binding SinoVietnamese, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="0"/>
                         <TextBox x:Name="Level" Header="Level:" Text="{Binding Level, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="0"/>
 
-                        <TextBox x:Name="OnYumi" Header="訓:" Text="{Binding OnYumi, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="1"/>
-                        <TextBox x:Name="KunYumi" Header="音:" Text="{Binding KunYumi, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="1"/>
+                        <TextBox x:Name="OnYumi" Header="訓:" Text="{Binding Onyumi, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="1"/>
+                        <TextBox x:Name="KunYumi" Header="音:" Text="{Binding Kunyumi, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="1"/>
 
                         <TextBox x:Name="Strokes" Header="Strokes:" Text="{Binding Strokes, Mode=TwoWay}" Margin="4" Grid.Column="0" Grid.Row="2"/>
                         <TextBox x:Name="Radicals" Header="Radicals:" Text="{Binding Radicals, Mode=TwoWay}" Margin="4" Grid.Column="1" Grid.Row="2"/>
@@ -191,7 +257,13 @@
                 <TextBox x:Name="SearchContent" TextWrapping="Wrap" AcceptsReturn="True"/>
             </ScrollViewer>
         </ContentDialog>
+
+        <ContentDialog x:Name="ErrorDialog" PrimaryButtonText="OK">
+            <RichTextBlock>
+                <Paragraph>
+                    <Run x:Name="ErrorRun" Text="as"/>
+                </Paragraph>
+            </RichTextBlock>
+        </ContentDialog>
     </Grid>
-    
-    
 </Page>

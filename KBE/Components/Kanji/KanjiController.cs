@@ -8,6 +8,9 @@ using System.Text.Json;
 using HtmlAgilityPack;
 using KBE.Models;
 using System.Diagnostics;
+using KBE.Components.SQL;
+using KBE.Components.Utils;
+using KBE.Components.Settings;
 //List<string> list = new () { "光" };
 //var s = await KBE.WordController.FetchAll(list);
 //int a = 0;
@@ -21,7 +24,7 @@ using System.Diagnostics;
 //}
 //var a = JsonSerializer.Deserialize<KBE.MaziiAPI>(tmp);
 ////var d = JsonSerializer.Deserialize<KBE.MaziiAPIResults>(a.results[0].ToString());
-namespace KBE.Components
+namespace KBE.Components.Kanji
 {
     //enum KanjiDict
     //{
@@ -63,37 +66,31 @@ namespace KBE.Components
         public string jlpt { get; set; } = "";
         public string radicals { get; set; } = "";
 
+
+        private string CheckNullAndTrim(HtmlNode? node)
+        {
+            if (node is null)
+            {
+                return "N/A";
+            }
+            return node.InnerText.ToString().Replace("\n", "").Trim();
+        }
         public JishoAPI(string htmlContent)
         {
             doc.LoadHtml(htmlContent);
-            strokes = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[1]")
-                .InnerText.ToString().Replace("\n", "").Trim();
-            english = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[1]/div[1]")
-                .InnerText.ToString().Replace("\n", "").Trim();
-            taught = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[1]")
-                .InnerText.ToString().Replace("\n", "").Trim();
-            try
-            {
-                jlpt = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[2]")
-    .InnerText.ToString().Replace("\n", "");
-                jlpt = jlpt.Trim();
-            }
-            catch (NullReferenceException ex)
-            {
-                Debug.WriteLine(ex);
-                jlpt = "0";
-            }
 
-            radicals = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[2]/dl/dd/span")
-                .InnerText.ToString().Replace("\n", "").Trim();
-
+            strokes = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[1]"));
+            english = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[1]/div[1]"));
+            taught = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[1]"));
+            jlpt = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[2]"));
+            radicals = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[2]/dl/dd/span"));
         }
     }
 
     public class KanjiController
     {
         #region Init
-        public static Setting Setting { get; } = Setting.GetSetting();
+        public static Setting Setting => Setting.Instance;
         #endregion
 
         #region Get Kanji
@@ -118,14 +115,14 @@ namespace KBE.Components
             return await SQLController.GetAllKanjiWordsAsync();
         }
 
-        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(string rawString)
+        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(string rawString, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
             List<string> filteredString = KanjiProcessor.FilterProcessing(rawString, new() { isOnlyKanj = true });
-            return await GetKanjiNotInDatabaseFromInternet(filteredString);
-            
+            return await GetKanjiNotInDatabaseFromInternet(filteredString, JishoProgress, MaziiProgress);
+
         }
 
-        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(List<string> filteredKanji)
+        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(List<string> filteredKanji, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
             var checkTasks = filteredKanji.ToList().Select(kanji => SQLController.CheckExistAsync(kanji));
             var isInDatabase = await Task.WhenAll(checkTasks);
@@ -144,7 +141,7 @@ namespace KBE.Components
                 return false;
             }
 
-            var result = await GetKanjiFromInternet(kanjiStrings);
+            var result = await GetKanjiFromInternet(kanjiStrings, JishoProgress, MaziiProgress);
             await AddToDatabase(result);
             return true;
         }
@@ -156,15 +153,15 @@ namespace KBE.Components
 
         public static void UpdateKanji(KanjiWord kanji)
         {
-            Task.Run(()=>SQLController.Update(kanji));
+            Task.Run(() => SQLController.Update(kanji));
         }
-        
 
 
-        private static async Task<SortedSet<KanjiWord>> GetKanjiFromInternet(List<string> strings)
+
+        public static async Task<SortedSet<KanjiWord>> GetKanjiFromInternet(List<string> strings, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
 
-            var rawWord = await Fetching.FetchAll(strings);
+            var rawWord = await Fetching.FetchAll(strings, JishoProgress, MaziiProgress);
             SortedSet<KanjiWord> kanjiList = new(new KanjiWordComparer());
             foreach (var (word, rawContent) in rawWord)
             {
@@ -185,13 +182,44 @@ namespace KBE.Components
             return kanji;
         }
 
+        private static string MaziiErrorTemplate() {
+            return @"
+                {
+                  ""status"": 200,
+                  ""results"": [
+                    {
+                      ""comp"": null,
+                      ""level"": null,
+                      ""kun"": null,
+                      ""kanji"": null,
+                      ""freq"": null,
+                      ""stroke_count"": null,
+                      ""example_on"": null,
+                      ""mean"": null,
+                      ""detail"": null,
+                      ""on"": null,
+                      ""label"": ""ja_vi""
+                    }
+                  ],
+                  ""total"": 1
+                }
+            ";
+        }
+
         public static MaziiAPIResults ProcessMazii(string maziiRaw)
         {
             var maziiObj = JsonSerializer.Deserialize<MaziiAPI>(maziiRaw);
+            if (maziiObj.status != 200)
+            {
+                maziiObj = JsonSerializer.Deserialize<MaziiAPI>(MaziiErrorTemplate());
+            }
+
             if (maziiObj is null)
             {
                 throw new Exception("Parse Error");
             }
+
+
             return maziiObj.results[0];
         }
         #endregion
