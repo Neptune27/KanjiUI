@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanjiUI", "KanjiUI\KanjiUI.csproj", "{6B443ACE-B14E-4CF5-A4BD-520889B8F35A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KanjiUI", "KanjiUI\KanjiUI.csproj", "{6B443ACE-B14E-4CF5-A4BD-520889B8F35A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KBE", "KBE\KBE.csproj", "{22337E34-F094-48E5-A704-5FB96E096944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KBE", "KBE\KBE.csproj", "{22337E34-F094-48E5-A704-5FB96E096944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,8 +55,8 @@ Global
 		{22337E34-F094-48E5-A704-5FB96E096944}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22337E34-F094-48E5-A704-5FB96E096944}.Release|arm64.ActiveCfg = Release|Any CPU
 		{22337E34-F094-48E5-A704-5FB96E096944}.Release|arm64.Build.0 = Release|Any CPU
-		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x64.ActiveCfg = Release|Any CPU
-		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x64.Build.0 = Release|Any CPU
+		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x64.ActiveCfg = Release|x64
+		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x64.Build.0 = Release|x64
 		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x86.ActiveCfg = Release|Any CPU
 		{22337E34-F094-48E5-A704-5FB96E096944}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
