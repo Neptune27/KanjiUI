@@ -18,6 +18,7 @@ using KBE.Components.Kanji;
 using KBE.Components.Utils;
 using KBE.Components.Settings;
 using KBE.Components.SQL;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace KanjiUI.ViewModels
 {
@@ -25,18 +26,24 @@ namespace KanjiUI.ViewModels
     {
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get => Setting.Instance; }
-        private static DataPackage DataPackage { get; set; } = new();
 
+        private readonly ObservableCollection<KanjiWord> items = new();
 
-        private readonly ObservableCollection<KanjiWord> items = ShellViewModel.KanjiWords;
-
-        public override ObservableCollection<KanjiWord> Items => filter is null
+        public override ObservableCollection<KanjiWord> Items => string.IsNullOrEmpty(filter)
         ? items
         : new ObservableCollection<KanjiWord>(items.Where(i => ApplyFilter(i, filter)));
 
         public ICommand OpenMaziiLinkCommand => new RelayCommand(OpenMaziiLinkCommand_Executed);
         public ICommand OpenJishoLinkCommand => new RelayCommand(OpenJishoLinkCommand_Executed);
         public ICommand ResetKanjiCommand => new AsyncRelayCommand(ResetItem);
+        public ICommand DeleteKanjiCommand => new AsyncRelayCommand(DeleteItem);
+
+        private async Task DeleteItem()
+        {
+            await SQLController.DeleteKanjiAsync(Current);
+            items.Remove(Current);
+            OnPropertyChanged(nameof(Items));
+        }
 
         [ObservableProperty]
         int maziiProgress = 0;
@@ -44,20 +51,8 @@ namespace KanjiUI.ViewModels
         [ObservableProperty]
         int jishoProgress = 0;
 
-        private Visibility visibility;
-        public Visibility ProgressVisibility
-        {
-            get
-            {
-                return visibility;
-            }
-            set
-            {
-                visibility = value;
-
-                OnPropertyChanged(nameof(ProgressVisibility));
-            }
-        }
+        [ObservableProperty]
+        private Visibility progressVisibility = Visibility.Collapsed;
 
 
         public static HomePageViewModel GetInstance()
@@ -68,10 +63,27 @@ namespace KanjiUI.ViewModels
 
         public HomePageViewModel()
         {
-            var kanjiItem = KanjiController.GetKanjiFromDatabaseAsync().GetAwaiter().GetResult();
-            kanjiItem.ToList().ForEach(i => Items.Add(i));
-            Instance = this;
-            visibility = Visibility.Collapsed;
+            StartUpTask();
+        }
+
+        public async void StartUpTask()
+        {
+            if (items.Count == 0)
+            {
+                var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync();
+                kanjiItem.ToList().ForEach(Items.Add);
+
+                WeakReferenceMessenger.Default.Register<KanjiUpdateMessage>(this, (r, m) =>
+                {
+                    _ = RenewItems();
+                });
+
+                WeakReferenceMessenger.Default.Register<FilterChangedMessage>(this, (r, m) =>
+                {
+                    _ = SetFilter(m.Value);
+                });
+                Instance = this;
+            }
         }
 
 
@@ -118,33 +130,19 @@ namespace KanjiUI.ViewModels
 
         private async Task GetFiltered()
         {
-            var maziiProgress = new Progress<int>(percent =>
-            {
-                MaziiProgress = percent;
-            });
+            var maziiProgress = new Progress<int>(percent => MaziiProgress = percent);
 
-            var jishoProgress = new Progress<int>(percent =>
-            {
-                JishoProgress = percent;
-            });
+            var jishoProgress = new Progress<int>(percent => JishoProgress = percent);
 
-            if (Filter == "")
+            if (string.IsNullOrEmpty(Filter))
             {
                 return;
             }
+
             ProgressVisibility = Visibility.Visible;
             if (await KanjiController.GetKanjiNotInDatabaseFromInternet(filter, jishoProgress, maziiProgress))
             {
-                var res = await KanjiController.GetKanjiFromDatabaseAsync();
-                OnPropertyChanging(nameof(Items));
-                items.Clear();
-
-                foreach (var kanji in res)
-                {
-                    items.Add(kanji);
-                }
-
-                OnPropertyChanged(nameof(Items));
+                await RenewItems();
             }
 
             MaziiProgress = 0;
@@ -153,8 +151,23 @@ namespace KanjiUI.ViewModels
             ProgressVisibility = Visibility.Collapsed;
         }
 
+        private async Task RenewItems()
+        {
+            var res = await KanjiController.GetKanjiFromDatabaseAsync();
+            OnPropertyChanging(nameof(Items));
+            items.Clear();
+
+            foreach (var kanji in res)
+            {
+                items.Add(kanji);
+            }
+
+            OnPropertyChanged(nameof(Items));
+        }
+
         private async Task ResetItem()
         {
+
             var maziiProgress = new Progress<int>(percent =>
             {
                 MaziiProgress = percent;

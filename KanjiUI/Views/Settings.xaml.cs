@@ -31,6 +31,8 @@ namespace KanjiUI.Views
         public Settings()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Required;
+
         }
 
         public ICommand FileBrowserCommand => new AsyncRelayCommand(FileBrowserDialog);

@@ -75,7 +75,7 @@
                 </Expander>
 
                 <Expander x:Name="FSExpander"
-                    IsExpanded="True"
+                    IsExpanded="False"
                     ExpandDirection="Down"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
@@ -85,6 +85,43 @@
                     </Expander.Header>
                     <Expander.Content>
                         <NumberBox Text="{x:Bind ViewModel.Items[0].FetchSize, Mode=TwoWay}"/>
+                    </Expander.Content>
+                </Expander>
+
+                <Expander x:Name="TCSExpander"
+                    IsExpanded="False"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Translator Fetch Size</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <NumberBox Text="{x:Bind ViewModel.Items[0].TranslateChunkSize, Mode=TwoWay}"/>
+                    </Expander.Content>
+                </Expander>
+
+                <Expander x:Name="FilterExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Filter</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="Filter"
+                                     TextWrapping="Wrap"
+                                     Text="{x:Bind ViewModel.Items[0].Filter, Mode=TwoWay}" 
+                                     Grid.Column="0"/>
+                        </Grid>
                     </Expander.Content>
                 </Expander>
 

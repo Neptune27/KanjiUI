@@ -5,15 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KBE.Components.Settings;
+using KBE.Enums;
 
 namespace KBE.Components.Utils
 {
-
-    enum FetchingOptions
-    {
-        POST,
-        GET
-    }
 
     class Fetching
     {

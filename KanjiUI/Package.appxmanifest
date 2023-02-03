@@ -14,7 +14,7 @@
   <Properties>
     <DisplayName>KanjiUI</DisplayName>
     <PublisherDisplayName>vomin</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\KanjiIcon.png</Logo>
   </Properties>
 
   <Dependencies>

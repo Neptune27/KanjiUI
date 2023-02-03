@@ -23,7 +23,8 @@
                        Description="Open Jisho link of the current item (Control + J)" Label="Goto Jisho"/>
         <XamlUICommand x:Name="ResetKanjiCommand" Command="{x:Bind ViewModel.ResetKanjiCommand}" 
                        Description="Reset current kanji (Control + R)" Label="Reset"/>
-
+        <XamlUICommand x:Name="DeleteKanjiCommand" Command="{x:Bind ViewModel.DeleteKanjiCommand}" 
+                       Description="Reset current kanji (Control + D)" Label="Delete"/>
         <!--<XamlUICommand x:Name="CreateDocxCommand" Command="{x:Bind ViewModel.CreateDocxCommand}" Description="" Label="Create Docx"/>-->
     </Page.Resources>
 
@@ -44,12 +45,14 @@
 
             <AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" 
                             TextChanged="AutoSuggestBox_TextChanged"
+                            Text="{x:Bind ViewModel.Filter, Mode=OneWay}"
                             Grid.Column="0"
                             QueryIcon="Find"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             Margin="8 0 0 0"
                             ToolTipService.ToolTip="Search Kanji (Control + S)"
+                            
                             x:Name="AutoSuggest">
                 <AutoSuggestBox.KeyboardAccelerators>
                     <KeyboardAccelerator Modifiers="Control" Key="S" x:Name="AutoSuggestKBA" Invoked="AutoSuggestKBA_Invoked"/>
@@ -57,7 +60,7 @@
             </AutoSuggestBox>
             <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
                 
-                <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneWay}"
+                <AppBarButton Grid.Column="1" Command="{x:Bind SearchCommand,Mode=OneTime}"
                               Icon="List" Label="Multi-line Search" 
                               ToolTipService.ToolTip="Control + F"
                               AccessKey="Control + F">
@@ -97,6 +100,13 @@
                 </AppBarButton>
                 
                 <AppBarSeparator/>
+                <AppBarButton Command="{x:Bind DeleteKanjiCommand, Mode=OneTime}" Icon="Delete" 
+                              IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Delete" ToolTipService.ToolTip="Delete (Control + D)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="D"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                
                 <AppBarButton Command="{x:Bind EditCommand, Mode=OneTime}" Icon="Edit" 
                               IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Label="Edit" ToolTipService.ToolTip="Edit (Control + E)">
                     <AppBarButton.KeyboardAccelerators>

@@ -43,6 +43,11 @@ namespace KBE.Components.Settings
         public string DatabaseConnectDirectory { get; set; } = "";
         public SearchOptions SearchOptions { get; set; } = new();
         public SaveOptions SaveOption { get; set; } = new();
+        public string Filter { get; set; } = "";
+        public string TranslateFromCodeName { get; set; } = "";
+        public string TranslateToCodeName { get; set; } = "";
+
+        public int TranslateChunkSize { get; set; }
 
         public bool LossySearch { get; set; } = true;
 
@@ -76,7 +81,7 @@ namespace KBE.Components.Settings
         {
             try
             {
-                Setting? setting = JsonSerializer.Deserialize<Setting>(ReadFromFile());
+                Setting? setting = JsonSerializer.Deserialize<Setting>(ReadFromFile(), SettingJsonContext.Default.Setting);
 
                 if (setting is null)
                 {
@@ -105,7 +110,11 @@ namespace KBE.Components.Settings
                 DatabaseConnectDirectory = $"{Directory}\\Data\\DefaultDatabase.db",
                 SearchOptions = new SearchOptions(),
                 SaveOption = new(),
-                LossySearch = true
+                LossySearch = true,
+                Filter = "",
+                TranslateFromCodeName = "Japanese",
+                TranslateToCodeName = "English",
+                TranslateChunkSize = 1500
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

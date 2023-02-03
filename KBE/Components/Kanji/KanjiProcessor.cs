@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBE.Components.Settings;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,12 +10,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace KBE.Components.Kanji
 {
-    public class FilterProcessingOption
-    {
-        public bool isKanjiEnable = true;
-        public bool isLossySearch = true;
-        public bool isOnlyKanj = false;
-    }
 
     public class KanjiProcessor
     {
@@ -61,10 +56,15 @@ namespace KBE.Components.Kanji
         public static List<string> GetKanjis(string words)
         {
             List<string> kanjis = new();
-            foreach (var item in CHINESE_REPLACE)
-            {
-                words = words.Replace(item.Key, item.Value);
-            }
+            _ = CHINESE_REPLACE.Select(
+                (item, index) => 
+                words = words.Replace(item.Key, item.Value)
+            );
+
+            var filter = Setting.Instance.Filter;
+            words = Regex.Replace(words, $@"[{filter} ]", "");
+
+            words = words.Trim();
 
             foreach (var letter in words)
             {
@@ -94,12 +94,16 @@ namespace KBE.Components.Kanji
         }
         public static List<string> FilterProcessing(string filter, FilterProcessingOption option)
         {
+            if (String.IsNullOrEmpty(filter))
+            {
+                return new();
+            }
             List<string> filters = new() { filter };
 
             var processFilter = Regex.Replace(filter, @"[,./\\;]+", "");
             processFilter = Regex.Replace(processFilter, @"[\n]+", " ");
 
-            if (option.isOnlyKanj)
+            if (option.isOnlyKanji)
             {
                 filters.Clear();
                 processFilter = Regex.Replace(processFilter, @"[a-z A-Z0-9\ ]+", "");

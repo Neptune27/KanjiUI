@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <BitmapIcon UriSource="/Assets/Kanji50.png" Grid.Column="0" Height="20" Width="20" Margin="6 0 0 0"/>
+            <BitmapIcon UriSource="/Assets/KanjiIcon.png" Grid.Column="0" Height="20" Width="20" Margin="6 0 0 0"/>
             <!--<Image x:Name="TitleBarIcon" Source="/Assets/Kanji48.png"
                    Grid.Column="0" HorizontalAlignment="Left" 
                    Width="20" Height="20"
@@ -43,9 +43,15 @@
             Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Kanji View" Tag="KanjiUI.Views.HomePage" Icon="Home"></NavigationViewItem>
+                <NavigationViewItem Content="Translate" Tag="KanjiUI.Views.TranslatePage">
+                    <NavigationViewItem.Icon>
+                        <BitmapIcon UriSource="Assets/translate.png" ShowAsMonochrome="True"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" Margin="0"/>
         </NavigationView>
+
     </Grid>
 
 </Window>

@@ -1,0 +1,122 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Page
+    x:Class="KanjiUI.Views.TranslatePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KanjiUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:viewmodels="using:KanjiUI.ViewModels"
+    xmlns:models="using:KBE.Models"
+    
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <viewmodels:TranslateViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+
+    <Page.Resources>
+        <XamlUICommand x:Name="OpenNewWindowsCommand" Command="{x:Bind ViewModel.OpenNewWindowCommand}" 
+                       Description="Open new windows" Label="Open new windows"/>
+    </Page.Resources>
+
+    <Grid
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+        Margin="20 20 20 0"
+        >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+
+
+        <Grid Grid.Row="0">
+            <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
+
+                <AppBarButton Grid.Column="1" Command="{x:Bind OpenNewWindowsCommand,Mode=OneTime}"
+                              Icon="NewWindow" Label="Open Kanji View" 
+                              ToolTipService.ToolTip="Control + F"
+                              AccessKey="Control + F">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="F"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+            </CommandBar>
+        </Grid>
+        
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="10 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Margin="0 4">Words to translate</TextBlock>
+                <ComboBox x:Name="FromCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch"
+                          SelectionChanged="TranslateComboBox_SelectionChanged"
+                          SelectedValue="{x:Bind ViewModel.FromCodeName, Mode=TwoWay}">
+                </ComboBox>
+                <TextBox Margin="0 10" Text="{x:Bind ViewModel.InputText, Mode=TwoWay}" 
+                         SelectionChanged="TextBox_SelectionChanged"
+                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                         AcceptsReturn="True" FontSize="22" IsSpellCheckEnabled="False"
+                         Grid.Row="2"/>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="10 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Margin="0 4">Translated Words</TextBlock>
+                <ComboBox x:Name="ToCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch" SelectionChanged="TranslateComboBox_SelectionChanged"
+                          SelectedValue="{x:Bind ViewModel.ToCodeName, Mode=TwoWay}">
+                </ComboBox>
+                <TextBox Margin="0 10" Text="{x:Bind ViewModel.OutputText, Mode=TwoWay}"
+                         SelectionChanged="TextBox_SelectionChanged"
+                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                         AcceptsReturn="True" FontSize="22"
+                         Grid.Row="2"/>
+            </Grid>
+        </Grid>
+
+
+
+        <ProgressBar x:Name="TranslateProgressBar" Grid.Row="2" Margin="0 8"
+                     Value="{x:Bind ViewModel.TranslateProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.TranslateProgressVisibility, Mode=OneWay}"/>
+        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="3" Margin="0 8"
+                     Value="{x:Bind ViewModel.MaziiProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+        <ProgressBar x:Name="JishoProgressBar" Grid.Row="4" Margin="0 8"
+                     Value="{x:Bind ViewModel.JishoProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+
+        <ContentDialog x:Name="ErrorDialog" PrimaryButtonText="OK">
+            <RichTextBlock>
+                <Paragraph>
+                    <Run x:Name="ErrorRun" Text="as"/>
+                </Paragraph>
+            </RichTextBlock>
+        </ContentDialog>
+
+    </Grid>
+</Page>

@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
-
-using HtmlAgilityPack;
 using KBE.Models;
 using System.Diagnostics;
 using KBE.Components.SQL;
 using KBE.Components.Utils;
 using KBE.Components.Settings;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Reflection;
+using KBE.Components.Kanji.Jisho;
+using KBE.Components.Kanji.Mazii;
 //List<string> list = new () { "光" };
 //var s = await KBE.WordController.FetchAll(list);
 //int a = 0;
@@ -26,66 +28,6 @@ using KBE.Components.Settings;
 ////var d = JsonSerializer.Deserialize<KBE.MaziiAPIResults>(a.results[0].ToString());
 namespace KBE.Components.Kanji
 {
-    //enum KanjiDict
-    //{
-    //    KANJI,
-    //    MEANING,
-    //    ON,
-    //    KUN,
-    //    LEVEL,
-    //    ENGLISH,
-    //    VIETNAMESE,
-    //    STROKES,
-    //    PARTS,
-    //    TAUGHT
-    //}
-
-    public class MaziiAPI
-    {
-        public int status { get; set; } = 400;
-        public MaziiAPIResults[] results { get; set; } = new MaziiAPIResults[0];
-    }
-
-    public class MaziiAPIResults
-    {
-        public string comp { get; set; } = "";
-        public string level { get; set; } = "";
-        public string kun { get; set; } = "";
-        public string on { get; set; } = "";
-        public string mean { get; set; } = "";
-        public string detail { get; set; } = "";
-    }
-
-    class JishoAPI
-    {
-        static HtmlDocument doc = new();
-
-        public string strokes { get; set; } = "";
-        public string english { get; set; } = "";
-        public string taught { get; set; } = "";
-        public string jlpt { get; set; } = "";
-        public string radicals { get; set; } = "";
-
-
-        private string CheckNullAndTrim(HtmlNode? node)
-        {
-            if (node is null)
-            {
-                return "N/A";
-            }
-            return node.InnerText.ToString().Replace("\n", "").Trim();
-        }
-        public JishoAPI(string htmlContent)
-        {
-            doc.LoadHtml(htmlContent);
-
-            strokes = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[1]"));
-            english = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[1]/div[1]"));
-            taught = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[1]"));
-            jlpt = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[2]/div/div[2]/div/div[2]"));
-            radicals = CheckNullAndTrim(doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[2]/dl/dd/span"));
-        }
-    }
 
     public class KanjiController
     {
@@ -117,7 +59,7 @@ namespace KBE.Components.Kanji
 
         public static async Task<bool> GetKanjiNotInDatabaseFromInternet(string rawString, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
-            List<string> filteredString = KanjiProcessor.FilterProcessing(rawString, new() { isOnlyKanj = true });
+            List<string> filteredString = KanjiProcessor.FilterProcessing(rawString, new() { isOnlyKanji = true });
             return await GetKanjiNotInDatabaseFromInternet(filteredString, JishoProgress, MaziiProgress);
 
         }
@@ -209,6 +151,7 @@ namespace KBE.Components.Kanji
         public static MaziiAPIResults ProcessMazii(string maziiRaw)
         {
             var maziiObj = JsonSerializer.Deserialize<MaziiAPI>(maziiRaw);
+            if (maziiObj == null) { throw new Exception($"{maziiRaw} not found"); }
             if (maziiObj.status != 200)
             {
                 maziiObj = JsonSerializer.Deserialize<MaziiAPI>(MaziiErrorTemplate());

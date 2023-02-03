@@ -50,6 +50,25 @@ namespace KBE.Models
             }
         }
 
+        public string Filter
+        {
+            get => setting.Filter;
+            set
+            {
+                if (Filter == value)
+                {
+                    return;
+                }
+
+                OnPropertyChanging(nameof(Filter));
+
+                setting.Filter = value;
+
+                OnPropertyChanged(nameof(Filter));
+
+            }
+        }
+
         #region Search Types
         public bool Kanji
         {
@@ -207,6 +226,25 @@ namespace KBE.Models
                 OnPropertyChanged(nameof(LossySearch));
             }
         }
+        #endregion
+
+        #region Translate Setting
+
+        public int TranslateChunkSize
+        {
+            get => setting.TranslateChunkSize;
+            set
+            {
+                if (TranslateChunkSize == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(TranslateChunkSize));
+                setting.TranslateChunkSize = value;
+                OnPropertyChanged(nameof(TranslateChunkSize));
+            }
+        }
+
         #endregion
 
         #region Save Type
