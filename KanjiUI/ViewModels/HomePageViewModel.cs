@@ -97,8 +97,8 @@ namespace KanjiUI.ViewModels
         {
             var processedFilter = KanjiProcessor.FilterProcessing(filter, new FilterProcessingOption()
             {
-                isKanjiEnable = SettingInstance.SearchOptions.Kanji,
-                isLossySearch = SettingInstance.LossySearch
+                IsKanjiEnable = SettingInstance.SearchOptions.Kanji,
+                IsLossySearch = SettingInstance.LossySearch
             });
 
 
@@ -119,7 +119,7 @@ namespace KanjiUI.ViewModels
 
             foreach (var item in Items)
             {
-                if (current.Kanji.CompareTo(item.Kanji) == 0)
+                if (String.Compare(current.Kanji, item.Kanji, StringComparison.Ordinal) == 0)
                 {
                     current = item;
                     break;

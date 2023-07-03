@@ -18,7 +18,7 @@ namespace KBE.Components.SQL
     {
         #region Field
         static Setting Setting => Setting.Instance;
-        static readonly SqliteConnection _connection = new($"Data Source={Setting.DatabaseConnectDirectory}");
+        private static readonly SqliteConnection _connection = new($"Data Source={Setting.DatabaseConnectDirectory}");
         static readonly SQLController _controller = new();
         #endregion
 

@@ -12,24 +12,25 @@ namespace KBE.Components.Utils
 
     class Fetching
     {
-        private static readonly HttpClient client = new();
-        private List<Task<HttpResponseMessage>> requests = new();
+        private static readonly HttpClient Client = new();
+        private readonly List<Task<HttpResponseMessage>> requests = new();
 
         //
-        public List<string> Urls { get; set; } = new List<string> { };
-        public List<Dictionary<string, string>>
+        private List<string> Urls { get; set; } = new List<string> { };
+
+        private List<Dictionary<string, string>>
             Values
         { get; set; } = new();
 
-        static Setting Setting => Setting.Instance;
+        private static Setting Setting => Setting.Instance;
 
-        public int Size { get => Setting.FetchSize; set => Setting.FetchSize = value; }
+        public static int Size { get => Setting.FetchSize; set => Setting.FetchSize = value; }
         private int offset = 0;
-        public FetchingOptions options;
+        public readonly FetchingOptions Options;
 
         public Fetching(FetchingOptions options = FetchingOptions.GET)
         {
-            this.options = options;
+            this.Options = options;
         }
 
         private void QueueRequest()
@@ -42,14 +43,14 @@ namespace KBE.Components.Utils
                 {
                     break;
                 }
-                if (options == FetchingOptions.GET)
+                if (Options == FetchingOptions.GET)
                 {
-                    requests.Add(client.GetAsync(Urls[i]));
+                    requests.Add(Client.GetAsync(Urls[i]));
                 }
                 else
                 {
                     var content = new FormUrlEncodedContent(Values[i]);
-                    requests.Add(client.PostAsync(Urls[i], content));
+                    requests.Add(Client.PostAsync(Urls[i], content));
                 }
             }
             offset += Size;
@@ -105,16 +106,16 @@ namespace KBE.Components.Utils
             return await fetcher.FetchURLs(progress);
         }
 
-        static async public Task<Dictionary<string, string[]>> FetchAll(IEnumerable<string> strings, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
+        static async public Task<Dictionary<string, string[]>> FetchAll(IEnumerable<string> strings, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
         {
-            var JishoTask = GetJisho(strings, JishoProgress);
-            var MaziiTask = GetMazii(strings, MaziiProgress);
+            var jishoTask = GetJisho(strings, jishoProgress);
+            var maziiTask = GetMazii(strings, maziiProgress);
 
-            var Jisho = await JishoTask.ConfigureAwait(false);
-            var Mazii = await MaziiTask.ConfigureAwait(false);
+            var jisho = await jishoTask.ConfigureAwait(false);
+            var mazii = await maziiTask.ConfigureAwait(false);
 
             var dict = strings.Select((chr, index) => new { chr, index })
-                .ToDictionary(pair => pair.chr, pair => new string[2] { Jisho[pair.index], Mazii[pair.index] });
+                .ToDictionary(pair => pair.chr, pair => new string[2] { jisho[pair.index], mazii[pair.index] });
 
             return dict;
         }

@@ -2,8 +2,8 @@
 {
     public class FilterProcessingOption
     {
-        public bool isKanjiEnable = true;
-        public bool isLossySearch = true;
-        public bool isOnlyKanji = false;
+        public bool IsKanjiEnable = true;
+        public bool IsLossySearch = true;
+        public bool IsOnlyKanji = false;
     }
 }

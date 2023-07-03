@@ -22,6 +22,8 @@
     <Page.Resources>
         <XamlUICommand x:Name="OpenNewWindowsCommand" Command="{x:Bind ViewModel.OpenNewWindowCommand}" 
                        Description="Open new windows" Label="Open new windows"/>
+        <XamlUICommand x:Name="TranslateCommand" Command="{x:Bind ViewModel.TranslateCommand}" 
+                       Description="Open new windows" Label="Force Translate"/>
     </Page.Resources>
 
     <Grid
@@ -37,12 +39,21 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
 
 
         <Grid Grid.Row="0">
             <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
 
+                <AppBarButton Grid.Column="1" Command="{x:Bind TranslateCommand, Mode=OneTime}"
+                              Icon="Refresh" Label="Force Translate" 
+                              ToolTipService.ToolTip="Force to translate input text (Ctrl + R)"
+                              AccessKey="Control + R">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="R"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                
                 <AppBarButton Grid.Column="1" Command="{x:Bind OpenNewWindowsCommand,Mode=OneTime}"
                               Icon="NewWindow" Label="Open Kanji View" 
                               ToolTipService.ToolTip="Control + F"
@@ -51,51 +62,79 @@
                         <KeyboardAccelerator Modifiers="Control" Key="F"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
+
             </CommandBar>
+
         </Grid>
-        
-        
+
+
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" Margin="10 0">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Margin="0 4">Words to translate</TextBlock>
-                <ComboBox x:Name="FromCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch"
-                          SelectionChanged="TranslateComboBox_SelectionChanged"
-                          SelectedValue="{x:Bind ViewModel.FromCodeName, Mode=TwoWay}">
+
+                <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4">Words to translate</TextBlock>
+                <ComboBox x:Name="FromCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch" Grid.Column="0"
+                        SelectionChanged="TranslateComboBox_SelectionChanged"
+                        SelectedValue="{x:Bind ViewModel.FromCodeName, Mode=TwoWay}">
                 </ComboBox>
-                <TextBox Margin="0 10" Text="{x:Bind ViewModel.InputText, Mode=TwoWay}" 
-                         SelectionChanged="TextBox_SelectionChanged"
-                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
-                         AcceptsReturn="True" FontSize="22" IsSpellCheckEnabled="False"
-                         Grid.Row="2"/>
-            </Grid>
 
-            <Grid Grid.Column="1" Margin="10 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Margin="0 4">Translated Words</TextBlock>
+                <Button Grid.Row="1" Grid.RowSpan="1" Grid.Column="1"
+                    Height="40"
+                        Style="{StaticResource PagerControlNumberPanelButtonStyle}"
+                    VerticalAlignment="Top"
+                        Click="{x:Bind ViewModel.OnSwapButtonClicked, Mode=OneWay}"
+                        BorderThickness="0"
+                    ToolTipService.ToolTip="Swap Language (Ctrl + S)"
+                    AccessKey="Control + S">
+                    <SymbolIcon VerticalAlignment="Top" Symbol="RepeatAll"/>
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="S"/>
+                    </Button.KeyboardAccelerators>
+                </Button>
+
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Margin="0 4" >Translated Words</TextBlock>
                 <ComboBox x:Name="ToCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch" SelectionChanged="TranslateComboBox_SelectionChanged"
-                          SelectedValue="{x:Bind ViewModel.ToCodeName, Mode=TwoWay}">
+                     SelectedValue="{x:Bind ViewModel.ToCodeName, Mode=TwoWay}" Grid.Column="2"
+                     >
                 </ComboBox>
-                <TextBox Margin="0 10" Text="{x:Bind ViewModel.OutputText, Mode=TwoWay}"
-                         SelectionChanged="TextBox_SelectionChanged"
-                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
-                         AcceptsReturn="True" FontSize="22"
-                         Grid.Row="2"/>
             </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Margin="0 0 20 10" Text="{x:Bind ViewModel.InputText, Mode=TwoWay}" Grid.Column="0"
+                    SelectionChanged="TextBox_SelectionChanged"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                    AcceptsReturn="True" FontSize="22" IsSpellCheckEnabled="False"
+                    />
+
+                <TextBox Margin="20 0 0 10" Text="{x:Bind ViewModel.OutputText, Mode=TwoWay}" Grid.Column="1"
+                        SelectionChanged="TextBox_SelectionChanged"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                        AcceptsReturn="True" FontSize="22"
+                        />
+
+            </Grid>
+            
         </Grid>
 
 

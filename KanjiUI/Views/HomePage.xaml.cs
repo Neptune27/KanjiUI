@@ -157,5 +157,10 @@ namespace KanjiUI.Views
         {
             AutoSuggest.Focus(FocusState.Programmatic);
         }
+
+        private void AutoSuggest_OnContextRequested(UIElement sender, ContextRequestedEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

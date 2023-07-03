@@ -59,31 +59,23 @@ namespace KBE.Components.Kanji
 
         public static async Task<bool> GetKanjiNotInDatabaseFromInternet(string rawString, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
         {
-            List<string> filteredString = KanjiProcessor.FilterProcessing(rawString, new() { isOnlyKanji = true });
+            List<string> filteredString = KanjiProcessor.FilterProcessing(rawString, new() { IsOnlyKanji = true });
             return await GetKanjiNotInDatabaseFromInternet(filteredString, JishoProgress, MaziiProgress);
 
         }
 
-        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(List<string> filteredKanji, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
+        public static async Task<bool> GetKanjiNotInDatabaseFromInternet(List<string> filteredKanji, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
         {
-            var checkTasks = filteredKanji.ToList().Select(kanji => SQLController.CheckExistAsync(kanji));
+            var checkTasks = filteredKanji.ToList().Select(SQLController.CheckExistAsync);
             var isInDatabase = await Task.WhenAll(checkTasks);
-            List<string> kanjiStrings = new();
-
-            for (int i = 0; i < filteredKanji.Count; i++)
-            {
-                if (isInDatabase[i] == false)
-                {
-                    kanjiStrings.Add(filteredKanji[i]);
-                }
-            }
+            List<string> kanjiStrings = filteredKanji.Where((t, i) => isInDatabase[i] == false).ToList();
 
             if (kanjiStrings.Count == 0)
             {
                 return false;
             }
 
-            var result = await GetKanjiFromInternet(kanjiStrings, JishoProgress, MaziiProgress);
+            var result = await GetKanjiFromInternet(kanjiStrings, jishoProgress, maziiProgress);
             await AddToDatabase(result);
             return true;
         }
@@ -100,10 +92,10 @@ namespace KBE.Components.Kanji
 
 
 
-        public static async Task<SortedSet<KanjiWord>> GetKanjiFromInternet(List<string> strings, IProgress<int>? JishoProgress = null, IProgress<int>? MaziiProgress = null)
+        public static async Task<SortedSet<KanjiWord>> GetKanjiFromInternet(List<string> strings, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
         {
 
-            var rawWord = await Fetching.FetchAll(strings, JishoProgress, MaziiProgress);
+            var rawWord = await Fetching.FetchAll(strings, jishoProgress, maziiProgress);
             SortedSet<KanjiWord> kanjiList = new(new KanjiWordComparer());
             foreach (var (word, rawContent) in rawWord)
             {

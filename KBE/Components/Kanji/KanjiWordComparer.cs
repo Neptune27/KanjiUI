@@ -15,7 +15,7 @@ namespace KBE.Components.Kanji
             {
                 return 0;
             }
-            return x.Kanji.CompareTo(y.Kanji);
+            return string.Compare(x.Kanji, y.Kanji, StringComparison.Ordinal);
         }
     }
 }

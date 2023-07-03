@@ -88,6 +88,8 @@ namespace KanjiUI.ViewModels
 
             var fromCode = typeof(LanguageCodes).GetField(FromCodeName).GetValue(null).ToString();
             var toCode = typeof(LanguageCodes).GetField(ToCodeName).GetValue(null).ToString();
+            Debug.WriteLine(fromCode);
+            Debug.WriteLine(toCode);
 
             TranslateProgress = 0;
             var translateProgress = new Progress<int>(percent => TranslateProgress = percent);
@@ -112,6 +114,14 @@ namespace KanjiUI.ViewModels
             Setting.Instance.TranslateToCodeName = ToCodeName;
             Setting.Instance.TranslateFromCodeName = FromCodeName;
             Setting.Instance.SaveSetting();
+        }
+
+        public void OnSwapButtonClicked()
+        {
+            (FromCodeName, ToCodeName) = (ToCodeName, FromCodeName);
+            (InputText, OutputText) = (OutputText, InputText);
+
+            TranslateSelectionChanged();
         }
 
         private async Task SearchKanjiAsync()

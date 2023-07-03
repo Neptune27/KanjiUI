@@ -83,12 +83,7 @@ namespace KBE.Components.Settings
             {
                 Setting? setting = JsonSerializer.Deserialize<Setting>(ReadFromFile(), SettingJsonContext.Default.Setting);
 
-                if (setting is null)
-                {
-                    throw new NullReferenceException();
-                }
-                return setting;
-
+                return setting ?? throw new NullReferenceException();
             }
             catch (Exception e) when (e is JsonException || e is NullReferenceException)
             {

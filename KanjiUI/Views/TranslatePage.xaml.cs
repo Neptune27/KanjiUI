@@ -46,8 +46,19 @@ namespace KanjiUI.Views
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
 
-            ViewModel.OnTranslatorError = (obj) => OpenErrorDialog(title: $"Translator Fetch Size {Setting.Instance.TranslateChunkSize} is too large!",
-                content: $"Please lower the translator fetch size in the option panel!");
+            ViewModel.OnTranslatorError = (obj) =>
+            {
+                if (Setting.Instance.TranslateChunkSize <= 0)
+                {
+                    OpenErrorDialog(title: $"Translator Fetch Size {Setting.Instance.TranslateChunkSize} is too small!",
+                        content: $"Please set the translator fetch size in the option panel higher than 0!");
+                }
+                else
+                {
+                    OpenErrorDialog(title: $"Translator Fetch Size {Setting.Instance.TranslateChunkSize} is too large!",
+                        content: $"Please lower the translator fetch size in the option panel!");
+                }
+            };
 
             Type type = typeof(LanguageCodes);
             foreach (var p in type.GetFields())

@@ -148,7 +148,7 @@ namespace KBE.Components.Utils
                 run.RunProperties.RemoveChild(color);
             }
 
-            if (textColor.CompareTo("") == 0)
+            if (string.Compare(textColor, "", StringComparison.Ordinal) == 0)
             {
                 return;
             }

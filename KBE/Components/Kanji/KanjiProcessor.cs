@@ -103,20 +103,20 @@ namespace KBE.Components.Kanji
             var processFilter = Regex.Replace(filter, @"[,./\\;]+", "");
             processFilter = Regex.Replace(processFilter, @"[\n]+", " ");
 
-            if (option.isOnlyKanji)
+            if (option.IsOnlyKanji)
             {
                 filters.Clear();
                 processFilter = Regex.Replace(processFilter, @"[a-z A-Z0-9\ ]+", "");
                 processFilter = new string(processFilter.ToCharArray().Distinct().ToArray());
-                option.isLossySearch = false;
+                option.IsLossySearch = false;
             }
 
-            if (option.isKanjiEnable)
+            if (option.IsKanjiEnable)
             {
                 filters.AddRange(GetKanjis(processFilter));
             }
 
-            if (option.isLossySearch)
+            if (option.IsLossySearch)
             {
                 filters.AddRange(processFilter.Split());
             }
