@@ -20,9 +20,6 @@ using WinRT.Interop;          // Needed for XAML/HWND interop
 
 using KanjiUI.Views;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
