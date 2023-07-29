@@ -20,6 +20,9 @@ using WinRT.Interop;          // Needed for XAML/HWND interop
 
 using KanjiUI.Views;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,12 +32,16 @@ namespace KanjiUI
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Shell : Window
+    public partial class Shell : Window
     {
         private AppWindow m_AppWindow;
 
+        public static Shell CurrentShell;
+
         public Shell()
         {
+            CurrentShell = this;
+
             Title = "Kanji UI";
             this.InitializeComponent();
 
@@ -55,6 +62,8 @@ namespace KanjiUI
                 // the custom title bar element.
                 AppTitleBar.Visibility = Visibility.Collapsed;
             }
+
+            m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
         }
 
         private AppWindow GetAppWindowForCurrentWindow()
@@ -63,6 +72,7 @@ namespace KanjiUI
             WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
             return AppWindow.GetFromWindowId(wndId);
         }
+
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
@@ -97,6 +107,12 @@ namespace KanjiUI
             Debug.WriteLine($"Set Content to: {item.Tag}");
             Debug.WriteLine($"NavView: {NavView.SelectedItem}");
 
+        }
+
+        public void SetContentFrame(Type type, int index)
+        {
+            ContentFrame.Navigate(type);
+            NavView.SelectedItem = NavView.MenuItems[index];
         }
 
 

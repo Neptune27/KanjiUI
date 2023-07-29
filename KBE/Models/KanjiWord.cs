@@ -32,8 +32,18 @@ namespace KBE.Models
         [ObservableProperty]
         private string level = "";
         
-        [ObservableProperty]
         private string english = "";
+
+        public string English
+        {
+            get => english;
+            set
+            {
+                SetProperty(ref english, value);
+                OnPropertyChanged(nameof(FirstEnglish));
+            }
+        }
+
         
         [ObservableProperty]
         private string vietnamese = "";
@@ -50,17 +60,19 @@ namespace KBE.Models
         [ObservableProperty]
         private string taught = "";
 
-        private string color = EKanjiColor.DEFAULT;
+        private string? color = null;
 
-        public string Color { 
+        public string? Color { 
             get { return color; }
             set {
                 switch (value)
                 {
                     case EKanjiColor.DEFAULT:
                     case EKanjiColor.RED:
+                    case EKanjiColor.YELLOW:
                     case EKanjiColor.GREEN:
                         SetProperty(ref color, value);
+
                         break;
                     default:
                         return;
@@ -68,6 +80,11 @@ namespace KBE.Models
             } 
         }
 
+
+        public void ResetColor()
+        {
+            Color = EKanjiColor.DEFAULT;
+        }
 
         public string FirstEnglish => english.Split(",")[0];
 
@@ -85,15 +102,22 @@ namespace KBE.Models
             this.radicals = radicals;
             this.parts = parts;
             this.taught = taught;
+
+            color = null;
         }
 
 
-        public static List<KanjiWord> GenerateDummy()
+        public static List<KanjiWord> GenerateDummies()
         {
             return new() {
                 new() {english= "one, one radical (no.1)", kanji= "一", level="5", sinoVietnamese="NHẤT",strokes="1 strokes", taught="Jōyō kanji, taught in grade 1", radicals="one 一", parts="一", onyumi="ひと- ひと.つ", kunyumi="イチ イツ" ,vietnamese="Một, là số đứng đầu các số đếm. Phàm vật gì chỉ có một đều gọi là Nhất cả.##Cùng. Như sách Trung Dung nói : Cập kì thành công nhất dã [及其成工一也] nên công cùng như nhau vậy.##Dùng về lời nói hoặc giả thế chăng. Như vạn nhất [萬一] muôn một, nhất đán [一旦] một mai, v.v.##Bao quát hết thẩy. Như nhất thiết [一切] hết thẩy, nhất khái [一概] một mực như thế cả, v.v.##Chuyên môn về một mặt. Như nhất vị [一味] một mặt, nhất ý [一意] một ý, v.v." },
                 new() {english= "seven", kanji= "七" }
             };
+        }
+
+        public static KanjiWord GenerateDummy()
+        {
+            return new() { english = "one, one radical (no.1)", kanji = "一", level = "5", sinoVietnamese = "NHẤT", strokes = "1 strokes", taught = "Jōyō kanji, taught in grade 1", radicals = "one 一", parts = "一", onyumi = "ひと- ひと.つ", kunyumi = "イチ イツ", vietnamese = "Một, là số đứng đầu các số đếm. Phàm vật gì chỉ có một đều gọi là Nhất cả.##Cùng. Như sách Trung Dung nói : Cập kì thành công nhất dã [及其成工一也] nên công cùng như nhau vậy.##Dùng về lời nói hoặc giả thế chăng. Như vạn nhất [萬一] muôn một, nhất đán [一旦] một mai, v.v.##Bao quát hết thẩy. Như nhất thiết [一切] hết thẩy, nhất khái [一概] một mực như thế cả, v.v.##Chuyên môn về một mặt. Như nhất vị [一味] một mặt, nhất ý [一意] một ý, v.v." };
         }
 
         public KanjiWord Clone() => new()
@@ -122,6 +146,8 @@ namespace KBE.Models
             Strokes = kanji.strokes;
             Radicals = kanji.radicals;
             Taught = kanji.taught;
+
+            OnPropertyChanged(nameof(English));
 
             return this;
         }

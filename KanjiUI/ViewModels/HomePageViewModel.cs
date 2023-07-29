@@ -19,6 +19,7 @@ using KBE.Components.Utils;
 using KBE.Components.Settings;
 using KBE.Components.SQL;
 using CommunityToolkit.Mvvm.Messaging;
+using KanjiUI.Views;
 
 namespace KanjiUI.ViewModels
 {
@@ -29,14 +30,16 @@ namespace KanjiUI.ViewModels
 
         private readonly ObservableCollection<KanjiWord> items = new();
 
-        public override ObservableCollection<KanjiWord> Items => string.IsNullOrEmpty(filter)
+        public override ObservableCollection<KanjiWord> Items => string.IsNullOrEmpty(filter?.Trim())
         ? items
-        : new ObservableCollection<KanjiWord>(items.Where(i => ApplyFilter(i, filter)));
+        : new ObservableCollection<KanjiWord>(items.AsParallel().Where(i => ApplyFilter(i, filter?.Trim())));
 
         public ICommand OpenMaziiLinkCommand => new RelayCommand(OpenMaziiLinkCommand_Executed);
         public ICommand OpenJishoLinkCommand => new RelayCommand(OpenJishoLinkCommand_Executed);
         public ICommand ResetKanjiCommand => new AsyncRelayCommand(ResetItem);
         public ICommand DeleteKanjiCommand => new AsyncRelayCommand(DeleteItem);
+
+        public ICommand SendToRandoCommand => new RelayCommand(SendCurrentWordList);
 
         private async Task DeleteItem()
         {
@@ -68,22 +71,32 @@ namespace KanjiUI.ViewModels
 
         public async void StartUpTask()
         {
-            if (items.Count == 0)
+            if (items.Count != 0)
             {
-                var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync();
-                kanjiItem.ToList().ForEach(Items.Add);
-
-                WeakReferenceMessenger.Default.Register<KanjiUpdateMessage>(this, (r, m) =>
-                {
-                    _ = RenewItems();
-                });
-
-                WeakReferenceMessenger.Default.Register<FilterChangedMessage>(this, (r, m) =>
-                {
-                    _ = SetFilter(m.Value);
-                });
-                Instance = this;
+                return;
             }
+
+            var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync();
+            kanjiItem.ToList().ForEach(Items.Add);
+
+            WeakReferenceMessenger.Default.Register<KanjiUpdateMessage>(this, (r, m) =>
+            {
+                _ = RenewItems();
+            });
+
+            WeakReferenceMessenger.Default.Register<FilterChangedMessage>(this, (r, m) =>
+            {
+                _ = SetFilter(m.Value);
+            });
+            Instance = this;
+        }
+
+
+        public void SendCurrentWordList()
+        {
+
+            Shell.CurrentShell.SetContentFrame(typeof(Rando), 2);
+            WeakReferenceMessenger.Default.Send(new SendKanjiMessage(Items));
         }
 
 
@@ -92,6 +105,7 @@ namespace KanjiUI.ViewModels
             KanjiController.UpdateKanji(item);
             return original.UpdateFrom(item);
         }
+
 
         public override bool ApplyFilter(KanjiWord item, string filter)
         {

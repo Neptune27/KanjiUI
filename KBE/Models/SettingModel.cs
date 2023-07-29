@@ -19,15 +19,56 @@ namespace KBE.Models
             get => Setting.FetchSize;
             set
             {
-                //if (FetchSize == value)
-                //{
-                //    return;
-                //}
                 OnPropertyChanging(nameof(FetchSize));
 
                 Setting.FetchSize = value;
 
                 OnPropertyChanged(nameof(FetchSize));
+
+            }
+        }
+
+
+        public int TotalRandomLength
+        {
+            get => Setting.TotalRandomLength;
+            set
+            {
+                OnPropertyChanging(nameof(TotalRandomLength));
+
+                Setting.TotalRandomLength = value;
+
+                OnPropertyChanged(nameof(TotalRandomLength));
+
+            }
+        }
+
+
+        public int QuestionType
+        {
+            get => (int)Setting.QuestionType;
+            set
+            {
+                OnPropertyChanging(nameof(QuestionType));
+
+                Setting.QuestionType = (Enums.EKanjiShowingType)value;
+
+                OnPropertyChanged(nameof(QuestionType));
+
+            }
+        }
+
+
+        public int AnswerType
+        {
+            get => (int)Setting.AnswerType;
+            set
+            {
+                OnPropertyChanging(nameof(AnswerType));
+
+                Setting.AnswerType = (Enums.EKanjiShowingType)value;
+
+                OnPropertyChanged(nameof(AnswerType));
 
             }
         }

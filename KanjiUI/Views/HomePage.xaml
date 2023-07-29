@@ -25,6 +25,8 @@
                        Description="Reset current kanji (Control + R)" Label="Reset"/>
         <XamlUICommand x:Name="DeleteKanjiCommand" Command="{x:Bind ViewModel.DeleteKanjiCommand}" 
                        Description="Reset current kanji (Control + D)" Label="Delete"/>
+        <XamlUICommand x:Name="SendToRandoCommand" Command="{x:Bind ViewModel.SendToRandoCommand}" 
+                       Description="Send to Randomizer"/>
         <!--<XamlUICommand x:Name="CreateDocxCommand" Command="{x:Bind ViewModel.CreateDocxCommand}" Description="" Label="Create Docx"/>-->
     </Page.Resources>
 
@@ -69,6 +71,13 @@
                 </AppBarButton>
             </CommandBar>
             <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
+
+                <AppBarButton Command="{StaticResource SendToRandoCommand}" Icon="Send" 
+                              Label="Send To Rando" ToolTipService.ToolTip="Reset (Control + E)">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="R"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
                 <AppBarButton Label="Save" Icon="SaveLocal">
                     <AppBarButton.Flyout>
@@ -122,6 +131,7 @@
 
 
 
+
             </CommandBar>
         </Grid>
 
@@ -138,8 +148,8 @@
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:KanjiWord">
-                        <RelativePanel>
-                            <TextBlock>
+                        <RelativePanel >
+                            <TextBlock Foreground="{Binding Color, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}">
                             <Run Text="{x:Bind Kanji, Mode=OneWay}"/>
                             <Run Text="{x:Bind FirstEnglish, Mode=OneWay}"/>
                             </TextBlock>

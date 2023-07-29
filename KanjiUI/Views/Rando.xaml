@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page 
+    x:Class="KanjiUI.Views.Rando"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:KanjiUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:viewmodels ="using:KanjiUI.ViewModels"
+    xmlns:models ="using:KBE.Models"
+    
+    >
+
+    <Page.DataContext>
+        <viewmodels:RandoViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <Page.Resources>
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid Grid.Row="0">
+            <CommandBar DefaultLabelPosition="Right">
+
+                <AppBarButton Command="{x:Bind ViewModel.SubmitCommand, Mode=OneTime}"
+                              Icon="ShowResults" Label="Submit" 
+                              ToolTipService.ToolTip="Submit answer (Ctrl + S)"
+                              AccessKey="Control + S">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="S"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
+                <AppBarButton Command="{x:Bind ViewModel.ResetCommand, Mode=OneTime}"
+                              Icon="Refresh" Label="Reset" 
+                              ToolTipService.ToolTip="Reset Command (Ctrl + R)"
+                              AccessKey="Control + R">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="R"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+            </CommandBar>
+
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0"
+                      ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.Current, Mode=TwoWay}"
+                      FontSize="32"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:RandoWord">
+                        <RelativePanel >
+                            <TextBlock Foreground="{Binding Color, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}">
+                            <Run Text="{x:Bind Name, Mode=OneWay}"/>
+                            </TextBlock>
+                        </RelativePanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Grid Grid.Column="1" Visibility="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
+
+                <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Run Text="{x:Bind ViewModel.DisplayQuestion, Mode=OneWay}" FontSize="{x:Bind ViewModel.DisplayQuestionFontSize, Mode=OneWay}"/>
+                </TextBlock>
+
+
+
+                <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ColumnSpacing="10" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            Command="{x:Bind ViewModel.SelectOptionCommand}" CommandParameter="1">
+                        <TextBlock FontSize="24" 
+                            Foreground="{Binding Current.A.Color, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}"
+                                   Text="{Binding DisplayA, Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            Command="{x:Bind ViewModel.SelectOptionCommand}" CommandParameter="2"
+                            >
+                        <TextBlock FontSize="24" 
+                            Foreground="{Binding Current.B.Color, Mode=OneWay, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}"
+                                   Text="{Binding DisplayB, Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button Grid.Row="1" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            Command="{x:Bind ViewModel.SelectOptionCommand}" CommandParameter="3"
+                            >
+                        <TextBlock FontSize="24" 
+                            Foreground="{Binding Current.C.Color, Mode=OneWay, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}"
+                                   Text="{Binding DisplayC, Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Center"
+                                   />
+
+                    </Button>
+                    <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            Command="{x:Bind ViewModel.SelectOptionCommand}" CommandParameter="4"
+                            
+                            >
+                        <TextBlock FontSize="24" 
+                            Foreground="{Binding Current.D.Color, Mode=OneWay, TargetNullValue={ThemeResource TextBoxForegroundHeaderThemeBrush}}"
+                            Text="{Binding DisplayD, Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                </Grid>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Page>

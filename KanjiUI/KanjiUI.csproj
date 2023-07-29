@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Shell.xaml" />
+    <None Remove="Views\Rando.xaml" />
     <None Remove="Views\TranslatePage.xaml" />
   </ItemGroup>
 
@@ -55,6 +56,11 @@
   <ItemGroup>
     <Folder Include="Data\Img\" />
     <Folder Include="Setting\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Rando.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\TranslatePage.xaml">

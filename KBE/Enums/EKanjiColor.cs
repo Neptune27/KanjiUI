@@ -8,9 +8,10 @@ namespace KBE.Enums
 {
     public static class EKanjiColor
     {
-        public const string DEFAULT = "";
-        public const string RED = "FF565E";
-        public const string GREEN = "00A400";
+        public const string DEFAULT = null;
+        public const string RED = "#FF565E";
+        public const string GREEN = "#00A400";
+        public const string YELLOW = "#FFFF00";
 
     }
 }

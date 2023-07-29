@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBE.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace KBE.Components.Settings
         public static string Directory = ".";
         public static string FilePath = $"{Directory}\\Setting\\setting.json";
 #elif DEBUG
-        public static string Directory { get; set; } = "..\\..\\..\\..\\..";
+        public static string Directory { get; set; } = "..\\..\\..\\..";
         public static string FilePath { get; set; } = $"{Directory}\\Setting\\setting.json";
 #endif
         public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
@@ -46,6 +47,11 @@ namespace KBE.Components.Settings
         public string Filter { get; set; } = "";
         public string TranslateFromCodeName { get; set; } = "";
         public string TranslateToCodeName { get; set; } = "";
+
+        public EKanjiShowingType QuestionType { get; set; } = EKanjiShowingType.Kanji;
+        public EKanjiShowingType AnswerType { get; set; } = EKanjiShowingType.English;
+        public bool MoveNextAfterSelection { get; set; } = true;
+        public int TotalRandomLength { get; set; } = 0;
 
         public int TranslateChunkSize { get; set; }
 
@@ -109,7 +115,11 @@ namespace KBE.Components.Settings
                 Filter = "",
                 TranslateFromCodeName = "Japanese",
                 TranslateToCodeName = "English",
-                TranslateChunkSize = 1500
+                QuestionType = EKanjiShowingType.Kanji,
+                AnswerType = EKanjiShowingType.English,
+                TranslateChunkSize = 1500,
+                MoveNextAfterSelection = true,
+                TotalRandomLength = 0,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

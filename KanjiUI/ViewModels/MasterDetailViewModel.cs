@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DocumentFormat.OpenXml.Math;
+using Microsoft.UI.Xaml.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,20 +15,29 @@ namespace KanjiUI.ViewModels
     {
         private readonly ObservableCollection<T> items = new();
 
-        private T current;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasCurrent))]
+        protected T current;
+
+        partial void OnCurrentChanged(T value)
+        {
+            if (CurrentChanged is null)
+            {
+                return;
+            }
+            CurrentChanged();
+        }
+
+        protected delegate void CurrentChangedEvent();
+
+        protected event CurrentChangedEvent CurrentChanged;
 
         public virtual ObservableCollection<T> Items => filter is null
             ? items 
             : new ObservableCollection<T>(items.Where(i => ApplyFilter(i, filter)));
 
-        public T Current { 
-            get => current;
-            set {
-                Debug.WriteLine(value);
-                SetProperty(ref current, value);
-                OnPropertyChanged(nameof(HasCurrent));
-            }
-        }
+
+
 
         public bool HasCurrent => current is not null;
 

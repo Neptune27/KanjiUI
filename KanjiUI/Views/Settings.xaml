@@ -74,6 +74,123 @@
                     </Expander.Content>
                 </Expander>
 
+                <Expander x:Name="FilterExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Filter</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="Filter"
+                                     TextWrapping="Wrap"
+                                     Text="{x:Bind ViewModel.Items[0].Filter, Mode=TwoWay}" 
+                                     Grid.Column="0"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
+                <Expander x:Name="RandoExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Random Word Quizzes</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Grid RowSpacing="10" Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row="0" >
+                                Random Amounts:
+                                </TextBlock>
+                                <NumberBox x:Name="Rando"
+                                     Text="{x:Bind ViewModel.Items[0].TotalRandomLength, Mode=TwoWay}" 
+                                     Grid.Column="0" Grid.Row="1"/>
+                            </Grid>
+                            <Grid Grid.Row="1" RowSpacing="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0">
+                                    Random Word Options:
+                                </TextBlock>
+                                <Grid RowSpacing="10" ColumnSpacing="10" Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0">
+                                        Question Type:
+                                    </TextBlock>
+
+                                    <ComboBox SelectedIndex="{x:Bind ViewModel.Items[0].QuestionType, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch">
+                                        <x:String>Kanji</x:String>
+                                        <x:String>English</x:String>
+                                        <x:String>SinoVietnamese</x:String>
+                                        <x:String>Onyumi</x:String>
+                                        <x:String>Kunyumi</x:String>
+                                        <x:String>Level</x:String>
+                                        <x:String>Vietnamese</x:String>
+                                        <x:String>Strokes</x:String>
+                                        <x:String>Radicals</x:String>
+                                        <x:String>Taught</x:String>
+                                    </ComboBox>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="1">
+                                        Multiple Choices Type:
+                                    </TextBlock>
+
+                                    <ComboBox SelectedIndex="{x:Bind ViewModel.Items[0].AnswerType, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch">
+                                        <x:String>Kanji</x:String>
+                                        <x:String>English</x:String>
+                                        <x:String>SinoVietnamese</x:String>
+                                        <x:String>Onyumi</x:String>
+                                        <x:String>Kunyumi</x:String>
+                                        <x:String>Level</x:String>
+                                        <x:String>Vietnamese</x:String>
+                                        <x:String>Strokes</x:String>
+                                        <x:String>Radicals</x:String>
+                                        <x:String>Taught</x:String>
+                                    </ComboBox>
+
+
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
+
                 <Expander x:Name="FSExpander"
                     IsExpanded="False"
                     ExpandDirection="Down"
@@ -99,29 +216,6 @@
                     </Expander.Header>
                     <Expander.Content>
                         <NumberBox Text="{x:Bind ViewModel.Items[0].TranslateChunkSize, Mode=TwoWay}"/>
-                    </Expander.Content>
-                </Expander>
-
-                <Expander x:Name="FilterExpander"
-                    IsExpanded="True"
-                    ExpandDirection="Down"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch">
-                    <Expander.Header>
-                        <TextBlock>Filter</TextBlock>
-                    </Expander.Header>
-                    <Expander.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="Filter"
-                                     TextWrapping="Wrap"
-                                     Text="{x:Bind ViewModel.Items[0].Filter, Mode=TwoWay}" 
-                                     Grid.Column="0"/>
-                        </Grid>
                     </Expander.Content>
                 </Expander>
 
@@ -210,7 +304,6 @@
                         </Grid>
                     </Expander.Content>
                 </Expander>
-
 
             </ItemsControl>
         </ScrollViewer>
