@@ -52,7 +52,7 @@ namespace KBE.Components.Kanji
         //}
 
 
-        public static async Task<SortedSet<KanjiWord>> GetKanjiFromDatabaseAsync()
+        public static async Task<List<KanjiWord>> GetKanjiFromDatabaseAsync()
         {
             return await SQLController.GetAllKanjiWordsAsync();
         }
@@ -67,7 +67,7 @@ namespace KBE.Components.Kanji
         public static async Task<bool> GetKanjiNotInDatabaseFromInternet(List<string> filteredKanji, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
         {
             var checkTasks = filteredKanji.ToList().Select(SQLController.CheckExistAsync);
-            var isInDatabase = await Task.WhenAll(checkTasks);
+            var isInDatabase = await Task.WhenAll(checkTasks).ConfigureAwait(false);
             List<string> kanjiStrings = filteredKanji.Where((t, i) => isInDatabase[i] == false).ToList();
 
             if (kanjiStrings.Count == 0)
@@ -80,7 +80,7 @@ namespace KBE.Components.Kanji
             return true;
         }
 
-        public static async Task AddToDatabase(SortedSet<KanjiWord> kanjis)
+        public static async Task AddToDatabase(List<KanjiWord> kanjis)
         {
             await SQLController.AddMultipleKanjisAsync(kanjis);
         }
@@ -92,16 +92,12 @@ namespace KBE.Components.Kanji
 
 
 
-        public static async Task<SortedSet<KanjiWord>> GetKanjiFromInternet(List<string> strings, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
+        public static async Task<List<KanjiWord>> GetKanjiFromInternet(List<string> strings, IProgress<int>? jishoProgress = null, IProgress<int>? maziiProgress = null)
         {
 
             var rawWord = await Fetching.FetchAll(strings, jishoProgress, maziiProgress);
-            SortedSet<KanjiWord> kanjiList = new(new KanjiWordComparer());
-            foreach (var (word, rawContent) in rawWord)
-            {
-                kanjiList.Add(ProcessWord(word, rawContent));
-            }
-            return kanjiList;
+            var kanjiList = rawWord.Select((kVP) => ProcessWord(kVP.Key, kVP.Value));
+            return kanjiList.ToList();
         }
         #endregion
 
@@ -158,17 +154,5 @@ namespace KBE.Components.Kanji
             return maziiObj.results[0];
         }
         #endregion
-
-        //public static List<KanjiWord> GetAllFromDatabase()
-        //{
-
-        //}
-
-
-        //public static Dictionary<KanjiDict, string> ProcessJisho(string jishoRaw)
-        //{
-        //    doc.Load(jishoRaw);
-        //    var strokes = doc.DocumentNode.SelectSingleNode("//*[@id='result_area']/div/div[1]/div[1]/div/div[2]/div[1]").ToString;
-        //}
     }
 }

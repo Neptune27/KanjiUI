@@ -10,7 +10,9 @@
     xmlns:models ="using:KBE.Models"
     
     mc:Ignorable="d"
-    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}">
+    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+    Loaded="Page_Loaded"
+    >
 
     <Page.DataContext>
         <viewmodels:HomePageViewModel x:Name="ViewModel"/>

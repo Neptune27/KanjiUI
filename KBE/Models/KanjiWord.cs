@@ -6,6 +6,8 @@ using KBE.Components.Utils;
 using KBE.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,7 @@ namespace KBE.Models
     {
 
         [ObservableProperty]
+        [Key]
         private string kanji = "";
         
         [ObservableProperty]
@@ -62,6 +65,7 @@ namespace KBE.Models
 
         private string? color = null;
 
+        [NotMapped]
         public string? Color { 
             get { return color; }
             set {
@@ -88,20 +92,22 @@ namespace KBE.Models
 
         public string FirstEnglish => english.Split(",")[0];
 
+        public KanjiWord() { }
+
         public KanjiWord(string kanji = "", string sinoVietnamese = "", string on = "", string kun = "", string level = "",
             string english = "", string vietnamese = "", string strokes = "", string radicals = "", string parts = "", string taught = "")
         {
-            this.kanji = kanji;
-            this.sinoVietnamese = sinoVietnamese;
-            onyumi = on;
-            kunyumi = kun;
-            this.level = level;
-            this.english = english;
-            this.vietnamese = vietnamese;
-            this.strokes = strokes;
-            this.radicals = radicals;
-            this.parts = parts;
-            this.taught = taught;
+            this.kanji = kanji ?? "ERROR";
+            this.sinoVietnamese = sinoVietnamese ?? "";
+            onyumi = on ?? "";
+            kunyumi = kun ?? "";
+            this.level = level ?? "";
+            this.english = english ?? "";
+            this.vietnamese = vietnamese ?? "" ;
+            this.strokes = strokes ?? "";
+            this.radicals = radicals ?? "";
+            this.parts = parts ?? "";
+            this.taught = taught ?? "";
 
             color = null;
         }
@@ -122,16 +128,16 @@ namespace KBE.Models
 
         public KanjiWord Clone() => new()
         {
-            english = english,
-            kanji = kanji,
-            sinoVietnamese = sinoVietnamese,
-            onyumi = onyumi,
-            kunyumi = kunyumi,
-            level = level,
-            vietnamese = vietnamese,
-            strokes = strokes,
-            radicals = radicals,
-            taught = taught
+            english = english ?? "",
+            kanji = kanji ?? "",
+            sinoVietnamese = sinoVietnamese ?? "",
+            onyumi = onyumi ?? "",
+            kunyumi = kunyumi ?? "",
+            level = level ?? "",
+            vietnamese = vietnamese ?? "",
+            strokes = strokes ?? "",
+            radicals = radicals ?? "",
+            taught = taught ?? ""
         };
         
         public KanjiWord UpdateFrom(KanjiWord kanji)

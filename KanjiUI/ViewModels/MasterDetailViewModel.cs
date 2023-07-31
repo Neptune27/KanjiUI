@@ -41,6 +41,12 @@ namespace KanjiUI.ViewModels
 
         public bool HasCurrent => current is not null;
 
+        public virtual async Task LoadData()
+        {
+            await Task.Delay(0);
+        }
+
+
         public virtual T UpdateItem(T item, T original)
         {
             var hasCurrent = HasCurrent;

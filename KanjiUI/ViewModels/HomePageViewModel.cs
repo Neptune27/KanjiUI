@@ -30,9 +30,11 @@ namespace KanjiUI.ViewModels
 
         private readonly ObservableCollection<KanjiWord> items = new();
 
+        private bool isLoaded = false;
+
         public override ObservableCollection<KanjiWord> Items => string.IsNullOrEmpty(filter?.Trim())
         ? items
-        : new ObservableCollection<KanjiWord>(items.AsParallel().Where(i => ApplyFilter(i, filter?.Trim())));
+        : new ObservableCollection<KanjiWord>(items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim())));
 
         public ICommand OpenMaziiLinkCommand => new RelayCommand(OpenMaziiLinkCommand_Executed);
         public ICommand OpenJishoLinkCommand => new RelayCommand(OpenJishoLinkCommand_Executed);
@@ -66,18 +68,27 @@ namespace KanjiUI.ViewModels
 
         public HomePageViewModel()
         {
-            StartUpTask();
         }
 
-        public async void StartUpTask()
+        public override async Task LoadData()
+        {
+            if (!isLoaded)
+            {
+                await StartUpTask();
+                isLoaded = true;
+            }
+        }
+
+
+        public async Task StartUpTask()
         {
             if (items.Count != 0)
             {
                 return;
             }
 
-            var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync();
-            kanjiItem.ToList().ForEach(Items.Add);
+            var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
+            kanjiItem.ForEach(Items.Add);
 
             WeakReferenceMessenger.Default.Register<KanjiUpdateMessage>(this, (r, m) =>
             {

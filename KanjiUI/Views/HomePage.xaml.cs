@@ -162,5 +162,11 @@ namespace KanjiUI.Views
         {
             throw new NotImplementedException();
         }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("HomePage Loaded");
+            await ViewModel.LoadData();
+        }
     }
 }

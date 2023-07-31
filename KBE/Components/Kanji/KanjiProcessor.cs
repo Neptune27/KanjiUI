@@ -11,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace KBE.Components.Kanji
 {
 
-    public class KanjiProcessor
+    public partial class KanjiProcessor
     {
         private static readonly Dictionary<char, char> CHINESE_REPLACE = new()
         {
@@ -62,13 +62,17 @@ namespace KBE.Components.Kanji
             );
 
             var filter = Setting.Instance.Filter;
-            words = Regex.Replace(words, $@"[{filter} ]", "");
 
             words = words.Trim();
 
             foreach (var letter in words)
             {
-                if (IsKanji(letter))
+                if (!IsKanji(letter))
+                {
+                    continue;
+                }
+
+                if (!filter.Contains(letter))
                 {
                     kanjis.Add(letter.ToString());
                 }
@@ -94,19 +98,19 @@ namespace KBE.Components.Kanji
         }
         public static List<string> FilterProcessing(string filter, FilterProcessingOption option)
         {
-            if (String.IsNullOrEmpty(filter))
+            if (string.IsNullOrEmpty(filter))
             {
                 return new();
             }
             List<string> filters = new() { filter };
 
-            var processFilter = Regex.Replace(filter, @"[,./\\;]+", "");
-            processFilter = Regex.Replace(processFilter, @"[\n]+", " ");
+            var processFilter = RegexFilterComma().Replace(filter, "");
+            processFilter = RegexFilterNewLine().Replace(processFilter, " ");
 
             if (option.IsOnlyKanji)
             {
                 filters.Clear();
-                processFilter = Regex.Replace(processFilter, @"[a-z A-Z0-9\ ]+", "");
+                processFilter = RegexFilterAlphabet().Replace(processFilter, "");
                 processFilter = new string(processFilter.ToCharArray().Distinct().ToArray());
                 option.IsLossySearch = false;
             }
@@ -123,5 +127,14 @@ namespace KBE.Components.Kanji
 
             return filters;
         }
+
+        [GeneratedRegex("[,./\\\\;]+")]
+        private static partial Regex RegexFilterComma();
+
+        [GeneratedRegex("[\\n]+")]
+        private static partial Regex RegexFilterNewLine();
+
+        [GeneratedRegex("[a-z A-Z0-9\\ ]+")]
+        private static partial Regex RegexFilterAlphabet();
     }
 }
