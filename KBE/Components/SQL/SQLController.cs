@@ -91,7 +91,6 @@ namespace KBE.Components.SQL
         #region Get From Database
 
 
-        //TODO: Reimplement this.
         public static async Task<List<KanjiWord>> GetAllKanjiWordsAsync()
         {
 

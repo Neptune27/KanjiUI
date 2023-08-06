@@ -21,9 +21,7 @@ namespace KanjiUI.ViewModels;
 public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
 {
 
-    private static Setting SettingInstance { get => Setting.Instance; }
-
-    private readonly List<KanjiWord> wordList = new List<KanjiWord>();
+    private readonly List<KanjiWord> wordList = new();
 
     [ObservableProperty]
     private ObservableCollection<RandoWord> items = new();
@@ -56,7 +54,7 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
 
 
     
-    private Setting setting = Setting.Instance;
+    private readonly Setting setting = Setting.Instance;
 
     [ObservableProperty]
     private bool showAnswer = false;
@@ -98,7 +96,7 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         for (int i = 0; i < correctWord.Count; i++)
         {
             var currentWord = correctWord[i];
-            var listWithoutCorrectWord = shuffleList.Where(i => !ReferenceEquals(i, currentWord));
+            var listWithoutCorrectWord = shuffleList.AsParallel().Where(i => !ReferenceEquals(i, currentWord));
             RandoWord randoWord;
 
             if (!listWithoutCorrectWord.Any())

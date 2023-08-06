@@ -25,8 +25,8 @@
                            Label="Reset to Default"/>
         <XamlUICommand x:Name="FileBrowser"
                        Command="{x:Bind FileBrowserCommand, Mode=OneTime}"
-                       Description="Open folder picker"
-                       Label="Select Database Folder"/>
+                       Description="Open file picker"
+                       Label="Select Database Location"/>
     </Page.Resources>
 
     <Page.DataContext>
@@ -60,7 +60,7 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch">
                     <Expander.Header>
-                        <TextBlock>Database Directory</TextBlock>
+                        <TextBlock>Database Location</TextBlock>
                     </Expander.Header>
                     <Expander.Content>
                         <Grid>
@@ -69,7 +69,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="DatabaseDirectory" Text="{x:Bind ViewModel.Items[0].DatabaseConnectDirectory, Mode=TwoWay}" Grid.Column="0"/>
-                            <AppBarButton Command="{StaticResource FileBrowser}" IsCompact="True" Icon="Folder" HorizontalAlignment="Right" Grid.Column="1"/>
+                            <AppBarButton Command="{StaticResource FileBrowser}" IsCompact="True" Icon="OpenFile" HorizontalAlignment="Right" Grid.Column="1"/>
                         </Grid>
                     </Expander.Content>
                 </Expander>

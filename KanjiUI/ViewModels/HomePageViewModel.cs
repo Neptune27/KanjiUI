@@ -87,6 +87,8 @@ namespace KanjiUI.ViewModels
                 return;
             }
 
+
+
             var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
             kanjiItem.ForEach(Items.Add);
 
@@ -100,6 +102,11 @@ namespace KanjiUI.ViewModels
                 _ = SetFilter(m.Value);
             });
             Instance = this;
+
+            Setting.Instance.OnDatabaseChanged += async () =>
+            {
+                await RenewItems();
+            };
         }
 
 

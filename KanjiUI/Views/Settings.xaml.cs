@@ -39,19 +39,19 @@ namespace KanjiUI.Views
 
         private async Task FileBrowserDialog()
         {
-            var folder = await OpenFolderBrowser();
-            if (folder == null)
+            var file = await OpenFolderBrowser();
+            if (file == null)
             {
                 return;
             }
 
-            DatabaseDirectory.Text = folder.Path + "\\DefaultDatabase.db";
+            DatabaseDirectory.Text = file.Path;
             DatabaseDirectory.Focus(FocusState.Pointer);
         }
 
-        private async Task<StorageFolder> OpenFolderBrowser()
+        private async Task<StorageFile> OpenFolderBrowser()
         {
-            var folderPicker = new FolderPicker();
+            var folderPicker = new FileOpenPicker();
 
             // Get the current window's HWND by passing in the Window object
             var hwnd = WindowNative.GetWindowHandle(App.Window);
@@ -60,8 +60,9 @@ namespace KanjiUI.Views
             InitializeWithWindow.Initialize(folderPicker, hwnd);
 
             // Use file picker like normal!
+
             folderPicker.FileTypeFilter.Add("*");
-            return await folderPicker.PickSingleFolderAsync();
+            return await folderPicker.PickSingleFileAsync();
         }
     }
 }

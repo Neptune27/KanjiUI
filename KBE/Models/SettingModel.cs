@@ -85,6 +85,7 @@ namespace KBE.Models
                 OnPropertyChanging(nameof(DatabaseConnectDirectory));
 
                 Setting.DatabaseConnectDirectory = value;
+                Setting.RaisedOnDatabaseChanged();
 
                 OnPropertyChanged(nameof(DatabaseConnectDirectory));
 
