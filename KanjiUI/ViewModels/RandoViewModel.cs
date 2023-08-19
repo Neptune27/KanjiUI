@@ -26,8 +26,6 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
     [ObservableProperty]
     private ObservableCollection<RandoWord> items = new();
 
-
-
     public RandoViewModel()
     {
         WeakReferenceMessenger.Default.Register<SendKanjiMessage>(this, (r, m) =>

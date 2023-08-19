@@ -20,6 +20,7 @@ using KBE.Components.Settings;
 using KBE.Components.SQL;
 using CommunityToolkit.Mvvm.Messaging;
 using KanjiUI.Views;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace KanjiUI.ViewModels
 {
@@ -101,6 +102,12 @@ namespace KanjiUI.ViewModels
             {
                 _ = SetFilter(m.Value);
             });
+
+            WeakReferenceMessenger.Default.Register<CurrentWordSelectedMesssage>(this, (r, m) =>
+            {
+                _ = SelectKanjiByCursorInTranslate(m.Value);
+            });
+
             Instance = this;
 
             Setting.Instance.OnDatabaseChanged += async () =>
@@ -109,6 +116,48 @@ namespace KanjiUI.ViewModels
             };
         }
 
+        private async Task ResetFilter()
+        {
+            if (Items != items)
+            {
+                await SetFilter("");
+            }
+        }
+
+        public async Task SelectKanjiByCursorInTranslate(char word)
+        {
+            if (SettingInstance.ShowCursorKanji)
+            {
+                await GetItemByCursor(word);
+            }
+            else
+            {
+                await ResetFilter();
+            }
+
+        }
+
+        private async Task GetItemByCursor(char word)
+        {
+            Debug.WriteLine($"[INFO]: Cursor: {word}");
+            var kanjis = KanjiProcessor.GetKanjis(word.ToString());
+            if (kanjis.Count == 0)
+            {
+                await ResetFilter();
+                return;
+            }
+
+            var item = Items.FirstOrDefault(k => k.Kanji == word.ToString());
+            if (item is null)
+            {
+                await ResetFilter();
+                Current = Items.FirstOrDefault(k => k.Kanji == word.ToString(),
+                    Items[0]);
+                return;
+            }
+
+            Current = item;
+        }
 
         public void SendCurrentWordList()
         {

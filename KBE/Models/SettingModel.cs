@@ -287,6 +287,36 @@ namespace KBE.Models
             }
         }
 
+        public bool ShowCursorKanji
+        {
+            get => Setting.ShowCursorKanji;
+            set
+            {
+                if (ShowCursorKanji == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(ShowCursorKanji));
+                Setting.ShowCursorKanji = value;
+                OnPropertyChanged(nameof(ShowCursorKanji));
+            }
+        }
+
+        public int SearchDelayInMs
+        {
+            get => Setting.SearchDelayInMs;
+            set
+            {
+                if (SearchDelayInMs == value)
+                {
+                    return;
+                }
+                OnPropertyChanging(nameof(SearchDelayInMs));
+                Setting.SearchDelayInMs = value;
+                OnPropertyChanged(nameof(SearchDelayInMs));
+            }
+        }
+
         #endregion
 
         #region Save Type

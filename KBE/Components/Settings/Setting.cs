@@ -45,8 +45,13 @@ namespace KBE.Components.Settings
         public SearchOptions SearchOptions { get; set; } = new();
         public SaveOptions SaveOption { get; set; } = new();
         public string Filter { get; set; } = "";
+
+
         public string TranslateFromCodeName { get; set; } = "";
         public string TranslateToCodeName { get; set; } = "";
+        public bool ShowCursorKanji { get; set; } = true;
+        public int SearchDelayInMs { get; set; } = 100;
+
 
         public EKanjiShowingType QuestionType { get; set; } = EKanjiShowingType.Kanji;
         public EKanjiShowingType AnswerType { get; set; } = EKanjiShowingType.English;
@@ -131,6 +136,8 @@ namespace KBE.Components.Settings
                 TranslateChunkSize = 1500,
                 MoveNextAfterSelection = true,
                 TotalRandomLength = 0,
+                ShowCursorKanji = true,
+                SearchDelayInMs = 100
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

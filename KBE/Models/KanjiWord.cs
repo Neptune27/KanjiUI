@@ -22,7 +22,7 @@ namespace KBE.Models
         [ObservableProperty]
         [Key]
         private string kanji = "";
-        
+
         [ObservableProperty]
         private string sinoVietnamese = "";
         

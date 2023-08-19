@@ -127,7 +127,7 @@
                     />
 
                 <TextBox Margin="20 0 0 10" Text="{x:Bind ViewModel.OutputText, Mode=TwoWay}" Grid.Column="1"
-                        SelectionChanged="TextBox_SelectionChanged"
+                        SelectionChanged="TextBox_SelectionChanged" 
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                         AcceptsReturn="True" FontSize="22"
                         />

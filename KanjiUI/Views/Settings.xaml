@@ -205,17 +205,26 @@
                     </Expander.Content>
                 </Expander>
 
-                <Expander x:Name="TCSExpander"
+                <Expander x:Name="TranslatorExpander"
                     IsExpanded="False"
                     ExpandDirection="Down"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch">
                     <Expander.Header>
-                        <TextBlock>Translator Fetch Size</TextBlock>
+                        <TextBlock>Translate Options:</TextBlock>
                     </Expander.Header>
                     <Expander.Content>
-                        <NumberBox Text="{x:Bind ViewModel.Items[0].TranslateChunkSize, Mode=TwoWay}"/>
+                        <StackPanel>
+                            <TextBlock Grid.Row="0">Translator Fetch Size:</TextBlock>
+                            <NumberBox Grid.Row="1" 
+                                Text="{x:Bind ViewModel.Items[0].TranslateChunkSize, Mode=TwoWay}"/>
+                            <TextBlock Grid.Row="0" Margin="0 8 0 0">Search delay (in ms):</TextBlock>
+                            <NumberBox Grid.Row="1"
+                                Text="{x:Bind ViewModel.Items[0].SearchDelayInMs, Mode=TwoWay}"/>
+                            <CheckBox Content="Select item in cursor position" Margin="0 8 0 0"
+                                      IsChecked="{x:Bind ViewModel.Items[0].ShowCursorKanji, Mode=TwoWay}"/>
+                        </StackPanel>
                     </Expander.Content>
                 </Expander>
 

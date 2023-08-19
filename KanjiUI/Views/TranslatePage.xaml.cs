@@ -36,13 +36,12 @@ namespace KanjiUI.Views
     /// </summary>
     public sealed partial class TranslatePage : Page
     {
-
-        private bool isTriggerFilter = false;
-
+        DispatcherTimer timer = new ();
+        TextBox selectedTextBox;
+        
         public TranslatePage()
         {
-
-
+            timer.Tick += SearchInHome;
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
 
@@ -69,6 +68,30 @@ namespace KanjiUI.Views
 
         }
 
+        private void SearchInHome(object sender, object e)
+        {
+            timer.Stop();
+            var textBox = selectedTextBox;
+            if (textBox is null)
+            {
+                return;
+            }
+
+            if (textBox.SelectionLength != 0)
+            {
+                WeakReferenceMessenger.Default.Send(new FilterChangedMessage(textBox.Text.
+                    Substring(textBox.SelectionStart, textBox.SelectionLength)
+                    ));
+                return;
+            }
+
+            if (textBox.SelectionStart == 0)
+            {
+                return;
+            }
+            WeakReferenceMessenger.Default.Send(new CurrentWordSelectedMesssage(textBox.Text[textBox.SelectionStart - 1]));
+        }
+
         private async void OpenErrorDialog(string title, string content)
         {
             ErrorDialog.Title = title;
@@ -84,18 +107,11 @@ namespace KanjiUI.Views
 
         private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox.SelectionLength != 0) {
-                isTriggerFilter = true;
-                WeakReferenceMessenger.Default.Send(new FilterChangedMessage(textBox.Text.
-                    Substring(textBox.SelectionStart, textBox.SelectionLength)
-                    ));
-            }
-            else if (isTriggerFilter)
-            {
-                WeakReferenceMessenger.Default.Send(new FilterChangedMessage(""));
-                isTriggerFilter = false;
-            }
+            selectedTextBox = sender as TextBox;
+            timer.Stop();
+            timer.Interval = new TimeSpan(0, 0, 0, 0, Setting.Instance.SearchDelayInMs);
+            timer.Start();
+            
         }
     }
 }
