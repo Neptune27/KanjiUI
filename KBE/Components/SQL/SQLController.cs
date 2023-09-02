@@ -31,8 +31,7 @@ namespace KBE.Components.SQL
 
         public static async Task<bool> CheckExistAsync(KanjiWord kanji)
         {
-
-            using var db = new KanjiWordContext(Setting.DatabaseConnectDirectory);
+            await using var db = new KanjiWordContext(Setting.DatabaseConnectDirectory);
             return await db.KANJIWORD.AnyAsync(k => k.Kanji == kanji.Kanji).ConfigureAwait(false);
         }
 

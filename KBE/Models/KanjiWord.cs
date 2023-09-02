@@ -231,27 +231,16 @@ namespace KBE.Models
                     continue;
                 }
 
-                var res = Search(value, filters);
-
-                if (res)
-                {
-                    return true;
-                }
+                return Search(value, filters);
             }
             return false;
         }
 
 
-        private bool Search(string propVal, List<string> filters)
+        private bool Search(string propVal, IEnumerable<string> filters)
         {
-            foreach (var filter in filters)
-            {
-                if (propVal.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return filters.Where(filter => filter.Length != 0)
+                .Any(filter => propVal.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public string ToString(SearchOptions sqlKanjiOptions)

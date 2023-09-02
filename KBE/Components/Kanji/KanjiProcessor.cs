@@ -53,9 +53,8 @@ namespace KBE.Components.Kanji
             {'⿓', '龍'},{'⿔', '龜'},{'⿕', '龠'}
         };
 
-        public static List<string> GetKanjis(string words)
+        public static IEnumerable<string> GetKanjis(string words)
         {
-            List<string> kanjis = new();
             _ = CHINESE_REPLACE.Select(
                 (item, index) => 
                 words = words.Replace(item.Key, item.Value)
@@ -63,21 +62,9 @@ namespace KBE.Components.Kanji
 
             var filter = Setting.Instance.Filter;
 
-            words = words.Trim();
+            var distintWords = words.Distinct();
 
-            foreach (var letter in words)
-            {
-                if (!IsKanji(letter))
-                {
-                    continue;
-                }
-
-                if (!filter.Contains(letter))
-                {
-                    kanjis.Add(letter.ToString());
-                }
-            }
-            return kanjis;
+            return (from letter in distintWords where IsKanji(letter) where !filter.Contains(letter) select letter.ToString());
         }
 
         public static bool IsKanji(char letter)
@@ -122,7 +109,7 @@ namespace KBE.Components.Kanji
 
             if (option.IsLossySearch)
             {
-                filters.AddRange(processFilter.Split());
+                filters.AddRange(processFilter.Split().Distinct());
             }
 
             return filters;

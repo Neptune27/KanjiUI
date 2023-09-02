@@ -27,6 +27,10 @@
                        Command="{x:Bind FileBrowserCommand, Mode=OneTime}"
                        Description="Open file picker"
                        Label="Select Database Location"/>
+        <XamlUICommand x:Name="RandoFolderPicker"
+               Command="{x:Bind RandoFolderBrowserCommand, Mode=OneTime}"
+               Description="Open file picker"
+               Label="Select Autosave Location"/>
     </Page.Resources>
 
     <Page.DataContext>
@@ -111,6 +115,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             
                             <Grid RowSpacing="10" Grid.Row="0">
@@ -184,6 +189,82 @@
 
 
                                 </Grid>
+                            </Grid>
+                            <Grid Grid.Row="2" RowSpacing="10">
+                                <Pivot>
+                                    <PivotItem Header="Autosave Setting">
+                                        <StackPanel>
+                                            <CheckBox 
+                                                IsChecked="{x:Bind ViewModel.Items[0].RandoAutoSaveIsEnable, Mode=TwoWay}">
+                                                Enable Autosave</CheckBox>
+                                            <TextBlock Margin="0 0 0 10">Autosave location:</TextBlock>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox VerticalAlignment="Top" Height="42" x:Name="RandoFolderDirectory" Text="{x:Bind ViewModel.Items[0].RandoAutoSaveLocation, Mode=TwoWay}" Grid.Column="0"/>
+                                                <AppBarButton VerticalAlignment="Top" Command="{StaticResource RandoFolderPicker}" IsCompact="True" Icon="Folder" HorizontalAlignment="Right" Grid.Column="1"/>
+                                            </Grid>
+
+                                            <Grid RowSpacing="10" ColumnSpacing="10" >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <StackPanel Grid.Column="0">
+                                                    <RadioButtons Header="Autosave option:" 
+                                                                  SelectedIndex="{x:Bind ViewModel.Items[0].RandoAutoSaveSaveOption, Mode=TwoWay}">
+                                                        <x:String>Save all</x:String>
+                                                        <x:String>Save wrong answers only</x:String>
+                                                        <x:String>Save right answers only</x:String>
+                                                    </RadioButtons>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Top">
+                                                    <RadioButtons Header="Save as:"
+                                                                  SelectedIndex="{x:Bind ViewModel.Items[0].RandoAutoSaveSaveAs, Mode=TwoWay}">
+                                                        <x:String>Text document (.txt)</x:String>
+                                                        <x:String>Word document (.docx)</x:String>
+                                                    </RadioButtons>
+                                                </StackPanel>
+                                            </Grid>
+
+                                        </StackPanel>
+                                    </PivotItem>
+                                    <PivotItem Header="Save Setting">
+                                        <Grid RowSpacing="10" ColumnSpacing="10" >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <RadioButtons Header="Save option:"
+                                                              SelectedIndex="{x:Bind ViewModel.Items[0].RandoSaveSaveOption, Mode=TwoWay}">
+                                                    <x:String>Save all</x:String>
+                                                    <x:String>Save wrong answers only</x:String>
+                                                    <x:String>Save right answers only</x:String>
+                                                </RadioButtons>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Top">
+                                                <RadioButtons Header="Save as:"
+                                                              SelectedIndex="{x:Bind ViewModel.Items[0].RandoSaveSaveAs, Mode=TwoWay}">
+                                                    <x:String>Text document (.txt)</x:String>
+                                                    <x:String>Word document (.docx)</x:String>
+                                                </RadioButtons>
+                                            </StackPanel>
+                                        </Grid>
+
+                                    </PivotItem>
+                                </Pivot>
+
                             </Grid>
 
                         </Grid>

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using DocumentFormat.OpenXml.Math;
 using KBE.Components.Kanji;
 using KBE.Components.Settings;
 using KBE.Components.Utils;
@@ -11,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.ApplicationModel.VoiceCommands;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using WinRT.Interop;
 
 namespace KanjiUI.ViewModels;
 
@@ -68,6 +68,79 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
     public ICommand SelectOptionCommand => new RelayCommand<string>(SelectOption);
     public ICommand SubmitCommand => new RelayCommand(Submit);
     public ICommand ResetCommand => new RelayCommand(Reset);
+    public ICommand SaveCommand => new AsyncRelayCommand(SaveDialog);
+
+    private async Task SaveDialog()
+    {
+        var extensionOption = Setting.Instance.RandoSave.SaveAsType;
+        var extension = extensionOption switch
+        {
+            ESaveAsType.TEXT => ".txt",
+            ESaveAsType.DOCX => ".docx",
+            _ => throw new NotImplementedException(),
+        };
+
+
+        var storageFile = await OpenFileSave("Rando", extension);
+        await Save(storageFile.Path, Setting.Instance.RandoSave);
+        
+    }
+
+    private async Task<StorageFile> OpenFileSave(string name, string extension)
+    {
+        var savePicker = new FileSavePicker();
+
+        // Get the current window's HWND by passing in the Window object
+        var hwnd = WindowNative.GetWindowHandle(App.Window);
+
+        // Associate the HWND with the file picker
+        InitializeWithWindow.Initialize(savePicker, hwnd);
+
+        // Use file picker like normal!
+        //folderPicker.FileTypeFilter.Add("*");
+        savePicker.FileTypeChoices.Add($"{name}", new List<string>() { $"{extension}" });
+        savePicker.SuggestedFileName = "New Document";
+
+        return await savePicker.PickSaveFileAsync();
+    }
+
+    private async Task Save(string fileName, RandoSaveModel model)
+    {
+        var itemsList = model.SaveOption switch
+        {
+            ERandoSaveOption.ALL => Items.Select(r => r.GetCorrectWordWithColor()).ToList(),
+            ERandoSaveOption.WRONG_ONLY => Items.Where(r => r.Color == EKanjiColor.RED)
+            .Select(r => r.GetCorrectWordWithColor())
+            .ToList(),
+            ERandoSaveOption.RIGHT_ONLY => Items.Where(r => r.Color == EKanjiColor.GREEN).Select(r => r.GetCorrectWordWithColor()).ToList(),
+            _ => throw new NotImplementedException(),
+        };
+
+
+
+        if (model.SaveAsType == ESaveAsType.DOCX)
+        {
+
+            if (!fileName.EndsWith(".docx"))
+            {
+                fileName += ".docx";
+            }
+            DocxProcessor processor = new("Rando", fileName);
+            var resId = await processor.CreateKanjiDocument(itemsList, Setting.Instance.SaveOption);
+        }
+        else
+        {
+            if (!fileName.EndsWith(".txt"))
+            {
+                fileName += ".txt";
+            }
+            TextProcessor processor = new("Rando", fileName + ".txt");
+            await processor.CreateFile(itemsList, Setting.Instance.SaveOption);
+        }
+
+
+    }
+
 
     private void Reset()
     {
@@ -132,6 +205,9 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
 
     private void Submit()
     {
+        
+       
+
         ShowAnswer = true;
         foreach (var item in Items)
         {
@@ -142,6 +218,14 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         Items = new(Items.Where(i => true));
         var newCurrent = Items.SingleOrDefault(i => i == oldCurrent);
         Current = newCurrent;
+
+
+        if (Setting.Instance.RandoAutoSave.IsEnable)
+        {
+            DateTime now = DateTime.Now;
+            var date = now.ToString("yyyy-MM-dd HH-mm-ss");
+            _ = Save($"{Setting.Instance.RandoAutoSave.SaveLocation}\\{date}", Setting.Instance.RandoAutoSave);
+        }
     }
 
     private void SelectOption(string obj)
@@ -186,11 +270,6 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
             _ => word.Kanji,
         };
     }
-
-    
-
-
-
 
 
     public override bool ApplyFilter(RandoWord item, string filter)

@@ -25,6 +25,9 @@
         <Grid Grid.Row="0">
             <CommandBar DefaultLabelPosition="Right">
 
+                <AppBarButton IsEnabled="{x:Bind ViewModel.ShowAnswer, Mode=OneWay}" Icon="SaveLocal" IsCompact="True" Label="Save"
+                              Command="{x:Bind ViewModel.SaveCommand, Mode=OneTime}">
+                </AppBarButton>
                 <AppBarButton Command="{x:Bind ViewModel.SubmitCommand, Mode=OneTime}"
                               Icon="ShowResults" Label="Submit" 
                               ToolTipService.ToolTip="Submit answer (Ctrl + S)"
@@ -42,6 +45,8 @@
                         <KeyboardAccelerator Modifiers="Control" Key="R"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
+
+                
             </CommandBar>
 
         </Grid>

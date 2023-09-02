@@ -36,10 +36,23 @@ namespace KanjiUI.Views
         }
 
         public ICommand FileBrowserCommand => new AsyncRelayCommand(FileBrowserDialog);
+        public ICommand RandoFolderBrowserCommand => new AsyncRelayCommand(RandoFolderBrowserDialog);
+
+        private async Task RandoFolderBrowserDialog()
+        {
+            var file = await OpenFolderBrowser();
+            if (file == null)
+            {
+                return;
+            }
+
+            RandoFolderDirectory.Text = file.Path;
+            RandoFolderDirectory.Focus(FocusState.Pointer);
+        }
 
         private async Task FileBrowserDialog()
         {
-            var file = await OpenFolderBrowser();
+            var file = await OpenFileBrowser();
             if (file == null)
             {
                 return;
@@ -49,7 +62,7 @@ namespace KanjiUI.Views
             DatabaseDirectory.Focus(FocusState.Pointer);
         }
 
-        private async Task<StorageFile> OpenFolderBrowser()
+        private async Task<StorageFile> OpenFileBrowser()
         {
             var folderPicker = new FileOpenPicker();
 
@@ -63,6 +76,18 @@ namespace KanjiUI.Views
 
             folderPicker.FileTypeFilter.Add("*");
             return await folderPicker.PickSingleFileAsync();
+        }
+
+        private async Task<StorageFolder> OpenFolderBrowser()
+        {
+            var folderPicker = new FolderPicker();
+
+            var hwnd = WindowNative.GetWindowHandle(App.Window);
+
+            InitializeWithWindow.Initialize(folderPicker, hwnd);
+
+            folderPicker.FileTypeFilter.Add("*");
+            return await folderPicker.PickSingleFolderAsync();
         }
     }
 }

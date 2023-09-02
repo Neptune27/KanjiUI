@@ -42,25 +42,29 @@ namespace KanjiUI
             Title = "Kanji UI";
             this.InitializeComponent();
 
+            AppWindow.SetIcon("Asset/KanjiIcon.ico");
+            ExtendsContentIntoTitleBar = true;
+            SetTitleBar(AppTitleBar);
+
 
             // Check to see if customization is supported.
             // Currently only supported on Windows 11.
-            m_AppWindow = GetAppWindowForCurrentWindow();
-            if (AppWindowTitleBar.IsCustomizationSupported())
-            {
-                var titleBar = m_AppWindow.TitleBar;
-                // Hide default title bar.
-                titleBar.ExtendsContentIntoTitleBar = true;
-            }
-            else
-            {
-                // Title bar customization using these APIs is currently
-                // supported only on Windows 11. In other cases, hide
-                // the custom title bar element.
-                AppTitleBar.Visibility = Visibility.Collapsed;
-            }
+            //m_AppWindow = GetAppWindowForCurrentWindow();
+            //if (AppWindowTitleBar.IsCustomizationSupported())
+            //{
+            //    var titleBar = m_AppWindow.TitleBar;
+            //    // Hide default title bar.
+            //    titleBar.ExtendsContentIntoTitleBar = true;
+            //}
+            //else
+            //{
+            //    // Title bar customization using these APIs is currently
+            //    // supported only on Windows 11. In other cases, hide
+            //    // the custom title bar element.
+            //    AppTitleBar.Visibility = Visibility.Collapsed;
+            //}
 
-            m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
+            //m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
         }
 
         private AppWindow GetAppWindowForCurrentWindow()

@@ -1,4 +1,5 @@
 ﻿using KBE.Enums;
+using KBE.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +10,20 @@ using System.Threading.Tasks;
 
 namespace KBE.Components.Settings
 {
+
+    public enum ESaveAsType
+    {
+        TEXT,
+        DOCX
+    }
+
+    public enum ERandoSaveOption
+    {
+        ALL,
+        WRONG_ONLY,
+        RIGHT_ONLY
+    }
+
 
     public class SearchOptions
     {
@@ -57,6 +72,8 @@ namespace KBE.Components.Settings
         public EKanjiShowingType AnswerType { get; set; } = EKanjiShowingType.English;
         public bool MoveNextAfterSelection { get; set; } = true;
         public int TotalRandomLength { get; set; } = 0;
+        public RandoSaveModel RandoSave { get; set; } = new();
+        public RandoAutoSaveModel RandoAutoSave { get; set; } = new();
 
         public int TranslateChunkSize { get; set; }
 
@@ -128,7 +145,7 @@ namespace KBE.Components.Settings
                 SearchOptions = new SearchOptions(),
                 SaveOption = new(),
                 LossySearch = true,
-                Filter = "",
+                Filter = "◇『』　、。」「～←…・々",
                 TranslateFromCodeName = "Japanese",
                 TranslateToCodeName = "English",
                 QuestionType = EKanjiShowingType.Kanji,
@@ -137,12 +154,15 @@ namespace KBE.Components.Settings
                 MoveNextAfterSelection = true,
                 TotalRandomLength = 0,
                 ShowCursorKanji = true,
-                SearchDelayInMs = 100
+                SearchDelayInMs = 100,
+                RandoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL },
+                RandoAutoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL, IsEnable = true, SaveLocation = $"{Directory}\\Data\\Autosave" }
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");
             System.IO.Directory.CreateDirectory($"{Directory}\\Data");
             System.IO.Directory.CreateDirectory($"{Directory}\\Data\\Img");
+            System.IO.Directory.CreateDirectory($"{Directory}\\Data\\Autosave");
             System.IO.Directory.CreateDirectory($"{Directory}\\Data\\Template");
 
             using (StreamWriter sw = new($"{FilePath}"))

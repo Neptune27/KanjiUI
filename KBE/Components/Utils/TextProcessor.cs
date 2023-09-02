@@ -45,6 +45,7 @@ namespace KBE.Components.Utils
                 }
 
                 await sw.WriteAsync(sb.ToString());
+                sw.Close();
                 return EErrorType.NORMAL;
             }
             catch (IOException ex) { 

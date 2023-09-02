@@ -473,6 +473,85 @@ namespace KBE.Models
 
         #endregion
 
+        #region Rando
+
+        public int RandoSaveSaveOption
+        {
+            get => (int)Setting.RandoSave.SaveOption;
+            set
+            {
+
+                OnPropertyChanging(nameof(RandoSaveSaveOption));
+                Setting.RandoSave.SaveOption = (ERandoSaveOption)value;
+                OnPropertyChanged(nameof(RandoSaveSaveOption));
+            }
+        }
+
+
+        public int RandoSaveSaveAs
+        {
+            get => (int)Setting.RandoSave.SaveAsType;
+            set
+            {
+                OnPropertyChanging(nameof(RandoSaveSaveAs));
+                Setting.RandoSave.SaveAsType = (ESaveAsType)value;
+                OnPropertyChanged(nameof(RandoSaveSaveAs));
+            }
+        }
+
+        public int RandoAutoSaveSaveOption
+        {
+            get => (int)Setting.RandoAutoSave.SaveOption;
+            set
+            {
+                OnPropertyChanging(nameof(RandoAutoSaveSaveOption));
+                Setting.RandoAutoSave.SaveOption = (ERandoSaveOption)value;
+                OnPropertyChanged(nameof(RandoAutoSaveSaveOption));
+
+            }
+        }
+
+        public int RandoAutoSaveSaveAs
+        {
+            get => (int)Setting.RandoAutoSave.SaveAsType;
+            set
+            {
+                OnPropertyChanging(nameof(RandoAutoSaveSaveAs));
+
+                Setting.RandoAutoSave.SaveAsType = (ESaveAsType)value;
+                OnPropertyChanged(nameof(RandoAutoSaveSaveOption));
+
+            }
+        }
+
+        public bool RandoAutoSaveIsEnable
+        {
+            get => Setting.RandoAutoSave.IsEnable;
+            set
+            {
+                OnPropertyChanging(nameof(RandoAutoSaveIsEnable));
+
+                Setting.RandoAutoSave.IsEnable = value;
+                OnPropertyChanged(nameof(RandoAutoSaveIsEnable));
+
+            }
+        }
+
+        public string RandoAutoSaveLocation
+        {
+            get => Setting.RandoAutoSave.SaveLocation;
+            set
+            {
+                OnPropertyChanging(nameof(RandoAutoSaveLocation));
+                Setting.RandoAutoSave.SaveLocation = value;
+                OnPropertyChanged(nameof(RandoAutoSaveLocation));
+
+            }
+        }
+
+
+        #endregion
+
         public void Save()
         {
             Setting.SaveSetting();

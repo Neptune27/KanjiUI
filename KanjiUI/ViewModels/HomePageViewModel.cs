@@ -141,7 +141,7 @@ namespace KanjiUI.ViewModels
         {
             Debug.WriteLine($"[INFO]: Cursor: {word}");
             var kanjis = KanjiProcessor.GetKanjis(word.ToString());
-            if (kanjis.Count == 0)
+            if (!kanjis.Any())
             {
                 await ResetFilter();
                 return;
@@ -211,14 +211,15 @@ namespace KanjiUI.ViewModels
 
         private async Task GetFiltered()
         {
-            var maziiProgress = new Progress<int>(percent => MaziiProgress = percent);
-
-            var jishoProgress = new Progress<int>(percent => JishoProgress = percent);
-
             if (string.IsNullOrEmpty(Filter))
             {
                 return;
             }
+
+
+            var maziiProgress = new Progress<int>(percent => MaziiProgress = percent);
+
+            var jishoProgress = new Progress<int>(percent => JishoProgress = percent);
 
             ProgressVisibility = Visibility.Visible;
             if (await KanjiController.GetKanjiNotInDatabaseFromInternet(filter, jishoProgress, maziiProgress))

@@ -100,6 +100,19 @@ public partial class RandoWord : ObservableObject
 
     public string? Color => GetColor();
 
+    public KanjiWord GetCorrectWordWithColor()
+    {
+        var correct = Correct;
+        var selected = IntToKanjiConverter(this.Selected);
+
+        var clonedCorrect = correct?.Clone();
+        if (selected is not null)
+        {
+            clonedCorrect.Color = selected.Color;
+        }
+
+        return clonedCorrect;
+    }
 
     partial void OnSelectedChanging(int value)
     {
@@ -111,10 +124,11 @@ public partial class RandoWord : ObservableObject
         SetWordColor(selected, EKanjiColor.DEFAULT);
     }
 
+
     partial void OnIsDoneChanged(bool value)
     {
         var correct = Correct;
-        var selected = IntToKanjiConverter(this.selected);
+        var selected = IntToKanjiConverter(this.Selected);
 
         if (correct is null)
         {
@@ -130,7 +144,6 @@ public partial class RandoWord : ObservableObject
 
 
         correct.Color = EKanjiColor.GREEN;
-
 
 
         if (selected.Kanji != correct.Kanji)
@@ -161,16 +174,16 @@ public partial class RandoWord : ObservableObject
 
     private string? GetColor()
     {
-        if (selected == 0) {
+        if (Selected == 0) {
             return null;
         }
 
-        if (!isDone)
+        if (!IsDone)
         {
             return EKanjiColor.YELLOW;
         }
 
-        var selectedWord = IntToKanjiConverter(selected);
+        var selectedWord = IntToKanjiConverter(Selected);
         return selectedWord?.Color;
 
     }
@@ -179,11 +192,11 @@ public partial class RandoWord : ObservableObject
 
     partial void OnSelectedChanged(int value)
     {
-        if (isDone) {
+        if (IsDone) {
             return;
         }
 
-        SetWordColor(selected, EKanjiColor.YELLOW);
+        SetWordColor(Selected, EKanjiColor.YELLOW);
 
     }
 
