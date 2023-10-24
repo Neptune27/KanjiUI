@@ -21,11 +21,14 @@ using KBE.Components.SQL;
 using CommunityToolkit.Mvvm.Messaging;
 using KanjiUI.Views;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using System.Numerics;
 
 namespace KanjiUI.ViewModels
 {
     internal partial class HomePageViewModel : MasterDetailViewModel<KanjiWord>
     {
+
+
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get => Setting.Instance; }
 
@@ -79,6 +82,7 @@ namespace KanjiUI.ViewModels
                 isLoaded = true;
             }
         }
+
 
 
         public async Task StartUpTask()

@@ -22,10 +22,6 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <BitmapIcon UriSource="/Assets/KanjiIcon.png" Grid.Column="0" Height="20" Width="20" Margin="6 0 0 0"/>
-            <!--<Image x:Name="TitleBarIcon" Source="/Assets/Kanji48.png"
-                   Grid.Column="0" HorizontalAlignment="Left" 
-                   Width="20" Height="20"
-                   Margin="8,0,0,0"/>-->
             <TextBlock x:Name="TitleTextBlock" 
                Text="Kanji Browser" 
                Style="{StaticResource CaptionTextBlockStyle}"
@@ -41,7 +37,7 @@
             Loaded="NavigationView_Loaded"
             x:Name="NavView"
             PaneDisplayMode="LeftCompact"
-            IsBackButtonVisible="Collapsed"
+            IsBackEnabled="False"
             Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Kanji View" Tag="KanjiUI.Views.HomePage" Icon="Home"></NavigationViewItem>

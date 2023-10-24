@@ -46,7 +46,6 @@ namespace KanjiUI
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 
-
             // Check to see if customization is supported.
             // Currently only supported on Windows 11.
             //m_AppWindow = GetAppWindowForCurrentWindow();
@@ -67,12 +66,7 @@ namespace KanjiUI
             //m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
         }
 
-        private AppWindow GetAppWindowForCurrentWindow()
-        {
-            IntPtr hWnd = WindowNative.GetWindowHandle(this);
-            WindowId wndId = Win32Interop.GetWindowIdFromWindow(hWnd);
-            return AppWindow.GetFromWindowId(wndId);
-        }
+       
 
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
