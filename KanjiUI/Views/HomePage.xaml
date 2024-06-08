@@ -10,7 +10,6 @@
     xmlns:models ="using:KBE.Models"
     
     mc:Ignorable="d"
-    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
     Loaded="Page_Loaded"
     >
 

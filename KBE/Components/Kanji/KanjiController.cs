@@ -106,9 +106,14 @@ namespace KBE.Components.Kanji
         {
             JishoAPI jishoAPI = new(wordDict[0]);
             var maziiApiResults = ProcessMazii(wordDict[1]);
+            maziiApiResults.compDetail ??= [];
+            var compDetail = maziiApiResults.compDetail;
+            var compDetailString = string.Join(", ", compDetail.Select(i => $"{i.h}: {i.w}"));
+            maziiApiResults.level ??= [];
+            var level = string.Join(", ", maziiApiResults.level);
             KanjiWord kanji = new(kanji: word, sinoVietnamese: maziiApiResults.mean, on: maziiApiResults.on, kun: maziiApiResults.kun,
-                level: maziiApiResults.level, radicals: jishoAPI.radicals, english: jishoAPI.english, vietnamese: maziiApiResults.detail,
-                strokes: jishoAPI.strokes, parts: maziiApiResults.comp, taught: jishoAPI.taught);
+                level: level, radicals: jishoAPI.radicals, english: jishoAPI.english, vietnamese: maziiApiResults.detail,
+                strokes: jishoAPI.strokes, parts: compDetailString, taught: jishoAPI.taught);
             return kanji;
         }
 

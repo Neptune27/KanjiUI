@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,7 +39,8 @@ namespace KanjiUI.Views
     {
         DispatcherTimer timer = new ();
         TextBox selectedTextBox;
-        
+
+
         public TranslatePage()
         {
             timer.Tick += SearchInHome;
@@ -59,13 +61,43 @@ namespace KanjiUI.Views
                 }
             };
 
-            Type type = typeof(LanguageCodes);
+
+            PopulateToFromCB();
+
+            Ensure();
+        }
+
+        private void PopulateToFromCB()
+        {
+
+            var source = TranslatorComboBox.SelectedValue as string;
+            source ??= Setting.Instance.TranslateSource;
+
+            Type type;
+            if (source == "Google Translator")
+            {
+                type = typeof(LanguageCodes);
+            }
+            else
+            {
+                type = typeof(DeepLLanguageCodes);
+            }
+
+            FromCodeComboBox.Items.Clear();
+            ToCodeComboBox.Items.Clear();
+
+
             foreach (var p in type.GetFields())
             {
                 FromCodeComboBox.Items.Add(p.Name);
                 ToCodeComboBox.Items.Add(p.Name);
             }
+        }
 
+
+        private async void Ensure()
+        {
+            await webView.EnsureCoreWebView2Async();
         }
 
         private void SearchInHome(object sender, object e)
@@ -112,6 +144,14 @@ namespace KanjiUI.Views
             timer.Interval = new TimeSpan(0, 0, 0, 0, Setting.Instance.SearchDelayInMs);
             timer.Start();
             
+        }
+
+        private void TranslatorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            PopulateToFromCB();
+            ViewModel.TranslatorSelectionChanged();
+            ViewModel.TranslatorSourceChanged();
         }
     }
 }

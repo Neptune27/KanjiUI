@@ -8,21 +8,12 @@ using System.Threading.Tasks;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using KBE.Components.Settings;
+using KBE.Components.Utils;
 
 namespace KBE.Components.Translator
 {
     public class GoogleTranslate
     {
-        private static IEnumerable<string> Chunks(string str, int maxChunkSize)
-        {
-            if (maxChunkSize <= 0)
-            {
-                throw new TranslatorFetchSizeException($"Fetch size cannot be lower than 1!");
-            }
-            for (int i = 0; i < str.Length; i += maxChunkSize)
-                yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
-        }
-
         public static async ValueTask<string> Translate(string input, string fromCode, string toCode,
             IProgress<int>? progress)
         {
@@ -31,7 +22,8 @@ namespace KBE.Components.Translator
             {
                 return "";
             }
-            var inputChunks = Chunks(input, Setting.Instance.TranslateChunkSize);
+
+            var inputChunks = input.ToChunks(Setting.Instance.TranslateChunkSize);
             var totalChunk = inputChunks.Count();
             string translation = "";
 

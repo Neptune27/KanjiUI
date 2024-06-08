@@ -10,7 +10,7 @@
     xmlns:viewmodel="using:KanjiUI.ViewModels"
     
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    >
 
     <Page.Resources>
         <StandardUICommand x:Name="SaveCommand"

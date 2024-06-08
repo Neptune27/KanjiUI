@@ -62,8 +62,14 @@ namespace KBE.Components.Settings
         public string Filter { get; set; } = "";
 
 
-        public string TranslateFromCodeName { get; set; } = "";
-        public string TranslateToCodeName { get; set; } = "";
+        public string TranslateSource { get; set; } = "";
+
+        public string GoogleTranslateFromCodeName { get; set; } = "";
+        public string GoogleTranslateToCodeName { get; set; } = "";
+
+        public string DeepLTranslateFromCodeName { get; set; } = "";
+        public string DeepLTranslateToCodeName { get; set; } = "";
+
         public bool ShowCursorKanji { get; set; } = true;
         public int SearchDelayInMs { get; set; } = 100;
 
@@ -145,9 +151,16 @@ namespace KBE.Components.Settings
                 SearchOptions = new SearchOptions(),
                 SaveOption = new(),
                 LossySearch = true,
-                Filter = "◇『』　、。」「～←…・々",
-                TranslateFromCodeName = "Japanese",
-                TranslateToCodeName = "English",
+                Filter = "◇『』　、。」「～←…・々→〜",
+
+                GoogleTranslateFromCodeName = "Japanese",
+                GoogleTranslateToCodeName = "English",
+
+                DeepLTranslateFromCodeName = "Japanese",
+                DeepLTranslateToCodeName = "English",
+
+                TranslateSource = "Google Translator",
+
                 QuestionType = EKanjiShowingType.Kanji,
                 AnswerType = EKanjiShowingType.English,
                 TranslateChunkSize = 1500,

@@ -44,6 +44,8 @@ namespace KanjiUI.ViewModels
         [ObservableProperty]
         private string toCodeName;
 
+        [ObservableProperty]
+        private string translatorSource;
 
 
         [ObservableProperty]
@@ -61,31 +63,46 @@ namespace KanjiUI.ViewModels
         [ObservableProperty]
         private Visibility progressVisibility = Visibility.Collapsed;
 
+        public void TranslatorSourceChanged()
+        {
+            var value = TranslatorSource;
+
+            if (value == "Google Translator")
+            {
+                ToCodeName = Setting.Instance.GoogleTranslateToCodeName;
+                FromCodeName = Setting.Instance.GoogleTranslateFromCodeName;
+            }
+            else if (value == "DeepL Translator")
+            {
+                ToCodeName = Setting.Instance.DeepLTranslateToCodeName;
+                FromCodeName = Setting.Instance.DeepLTranslateFromCodeName;
+            }
+        }
+
+        private DeepLTranslator deepLTranslator = new();
 
 
         public ICommand TranslateCommand => new AsyncRelayCommand(TranslateText);
         public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
 
+        
+
         public TranslateViewModel()
         {
-            FromCodeName = Setting.Instance.TranslateFromCodeName;
-            ToCodeName = Setting.Instance.TranslateToCodeName;
-
+            TranslatorSource = Setting.Instance.TranslateSource;
         }
 
         public Action<bool> OnTranslatorError { get; set; }
 
         private void OpenNewWindow_CommandExecuted()
         {
-
-            var window = new Shell();
-            window.Activate();
+            OutputText = "Hello";
+            //var window = new Shell();
+            //window.Activate();
         }
 
         private async Task TranslateText()
         {
-
-
             var fromCode = typeof(LanguageCodes).GetField(FromCodeName).GetValue(null).ToString();
             var toCode = typeof(LanguageCodes).GetField(ToCodeName).GetValue(null).ToString();
             Debug.WriteLine(fromCode);
@@ -97,7 +114,14 @@ namespace KanjiUI.ViewModels
             TranslateProgressVisibility = Visibility.Visible;
             try
             {
-                OutputText = await GoogleTranslate.Translate(InputText, fromCode, toCode, translateProgress);
+                if (TranslatorSource == "Google Translator") {
+                    OutputText = await GoogleTranslate.Translate(InputText, fromCode, toCode, translateProgress);
+
+                }
+                else
+                {
+                    OutputText = await deepLTranslator.GetTranslation(fromCode, toCode, InputText, translateProgress);
+                }
             }
             catch (TranslatorFetchSizeException)
             {
@@ -111,8 +135,29 @@ namespace KanjiUI.ViewModels
 
         public void TranslateSelectionChanged()
         {
-            Setting.Instance.TranslateToCodeName = ToCodeName;
-            Setting.Instance.TranslateFromCodeName = FromCodeName;
+            if (ToCodeName == null || FromCodeName == null)
+            {
+                return;
+            }
+
+            if (TranslatorSource == "Google Translator")
+            {
+                Setting.Instance.GoogleTranslateToCodeName = ToCodeName;
+                Setting.Instance.GoogleTranslateFromCodeName = FromCodeName;
+            }
+            else
+            {
+                Setting.Instance.DeepLTranslateToCodeName = ToCodeName;
+                Setting.Instance.DeepLTranslateFromCodeName = FromCodeName;
+            }
+
+           
+            Setting.Instance.SaveSetting();
+        }
+
+        public void TranslatorSelectionChanged()
+        {
+            Setting.Instance.TranslateSource = TranslatorSource;
             Setting.Instance.SaveSetting();
         }
 

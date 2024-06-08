@@ -12,7 +12,7 @@
     xmlns:models="using:KBE.Models"
     
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    >
 
     <Page.DataContext>
         <viewmodels:TranslateViewModel x:Name="ViewModel"/>
@@ -44,6 +44,16 @@
 
         <Grid Grid.Row="0">
             <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
+
+               
+
+                <AppBarElementContainer Grid.Column="1" VerticalAlignment="Center">
+                    <ComboBox x:Name="TranslatorComboBox" SelectedValue="{x:Bind ViewModel.TranslatorSource, Mode=TwoWay}" SelectionChanged="TranslatorComboBox_SelectionChanged">
+                        <x:String>Google Translator</x:String>
+                        <x:String>DeepL Translator</x:String>
+                    </ComboBox>
+                 
+                </AppBarElementContainer>
 
                 <AppBarButton Grid.Column="1" Command="{x:Bind TranslateCommand, Mode=OneTime}"
                               Icon="Refresh" Label="Force Translate" 
@@ -84,6 +94,9 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
+
+                <WebView2 Name="webView" Visibility="Collapsed"></WebView2>
+
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4">Words to translate</TextBlock>
                 <ComboBox x:Name="FromCodeComboBox" Grid.Row="1" HorizontalAlignment="Stretch" Grid.Column="0"

@@ -20,6 +20,7 @@ using WinRT.Interop;          // Needed for XAML/HWND interop
 
 using KanjiUI.Views;
 using System.Threading.Tasks;
+using KBE.Components.Translator;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -38,9 +39,11 @@ namespace KanjiUI
         public Shell()
         {
             CurrentShell = this;
+            Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=9222");
 
             Title = "Kanji UI";
             this.InitializeComponent();
+
 
             AppWindow.SetIcon("Asset/KanjiIcon.ico");
             ExtendsContentIntoTitleBar = true;

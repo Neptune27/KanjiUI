@@ -16,8 +16,8 @@ namespace KBE.Components.Kanji.Mazii
 {
     public class MaziiAPIResults
     {
-        public string comp { get; set; } = "";
-        public string level { get; set; } = "";
+        public List<MaziiCompDetail> compDetail { get; set; } = [];
+        public List<string> level { get; set; } = [];
         public string kun { get; set; } = "";
         public string on { get; set; } = "";
         public string mean { get; set; } = "";
