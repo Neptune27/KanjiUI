@@ -117,46 +117,30 @@ namespace KBE.Components.Kanji
             return kanji;
         }
 
-        private static string MaziiErrorTemplate() {
-            return @"
-                {
-                  ""status"": 200,
-                  ""results"": [
-                    {
-                      ""comp"": null,
-                      ""level"": null,
-                      ""kun"": null,
-                      ""kanji"": null,
-                      ""freq"": null,
-                      ""stroke_count"": null,
-                      ""example_on"": null,
-                      ""mean"": null,
-                      ""detail"": null,
-                      ""on"": null,
-                      ""label"": ""ja_vi""
-                    }
-                  ],
-                  ""total"": 1
-                }
-            ";
+        private static MaziiAPI MaziiErrorTemplate() {
+            return new() { 
+                status = 404,
+                results = [new() { mean = "N/A"}]
+            };
         }
 
         public static MaziiAPIResults ProcessMazii(string maziiRaw)
         {
-            var maziiObj = JsonSerializer.Deserialize<MaziiAPI>(maziiRaw);
-            if (maziiObj == null) { throw new Exception($"{maziiRaw} not found"); }
+            var maziiObj = JsonSerializer.Deserialize<MaziiAPI>(maziiRaw) ?? throw new Exception($"{maziiRaw} not found");
             if (maziiObj.status != 200)
             {
-                maziiObj = JsonSerializer.Deserialize<MaziiAPI>(MaziiErrorTemplate());
+                return MaziiErrorTemplate().results[0];
             }
-
-            if (maziiObj is null)
+            if (maziiObj.results.Length == 0)
             {
-                throw new Exception("Parse Error");
+                return MaziiErrorTemplate().results[0];
             }
 
-
-            return maziiObj.results[0];
+            return maziiObj switch
+            {
+                null => throw new Exception("Parse Error"),
+                _ => maziiObj.results[0]
+            };
         }
         #endregion
     }
