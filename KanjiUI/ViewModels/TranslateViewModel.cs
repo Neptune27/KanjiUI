@@ -96,9 +96,8 @@ namespace KanjiUI.ViewModels
 
         private void OpenNewWindow_CommandExecuted()
         {
-            OutputText = "Hello";
-            //var window = new Shell();
-            //window.Activate();
+            var window = new Shell();
+            window.Activate();
         }
 
         private async Task TranslateText()
