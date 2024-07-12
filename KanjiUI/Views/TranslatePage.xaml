@@ -55,6 +55,15 @@
                  
                 </AppBarElementContainer>
 
+                <AppBarToggleButton Grid.Column="1" IsChecked="{x:Bind ViewModel.Furigana, Mode=TwoWay}"
+                              Icon="Character" Label="Furigana" 
+                              ToolTipService.ToolTip="Enable Furigana Hint"
+                              AccessKey="Control + H">
+                    <AppBarToggleButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="H"/>
+                    </AppBarToggleButton.KeyboardAccelerators>
+                </AppBarToggleButton>
+
                 <AppBarButton Grid.Column="1" Command="{x:Bind TranslateCommand, Mode=OneTime}"
                               Icon="Refresh" Label="Force Translate" 
                               ToolTipService.ToolTip="Force to translate input text (Ctrl + R)"
@@ -133,16 +142,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Margin="0 0 20 10" Text="{x:Bind ViewModel.InputText, Mode=TwoWay}" Grid.Column="0"
+                <TextBox Margin="0 0 20 10" Grid.Column="0"
                     SelectionChanged="TextBox_SelectionChanged"
                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                     AcceptsReturn="True" FontSize="22" IsSpellCheckEnabled="False"
+                         Name="InputTextBox"
+                         GotFocus="InputTextBox_GotFocus"
+                         LostFocus="InputTextBox_LostFocus"
                     />
 
-                <TextBox Margin="20 0 0 10" Text="{x:Bind ViewModel.OutputText, Mode=TwoWay}" Grid.Column="1"
+                <TextBox Margin="20 0 0 10" Grid.Column="1"
                         SelectionChanged="TextBox_SelectionChanged" 
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
-                        AcceptsReturn="True" FontSize="22"
+                        AcceptsReturn="True" FontSize="22" Name="OutputTextBox"
+                         GotFocus="OutputTextBox_GotFocus"
+                         LostFocus="OutputTextBox_LostFocus"
                         />
 
             </Grid>

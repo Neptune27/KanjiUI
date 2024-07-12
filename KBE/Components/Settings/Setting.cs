@@ -85,7 +85,9 @@ namespace KBE.Components.Settings
 
         public bool LossySearch { get; set; } = true;
 
-        public static Setting Instance { get; private set; } = MakeSetting();
+        public bool Furigana { get; set; } = false;
+
+		public static Setting Instance { get; private set; } = MakeSetting();
 
         public static Setting GetSetting()
         {
@@ -169,7 +171,9 @@ namespace KBE.Components.Settings
                 ShowCursorKanji = true,
                 SearchDelayInMs = 100,
                 RandoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL },
-                RandoAutoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL, IsEnable = true, SaveLocation = $"{Directory}\\Data\\Autosave" }
+                RandoAutoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL, IsEnable = true, SaveLocation = $"{Directory}\\Data\\Autosave" },
+            
+                Furigana = false,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

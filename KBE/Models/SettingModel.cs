@@ -29,6 +29,7 @@ namespace KBE.Models
         }
 
 
+
         public int TotalRandomLength
         {
             get => Setting.TotalRandomLength;

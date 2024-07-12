@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation and Contributors.
+﻿// Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
 using CommunityToolkit.Mvvm.Messaging;
@@ -26,6 +26,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -43,7 +45,11 @@ namespace KanjiUI.Views
 
         public TranslatePage()
         {
-            timer.Tick += SearchInHome;
+			//Ensuring the singleton is created and initialized for thread-safe operations
+			//Or else when async/parallel it will produce an COMException Error
+			JapanesePhoneticAnalyzer.GetWords("");
+
+			timer.Tick += SearchInHome;
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
 
@@ -61,13 +67,70 @@ namespace KanjiUI.Views
                 }
             };
 
+            ViewModel.OnInputChanged = OnInputChanged;
+            ViewModel.OnOutputChanged = OnOutputChanged;
 
             PopulateToFromCB();
-
             Ensure();
+
+
+		}
+
+        private async void OnInputChanged(string value)
+        {
+            InputTextBox.Text = await GetFuriganaBySetting(value, ViewModel.FromCodeName);
         }
 
-        private void PopulateToFromCB()
+		private async void OnOutputChanged(string value)
+		{
+			OutputTextBox.Text = await GetFuriganaBySetting(value, ViewModel.ToCodeName);
+		}
+
+        private static async Task<string> GetFuriganaBySetting(string text, string code)
+        {
+            if (code != "Japanese")
+            {
+                return text;
+            }
+
+            if (!Setting.Instance.Furigana)
+            {
+                return text;
+            }
+            return await ToFurigana(text);
+        }
+
+		private static async Task<string> ToFurigana(string text)
+        {
+            var textChunks = text.Split("\r");
+            return await Task.Run(() =>
+            {
+                return string.Join("\n", textChunks.AsParallel().AsOrdered().Select(ToFuriganaChunk));
+            });
+        }
+
+        private static string ToFuriganaChunk(string textChunks)
+        {
+			var yomiChunks = JapanesePhoneticAnalyzer.GetWords(textChunks);
+
+			var result = string.Empty;
+			foreach (var phoneme in yomiChunks)
+			{
+				if (phoneme.DisplayText == phoneme.YomiText)
+				{
+					result += phoneme.DisplayText;
+				}
+				else
+				{
+					result += $" {phoneme.DisplayText}({phoneme.YomiText}) ";
+				}
+			}
+
+			return result;
+
+		}
+
+		private void PopulateToFromCB()
         {
 
             var source = TranslatorComboBox.SelectedValue as string;
@@ -153,5 +216,29 @@ namespace KanjiUI.Views
             ViewModel.TranslatorSelectionChanged();
             ViewModel.TranslatorSourceChanged();
         }
-    }
+
+		private void OutputTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+            OutputTextBox.Text = ViewModel.OutputText;
+		}
+
+		private async void OutputTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+            ViewModel.OutputText = OutputTextBox.Text;
+            OutputTextBox.Text = await GetFuriganaBySetting(OutputTextBox.Text, ViewModel.ToCodeName);
+		}
+
+		private void InputTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			InputTextBox.Text = ViewModel.InputText;
+
+		}
+
+		private async void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			ViewModel.InputText = InputTextBox.Text;
+			InputTextBox.Text = await GetFuriganaBySetting(ViewModel.InputText, ViewModel.FromCodeName);
+
+		}
+	}
 }

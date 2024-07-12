@@ -20,25 +20,30 @@ namespace KanjiUI.ViewModels
 {
     internal partial class TranslateViewModel : MasterDetailViewModel<KanjiWord>
     {
+        [ObservableProperty]
         private string inputText;
 
-        public string InputText { 
-            get { return inputText; } 
-            set
-            {
-                if (inputText == value) {
-                    return;
-                }
-                SetProperty(ref inputText, value);
-                _ = TranslateText();
-                _ = SearchKanjiAsync();
-            } 
+		public Action<string> OnInputChanged { get; set; }
+
+		partial void OnInputTextChanged(string value)
+		{
+			_ = TranslateText();
+			_ = SearchKanjiAsync();
+            OnInputChanged?.Invoke(value);
         }
 
-        [ObservableProperty] 
+		[ObservableProperty] 
         private string outputText;
 
-        [ObservableProperty]
+		public Action<string> OnOutputChanged { get; set; }
+
+		partial void OnOutputTextChanged(string value)
+		{
+
+            OnOutputChanged?.Invoke(value);
+		}
+
+		[ObservableProperty]
         private string fromCodeName;
 
         [ObservableProperty]
@@ -58,6 +63,15 @@ namespace KanjiUI.ViewModels
         int translateProgress = 0;
 
         [ObservableProperty]
+        bool furigana = Setting.Instance.Furigana;
+
+		partial void OnFuriganaChanged(bool value)
+		{
+            Setting.Instance.Furigana = value;
+            Setting.Instance.SaveSetting();
+		}
+
+		[ObservableProperty]
         private Visibility translateProgressVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
@@ -154,7 +168,14 @@ namespace KanjiUI.ViewModels
             Setting.Instance.SaveSetting();
         }
 
-        public void TranslatorSelectionChanged()
+        public void FuriganaChanged()
+        {
+			Setting.Instance.Furigana = Furigana;
+            Setting.Instance.SaveSetting();
+
+		}
+
+		public void TranslatorSelectionChanged()
         {
             Setting.Instance.TranslateSource = TranslatorSource;
             Setting.Instance.SaveSetting();
