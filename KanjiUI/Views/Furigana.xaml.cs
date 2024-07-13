@@ -33,6 +33,7 @@ public sealed partial class Furigana : Page
     public Furigana()
     {
         this.InitializeComponent();
+		NavigationCacheMode = NavigationCacheMode.Required;
 
 		//Ensuring the singleton is created and initialized for thread-safe operations
 		//Or else when async/parallel it will produce an COMException Error
