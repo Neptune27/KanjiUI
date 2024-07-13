@@ -3,6 +3,7 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using HtmlAgilityPack;
+using KanjiUI.Utils;
 using KBE.Components.Kanji;
 using KBE.Components.Settings;
 using KBE.Components.Translator;
@@ -78,57 +79,14 @@ namespace KanjiUI.Views
 
         private async void OnInputChanged(string value)
         {
-            InputTextBox.Text = await GetFuriganaBySetting(value, ViewModel.FromCodeName);
+            InputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(value, ViewModel.FromCodeName);
         }
 
 		private async void OnOutputChanged(string value)
 		{
-			OutputTextBox.Text = await GetFuriganaBySetting(value, ViewModel.ToCodeName);
+			OutputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(value, ViewModel.ToCodeName);
 		}
 
-        private static async Task<string> GetFuriganaBySetting(string text, string code)
-        {
-            if (code != "Japanese")
-            {
-                return text;
-            }
-
-            if (!Setting.Instance.Furigana)
-            {
-                return text;
-            }
-            return await ToFurigana(text);
-        }
-
-		private static async Task<string> ToFurigana(string text)
-        {
-            var textChunks = text.Split("\r");
-            return await Task.Run(() =>
-            {
-                return string.Join("\n", textChunks.AsParallel().AsOrdered().Select(ToFuriganaChunk));
-            });
-        }
-
-        private static string ToFuriganaChunk(string textChunks)
-        {
-			var yomiChunks = JapanesePhoneticAnalyzer.GetWords(textChunks);
-
-			var result = string.Empty;
-			foreach (var phoneme in yomiChunks)
-			{
-				if (phoneme.DisplayText == phoneme.YomiText)
-				{
-					result += phoneme.DisplayText;
-				}
-				else
-				{
-					result += $" {phoneme.DisplayText}({phoneme.YomiText}) ";
-				}
-			}
-
-			return result;
-
-		}
 
 		private void PopulateToFromCB()
         {
@@ -225,7 +183,7 @@ namespace KanjiUI.Views
 		private async void OutputTextBox_LostFocus(object sender, RoutedEventArgs e)
 		{
             ViewModel.OutputText = OutputTextBox.Text;
-            OutputTextBox.Text = await GetFuriganaBySetting(OutputTextBox.Text, ViewModel.ToCodeName);
+            OutputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(OutputTextBox.Text, ViewModel.ToCodeName);
 		}
 
 		private void InputTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -237,7 +195,7 @@ namespace KanjiUI.Views
 		private async void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
 		{
 			ViewModel.InputText = InputTextBox.Text;
-			InputTextBox.Text = await GetFuriganaBySetting(ViewModel.InputText, ViewModel.FromCodeName);
+			InputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(ViewModel.InputText, ViewModel.FromCodeName);
 
 		}
 	}

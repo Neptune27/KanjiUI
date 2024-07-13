@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+        ruby { ruby-position: under; }
+        ruby ruby { ruby-position: over; }
+        rtc { ruby-position: under; }
+        * {
+            font-family: "Noto Sans JP", sans-serif;
+            font-size: xx-large;
+        }
+        .ta {
+            height: 95dvh; 
+            max-height: 95dvh;
+            min-width: 30dvw; 
+            width: 30dvw; 
+            resize: none;
+        }
+        rt {
+            font-size: medium;
+        }
+
+        .area {
+            overflow-y: scroll; 
+            max-height: 95dvh;
+        }
+        
+        .area::-webkit-scrollbar {
+            display: none;
+            
+        }
+
+        textarea {
+            background-color: InactiveCaptionText;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: white;
+            }
+
+        }
+    </style>
+    <script>
+        const taBlur = (event) => {
+            const value = event.target.value;
+            console.log(`Input: ${value}`);
+            window.chrome.webview.postMessage(value)
+        }
+
+        const handleMessage = (msg) => {
+            const areaElem = document.getElementById("furiganaArea")
+            areaElem.innerHTML = msg.data
+            console.log(msg);
+            console.log(`Message: ${msg.data}`);
+        }
+
+        window.chrome.webview.addEventListener("message", handleMessage)
+
+    </script>
+</head>
+<body>
+
+    <div style="display: flex; gap: 1rem;">
+        <textarea id="ta" class="ta" onblur="taBlur(event)" style="font-size: large;"></textarea>
+        <div id="furiganaArea" class="area">
+            
+        </div>
+    </div>
+</body>
+</html>

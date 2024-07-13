@@ -23,7 +23,9 @@
   </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Remove="assets\html\Furigana.html" />
     <None Remove="Shell.xaml" />
+    <None Remove="Views\Furigana.xaml" />
     <None Remove="Views\Rando.xaml" />
     <None Remove="Views\TranslatePage.xaml" />
   </ItemGroup>
@@ -53,10 +55,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Html\" />
     <Folder Include="Data\Img\" />
     <Folder Include="Data\Autosave\" />
     <Folder Include="Data\Template\" />
     <Folder Include="Setting\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Furigana.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Rando.xaml">
