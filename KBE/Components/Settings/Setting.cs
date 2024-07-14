@@ -87,6 +87,9 @@ namespace KBE.Components.Settings
 
         public bool Furigana { get; set; } = false;
 
+        public bool FuriganaHiragana { get; set; } = true;
+        public bool FuriganaRomanji { get; set; } = true;
+
 		public static Setting Instance { get; private set; } = MakeSetting();
 
         public static Setting GetSetting()
@@ -174,6 +177,8 @@ namespace KBE.Components.Settings
                 RandoAutoSave = new() { SaveAsType = ESaveAsType.TEXT, SaveOption = ERandoSaveOption.ALL, IsEnable = true, SaveLocation = $"{Directory}\\Data\\Autosave" },
             
                 Furigana = false,
+                FuriganaHiragana = true,
+                FuriganaRomanji = true,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

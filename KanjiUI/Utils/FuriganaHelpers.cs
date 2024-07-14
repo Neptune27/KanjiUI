@@ -42,7 +42,6 @@ public record JapanesePhonemeWithRomanji
 
 			var phoneme = phonemeWithRomanjis[i];
 
-
 			var displayText = phoneme.DisplayText;
 			var yomiText = phoneme.YomiText;
 			var isIn = HiraRomanji.TryGetValue(yomiText, out var romanji);
@@ -67,8 +66,17 @@ public record JapanesePhonemeWithRomanji
 				}
 			}
 
+			if (!Setting.Instance.FuriganaHiragana)
+			{
+				yomiText = "";
+			}
+            if (!Setting.Instance.FuriganaRomanji)
+            {
+				romanji = "";
+            }
 
-			res += $"""
+
+            res += $"""
 					<ruby>
 					    {displayText}
 					    <rt>{yomiText}</rt>
@@ -118,8 +126,8 @@ public record JapanesePhonemeWithRomanji
 		{"ぱ","pa"},{"ぴ","pi"},{"ぷ","pu"},{"ぺ","pe"},{"ぽ","po"},
 
 		{"きゃ","kya"},{"きゅ","kyu"},{"きょ","kyo"},
-		{"しゃ","sya"},{"しゅ","syu"},{"しょ","syo"},
-		{"ちゃ","tya"},{"ちゅ","tyu"},{"ちょ","tyo"},
+		{"しゃ","sha"},{"しゅ","shu"},{"しょ","sho"},
+		{"ちゃ","cha"},{"ちゅ","chu"},{"ちょ","cho"},
 		{"にゃ","nya"},{"にゅ","nyu"},{"にょ","nyo"},
 		{"ひゃ","hya"},{"ひゅ","hyu"},{"ひょ","hyo"},
 		{"みゃ","mya"},{"みゅ","myu"},{"みょ","myo"},
@@ -127,8 +135,8 @@ public record JapanesePhonemeWithRomanji
 
 
 		{"ぎゃ","gya"},{"ぎゅ","gyu"},{"ぎょ","gyo"},
-		{"じゃ","zya"},{"じゅ","zyu"},{"じょ","zyo"},
-		{"ぢゃ","dya"},{"ぢゅ","dyu"},{"ぢょ","dyo"},
+		{"じゃ","ja"},{"じゅ","ju"},{"じょ","jo"},
+		{"ぢゃ","dja"},{"ぢゅ","dju"},{"ぢょ","djo"},
 		{"びゃ","bya"},{"びゅ","byu"},{"びょ","byo"},
 		{"ぴゃ","pya"},{"ぴゅ","pyu"},{"ぴょ","pyo"},
 		{"くゎ","kwa"},{"ぐゎ","gwa"},{"ギャ","gya"},

@@ -395,6 +395,30 @@
                     </Expander.Content>
                 </Expander>
 
+                <Expander x:Name="FuriganaExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Furigana Reader Settings:</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ToggleButton Content="Hiragana" Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                                          IsChecked="{x:Bind ViewModel.Items[0].FuriganaHiragana, Mode=TwoWay}"/>
+                            <ToggleButton Content="Romanji" Grid.Row="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                                          IsChecked="{x:Bind ViewModel.Items[0].FuriganaRomanji, Mode=TwoWay}"/>
+
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
             </ItemsControl>
         </ScrollViewer>
         

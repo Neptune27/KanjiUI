@@ -551,9 +551,37 @@ namespace KBE.Models
         }
 
 
-        #endregion
+		#endregion
 
-        public void Save()
+		#region Furigana
+
+		public bool FuriganaHiragana
+		{
+			get => Setting.FuriganaHiragana;
+			set
+			{
+				OnPropertyChanging(nameof(FuriganaHiragana));
+
+				Setting.FuriganaHiragana = value;
+				OnPropertyChanged(nameof(FuriganaHiragana));
+
+			}
+		}
+
+		public bool FuriganaRomanji
+		{
+			get => Setting.FuriganaRomanji;
+			set
+			{
+				OnPropertyChanging(nameof(FuriganaRomanji));
+				Setting.FuriganaRomanji = value;
+				OnPropertyChanged(nameof(FuriganaRomanji));
+
+			}
+		}
+		#endregion
+
+		public void Save()
         {
             Setting.SaveSetting();
         }
