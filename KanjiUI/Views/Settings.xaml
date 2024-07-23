@@ -409,11 +409,14 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <ToggleButton Content="Hiragana" Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
                                           IsChecked="{x:Bind ViewModel.Items[0].FuriganaHiragana, Mode=TwoWay}"/>
                             <ToggleButton Content="Romanji" Grid.Row="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
                                           IsChecked="{x:Bind ViewModel.Items[0].FuriganaRomanji, Mode=TwoWay}"/>
+                            <ToggleButton Content="Connected Romanji (Experimental)" Grid.Row="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                                          IsChecked="{x:Bind ViewModel.Items[0].ConnectedRomanji, Mode=TwoWay}"/>
 
                         </Grid>
                     </Expander.Content>

@@ -42,7 +42,6 @@ public sealed partial class Furigana : Page
 		var dir = Directory.GetCurrentDirectory();
 		var working = Path.GetFullPath(dir + "\\"+ Setting.Directory);
 		FuriganaWV.Source = new Uri($"file:///{working}/Assets/Html/Furigana.html");
-		FuriganaWV.WebMessageReceived += Test;
         InitializeAsync();
     }
     private async void InitializeAsync()
@@ -50,13 +49,11 @@ public sealed partial class Furigana : Page
 		await FuriganaWV.EnsureCoreWebView2Async(null);
 	}
 
-	private async void Test(WebView2 sender, CoreWebView2WebMessageReceivedEventArgs args)
+
+	private async void FuriganaTextBox_LostFocus(object sender, RoutedEventArgs e)
 	{
-        var str = args.TryGetWebMessageAsString();
-        Debug.WriteLine(str);
-		var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(str);
+		var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(FuriganaTextBox.Text);
+		FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
 
-        FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
 	}
-
 }

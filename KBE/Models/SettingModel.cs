@@ -579,6 +579,19 @@ namespace KBE.Models
 
 			}
 		}
+
+
+		public bool ConnectedRomanji
+		{
+			get => Setting.ConnectedRomanji;
+			set
+			{
+				OnPropertyChanging(nameof(ConnectedRomanji));
+				Setting.ConnectedRomanji = value;
+				OnPropertyChanged(nameof(ConnectedRomanji));
+
+			}
+		}
 		#endregion
 
 		public void Save()

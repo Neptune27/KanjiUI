@@ -18,7 +18,16 @@
 
     <Grid>
 
-        <WebView2 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Margin="20 0 0 10" Grid.Column="0"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                        AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
+                         LostFocus="FuriganaTextBox_LostFocus"
+                        />
+        <WebView2 Grid.Column="1"
             DefaultBackgroundColor="Transparent"
             Name="FuriganaWV"/>
     </Grid>

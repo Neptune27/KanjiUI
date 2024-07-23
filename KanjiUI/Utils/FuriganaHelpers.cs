@@ -1,4 +1,5 @@
-﻿using KBE.Components.Settings;
+﻿using KBE.Components.Kanji;
+using KBE.Components.Settings;
 using KBE.Models;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,47 @@ public record JapanesePhonemeWithRomanji
 
 			res += romanji;
 		}
+
+		if (Setting.Instance.ConnectedRomanji)
+		{
+			return ToCombinationRomanji(res);
+		}
+
 		return res;
 	}
+
+	public static string ToCombinationRomanji(string romanji, string next = "")
+	{
+		if (string.IsNullOrWhiteSpace(romanji))
+		{
+			return romanji;
+		}
+
+        if (romanji == "-")
+        {
+			return next[0].ToString();
+        }
+
+		var newString = string.Empty;
+
+        for (int i = 0; i < romanji.Length - 1; i++)
+        {
+            var current = romanji[i];
+			if (current == '-')
+			{
+				var nextChar = romanji[i + 1];
+				newString += nextChar;
+			}
+			else
+			{
+				newString += current;
+			}
+        }
+
+		return newString + romanji[^1];
+
+    }
+
 	public static string ToHtml(IReadOnlyList<JapanesePhoneme> phonemeWithRomanjis)
 	{
 		var res = "<ruby>";
@@ -44,27 +84,49 @@ public record JapanesePhonemeWithRomanji
 
 			var displayText = phoneme.DisplayText;
 			var yomiText = phoneme.YomiText;
+
+
 			var isIn = HiraRomanji.TryGetValue(yomiText, out var romanji);
             if (!isIn) 
             {
 				romanji = CombineRomanji(yomiText);
             }
 
-
 			if (i < phonemeWithRomanjis.Count - 1)
 			{
 				var nextPhoneme = phonemeWithRomanjis[i + 1];
-				var isNextIn = HiraRomanji.TryGetValue(yomiText + nextPhoneme.DisplayText,
-					out var nextRomanji);
+				var isDigraphs = HiraRomanji.TryGetValue(yomiText + nextPhoneme.DisplayText,
+					out var nextDigraphs);
 
-				if (isNextIn)
+
+
+
+				if (Setting.Instance.ConnectedRomanji && romanji == "-")
 				{
-					romanji = nextRomanji;
+					var isNextRomanji = HiraRomanji.TryGetValue(nextPhoneme.YomiText[0].ToString(),
+						out var nextRomanji);
+					if (isNextRomanji)
+					{
+						romanji = ToCombinationRomanji(romanji, nextRomanji);
+					}
+                }
+
+				//For きょ,しょ,...
+				if (isDigraphs)
+				{
+					romanji = nextDigraphs;
 					displayText += nextPhoneme.DisplayText;
 					yomiText += nextPhoneme.YomiText;
 					i++;
 				}
+
+
+
 			}
+
+
+
+
 
 			if (!Setting.Instance.FuriganaHiragana)
 			{

@@ -89,6 +89,7 @@ namespace KBE.Components.Settings
 
         public bool FuriganaHiragana { get; set; } = true;
         public bool FuriganaRomanji { get; set; } = true;
+        public bool ConnectedRomanji { get; set; } = true;
 
 		public static Setting Instance { get; private set; } = MakeSetting();
 
@@ -179,6 +180,7 @@ namespace KBE.Components.Settings
                 Furigana = false,
                 FuriganaHiragana = true,
                 FuriganaRomanji = true,
+                ConnectedRomanji = true,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");
