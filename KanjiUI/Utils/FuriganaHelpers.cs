@@ -98,7 +98,7 @@ public record JapanesePhonemeWithRomanji
 
 			if (string.IsNullOrWhiteSpace(displayText))
 			{
-				res += displayText;
+				res += "&nbsp";
 				continue;
 			}
 
