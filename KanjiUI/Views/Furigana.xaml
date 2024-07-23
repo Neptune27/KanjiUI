@@ -17,18 +17,34 @@
     </Page.DataContext>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="20 0 0 10" Grid.Column="0"
+                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                 AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
+                  LostFocus="FuriganaTextBox_LostFocus"
+                 />
+            <WebView2 Grid.Column="1"
+                 DefaultBackgroundColor="Transparent"
+                 Name="FuriganaWV"/>
+        </Grid>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Margin="20 0 0 10" Grid.Column="0"
-                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
-                        AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
-                         LostFocus="FuriganaTextBox_LostFocus"
-                        />
-        <WebView2 Grid.Column="1"
-            DefaultBackgroundColor="Transparent"
-            Name="FuriganaWV"/>
+       
+
+        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="1" Margin="0 8"
+                     Value="{x:Bind ViewModel.MaziiProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+        <ProgressBar x:Name="JishoProgressBar" Grid.Row="2" Margin="0 8"
+                     Value="{x:Bind ViewModel.JishoProgress, Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
+
     </Grid>
 </Page>

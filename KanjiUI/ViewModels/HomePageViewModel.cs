@@ -32,7 +32,7 @@ namespace KanjiUI.ViewModels
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get => Setting.Instance; }
 
-        private readonly ObservableCollection<KanjiWord> items = new();
+		private readonly ObservableCollection<KanjiWord> items = [];
 
         private bool isLoaded = false;
 

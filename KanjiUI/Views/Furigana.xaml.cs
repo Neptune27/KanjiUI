@@ -54,6 +54,8 @@ public sealed partial class Furigana : Page
 	{
 		var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(FuriganaTextBox.Text);
 		FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
+		await ViewModel.Translate(FuriganaTextBox.Text);
+
 
 	}
 }

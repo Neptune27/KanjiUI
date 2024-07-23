@@ -70,9 +70,20 @@ public record JapanesePhonemeWithRomanji
 			}
         }
 
-		return newString + romanji[^1];
+        if (romanji[^1] == '-' && !string.IsNullOrWhiteSpace(next))
+        {
+			newString += next[0];
+        }
+		else
+		{
+			newString += romanji[^1];
+		}
+
+
+		return newString;
 
     }
+
 
 	public static string ToHtml(IReadOnlyList<JapanesePhoneme> phonemeWithRomanjis)
 	{
@@ -85,11 +96,17 @@ public record JapanesePhonemeWithRomanji
 			var displayText = phoneme.DisplayText;
 			var yomiText = phoneme.YomiText;
 
+			if (string.IsNullOrWhiteSpace(displayText))
+			{
+				res += displayText;
+				continue;
+			}
 
 			var isIn = HiraRomanji.TryGetValue(yomiText, out var romanji);
             if (!isIn) 
             {
 				romanji = CombineRomanji(yomiText);
+
             }
 
 			if (i < phonemeWithRomanjis.Count - 1)
@@ -99,16 +116,21 @@ public record JapanesePhonemeWithRomanji
 					out var nextDigraphs);
 
 
+				
 
-
-				if (Setting.Instance.ConnectedRomanji && romanji == "-")
+				if (Setting.Instance.ConnectedRomanji)
 				{
-					var isNextRomanji = HiraRomanji.TryGetValue(nextPhoneme.YomiText[0].ToString(),
-						out var nextRomanji);
-					if (isNextRomanji)
+					if (romanji == "-" || (romanji.Length > 1 && romanji[^1] == '-'))
 					{
-						romanji = ToCombinationRomanji(romanji, nextRomanji);
+						var isNextRomanji = HiraRomanji.TryGetValue(nextPhoneme.YomiText[0].ToString(),
+							out var nextRomanji);
+						if (isNextRomanji)
+						{
+							romanji = ToCombinationRomanji(romanji, nextRomanji);
+						}
 					}
+
+
                 }
 
 				//For きょ,しょ,...
