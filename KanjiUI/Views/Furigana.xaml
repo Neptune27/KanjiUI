@@ -16,7 +16,7 @@
         <viewmodels:FuriganaViewModel x:Name="ViewModel"/>
     </Page.DataContext>
 
-    <Grid>
+    <Grid Margin="20 10 0 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Margin="20 0 0 10" Grid.Column="0"
+            <TextBox Margin="0 0 0 0" Grid.Column="0"
                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                  AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
                   LostFocus="FuriganaTextBox_LostFocus"
@@ -39,10 +39,10 @@
 
        
 
-        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="1" Margin="0 8"
+        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="1" Margin="0 8 20 0"
                      Value="{x:Bind ViewModel.MaziiProgress, Mode=OneWay}"
                      Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
-        <ProgressBar x:Name="JishoProgressBar" Grid.Row="2" Margin="0 8"
+        <ProgressBar x:Name="JishoProgressBar" Grid.Row="2" Margin="0 8 20 0"
                      Value="{x:Bind ViewModel.JishoProgress, Mode=OneWay}"
                      Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
 
