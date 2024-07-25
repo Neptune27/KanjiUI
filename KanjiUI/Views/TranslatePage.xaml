@@ -104,7 +104,7 @@
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
 
-                <WebView2 Name="webView" Visibility="Collapsed"></WebView2>
+                <WebView2 Name="WebView" Source="" Visibility="Collapsed"></WebView2>
 
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4">Words to translate</TextBlock>

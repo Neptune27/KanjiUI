@@ -15,15 +15,13 @@ namespace KBE.Components.Translator
 {
     public partial class DeepLTranslator
     {
-        public IPlaywright playwright = null;
-        public IBrowser browser = null;
-        public IPage page = null;
+        public static IPlaywright playwright = null;
+        public static IBrowser browser = null;
+        public static IPage page = null;
 
         ~DeepLTranslator()
         {
-            if (page != null) {
-                page.CloseAsync();
-            }
+			page?.CloseAsync();
         }
 
         public async Task<string> GetTranslation(string fromCode, string toCode, string value, IProgress<int>? progress = null)
@@ -43,7 +41,15 @@ namespace KBE.Components.Translator
                 browser = await playwright.Chromium.ConnectOverCDPAsync("http://localhost:9222");
                 var contexts = browser.Contexts;
                 var pages = contexts[0].Pages;
-                page = pages[pages.Count-1];
+                foreach (var currentPage in pages)
+                {
+                    if (currentPage.Url.Contains("Translate.html"))
+                    {
+                        page = currentPage;
+                        break;
+                    }
+                }
+                
             }
 
 

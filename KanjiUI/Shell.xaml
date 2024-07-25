@@ -42,7 +42,7 @@
             x:Name="NavView"
             PaneDisplayMode="LeftCompact"
             IsBackButtonVisible="Collapsed"
-            IsBackEnabled="False"
+            IsBackEnabled="False" 
             >
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Kanji View" Tag="KanjiUI.Views.HomePage" Icon="Home"></NavigationViewItem>

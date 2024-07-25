@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="assets\html\Furigana.html" />
+    <None Remove="Assets\Html\Translate.html" />
     <None Remove="Shell.xaml" />
     <None Remove="Views\Furigana.xaml" />
     <None Remove="Views\Rando.xaml" />
@@ -55,7 +56,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Html\" />
     <Folder Include="Data\Img\" />
     <Folder Include="Data\Autosave\" />
     <Folder Include="Data\Template\" />

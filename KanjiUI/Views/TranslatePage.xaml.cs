@@ -72,7 +72,12 @@ namespace KanjiUI.Views
             ViewModel.OnOutputChanged = OnOutputChanged;
 
             PopulateToFromCB();
-            Ensure();
+
+			var dir = Directory.GetCurrentDirectory();
+			var working = Path.GetFullPath(dir + "\\" + Setting.Directory);
+			WebView.Source = new Uri($"file:///{working}/Assets/Html/Translate.html");
+
+			Ensure();
 
 
 		}
@@ -118,7 +123,7 @@ namespace KanjiUI.Views
 
         private async void Ensure()
         {
-            await webView.EnsureCoreWebView2Async();
+            await WebView.EnsureCoreWebView2Async();
         }
 
         private void SearchInHome(object sender, object e)
