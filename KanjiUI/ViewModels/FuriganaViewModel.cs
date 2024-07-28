@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using KBE.Components.Kanji;
 using KBE.Models;
 using Microsoft.UI.Xaml;
@@ -35,8 +36,11 @@ public partial class FuriganaViewModel : MasterDetailViewModel<KanjiWord>
 		var jishoProgress = new Progress<int>(percent => JishoProgress = percent);
 
 		ProgressVisibility = Visibility.Visible;
-		await KanjiController.GetKanjiNotInDatabaseFromInternet(value, jishoProgress, maziiProgress);
+		if (await KanjiController.GetKanjiNotInDatabaseFromInternet(value, jishoProgress, maziiProgress))
+		{
+			WeakReferenceMessenger.Default.Send(new KanjiUpdateMessage(true));
 
+		}
 		ProgressVisibility = Visibility.Collapsed;
 
 		MaziiProgress = 0;

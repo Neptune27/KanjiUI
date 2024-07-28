@@ -1,8 +1,10 @@
 ﻿using KBE.Components.Kanji;
 using KBE.Components.Settings;
+using KBE.Components.Utils;
 using KBE.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -85,9 +87,10 @@ public record JapanesePhonemeWithRomanji
     }
 
 
-	public static string ToHtml(IReadOnlyList<JapanesePhoneme> phonemeWithRomanjis)
+	public static string ToHtml(IList<JapanesePhoneme> phonemeWithRomanjis)
 	{
-		var res = "<ruby>";
+		
+		var res = "<p><ruby>";
 		for (int i = 0; i < phonemeWithRomanjis.Count; i++)
 		{
 
@@ -96,13 +99,21 @@ public record JapanesePhonemeWithRomanji
 			var displayText = phoneme.DisplayText;
 			var yomiText = phoneme.YomiText;
 
-			if (string.IsNullOrWhiteSpace(displayText))
+
+            if (yomiText == " ")
 			{
 				res += "&nbsp";
 				continue;
 			}
 
-			var isIn = HiraRomanji.TryGetValue(yomiText, out var romanji);
+            if (displayText == "\r" || displayText == "\n")
+            {
+				res += "</ruby></p><p><ruby>";
+				continue;
+
+			}
+
+            var isIn = HiraRomanji.TryGetValue(yomiText, out var romanji);
             if (!isIn) 
             {
 				romanji = CombineRomanji(yomiText);
@@ -161,16 +172,11 @@ public record JapanesePhonemeWithRomanji
 
 
             res += $"""
-					<ruby>
-					    {displayText}
-					    <rt>{yomiText}</rt>
-					</ruby>
-					<rt>{romanji}</rt>
-					<rb></rb>
+					<ruby>{displayText}<rt>{yomiText}</rt></ruby><rt>{romanji}</rt><rb></rb>
 					""";
         }
 
-		return res + "</ruby>";
+		return res + "</ruby></p>";
 		//return $"""
 		//	<ruby>
 		//	    <ruby>{DisplayText}
@@ -259,9 +265,13 @@ public partial class FuriganaHelpers
 		return await ToFuriganaText(text);
 	}
 
+	private static readonly IReadOnlyList<string> _seperatedList = ["\n", "\r"];
+
 	public static async Task<List<IReadOnlyList<JapanesePhoneme>>> ToFurigana(string text, bool isMono = false)
 	{
-		var textChunks = NewLineRegex().Split(text);
+		//var textChunks = NewLineRegex().Split(text);
+		var textChunks = text.ToChunks(70, _seperatedList);
+
 		return await Task.Run(() =>
 		{
 			return textChunks.AsParallel().AsOrdered().Select(c => JapanesePhoneticAnalyzer.GetWords(c,isMono)).ToList();
@@ -275,16 +285,27 @@ public partial class FuriganaHelpers
 
 	public static async Task<string> ToFuriganaRomanjiHtml(string text)
 	{
-		var withRomanjis = (await ToFurigana(text, true));
-		var t = withRomanjis
-			.Select(JapanesePhonemeWithRomanji.ToHtml);
+		var withRomanjis = await ToFurigana(text, true);
+		
+		//Combine it into a single list for accurate conversion.
+		var htmlList = new List<JapanesePhoneme>();
 
-		var res = "";
-		foreach (var phrase in t)
+		//Why the fuck does IReadOnlyList does not support SelectMany, Select, or ForEach.
+		//Then what's the point of using that interface then.
+		//I thought after the api call for Japanese Phoneme it'll convert to freaking List
+		//and not just a raw array masquerade as a IReadOnlyList, why???. And this is from Microsoft too.
+		//My dissappointment is immeasurable and my day is ruined because I have to do this.
+		//Freaking Windows.Globalization... Why???
+		foreach (var chunk in withRomanjis)
 		{
-			res += $"<p>{phrase}</p>";
-		}
-		return res;
+            for (var i = 0; i < chunk.Count; i++)
+            {
+				var phoneme = chunk[i];
+                htmlList.Add(phoneme);
+            }
+        }
+
+		return string.Join("",JapanesePhonemeWithRomanji.ToHtml(htmlList));
 	}
 
 
