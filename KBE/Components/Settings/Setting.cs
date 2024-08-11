@@ -91,6 +91,9 @@ namespace KBE.Components.Settings
         public bool FuriganaRomanji { get; set; } = true;
         public bool ConnectedRomanji { get; set; } = true;
 
+		public bool WVDeveloperMode { get; set; } = false;
+
+
 		public static Setting Instance { get; private set; } = MakeSetting();
 
         public static Setting GetSetting()
@@ -181,6 +184,8 @@ namespace KBE.Components.Settings
                 FuriganaHiragana = true,
                 FuriganaRomanji = true,
                 ConnectedRomanji = true,
+
+                WVDeveloperMode = false,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

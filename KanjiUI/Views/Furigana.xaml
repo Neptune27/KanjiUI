@@ -16,13 +16,46 @@
         <viewmodels:FuriganaViewModel x:Name="ViewModel"/>
     </Page.DataContext>
 
+
+    <Page.Resources>
+        <XamlUICommand x:Name="OpenNewWindowsCommand" Command="{x:Bind ViewModel.OpenNewWindowCommand}" 
+                       Description="Open new windows" Label="Open new windows"/>
+        <XamlUICommand x:Name="TranslateCommand" Command="{x:Bind SaveAsPDFCommand}" 
+                       Description="Save content into PDF" Label="Save As PDF"/>
+    </Page.Resources>
+
     <Grid Margin="20 10 0 10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
+            <CommandBar DefaultLabelPosition="Right">
+
+                <AppBarButton Grid.Column="1" Command="{x:Bind SaveAsPDFCommand,Mode=OneTime}"
+                              Icon="Print" Label="Save As PDF" 
+                              ToolTipService.ToolTip="Control + S"
+                              AccessKey="Control + S">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="S"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
+                <AppBarButton Grid.Column="1" Command="{x:Bind OpenNewWindowsCommand,Mode=OneTime}"
+                              Icon="NewWindow" Label="Open Kanji View" 
+                              ToolTipService.ToolTip="Control + F"
+                              AccessKey="Control + F">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="F"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
+            </CommandBar>
+
+        </Grid>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="7*"/>
@@ -30,7 +63,7 @@
             <TextBox Margin="0 0 0 0" Grid.Column="0"
                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                  AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
-                  LostFocus="FuriganaTextBox_LostFocus"
+                  LostFocus="FuriganaTextBox_LostFocus" SelectionChanged="FuriganaTextBox_SelectionChanged"
                  />
             <WebView2 Grid.Column="1"
                  DefaultBackgroundColor="Transparent"
@@ -39,10 +72,10 @@
 
        
 
-        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="1" Margin="0 8 20 0"
+        <ProgressBar x:Name="MaziiProgressBar" Grid.Row="2" Margin="0 8 20 0"
                      Value="{x:Bind ViewModel.MaziiProgress, Mode=OneWay}"
                      Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
-        <ProgressBar x:Name="JishoProgressBar" Grid.Row="2" Margin="0 8 20 0"
+        <ProgressBar x:Name="JishoProgressBar" Grid.Row="3" Margin="0 8 20 0"
                      Value="{x:Bind ViewModel.JishoProgress, Mode=OneWay}"
                      Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
 

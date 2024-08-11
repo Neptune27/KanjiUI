@@ -44,9 +44,6 @@
 
         <Grid Grid.Row="0">
             <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
-
-               
-
                 <AppBarElementContainer Grid.Column="1" VerticalAlignment="Center">
                     <ComboBox x:Name="TranslatorComboBox" SelectedValue="{x:Bind ViewModel.TranslatorSource, Mode=TwoWay}" SelectionChanged="TranslatorComboBox_SelectionChanged">
                         <x:String>Google Translator</x:String>
@@ -104,7 +101,7 @@
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
 
-                <WebView2 Name="WebView" Source="" Visibility="Collapsed"></WebView2>
+                <WebView2 Name="WebView"  Visibility="Collapsed"></WebView2>
 
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 4">Words to translate</TextBlock>

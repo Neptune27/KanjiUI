@@ -15,6 +15,7 @@ using System.Windows.Input;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
+using KanjiUI.Utils;
 
 namespace KanjiUI.ViewModels;
 
@@ -81,28 +82,11 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         };
 
 
-        var storageFile = await OpenFileSave("Rando", extension);
+        var storageFile = await SaveHelpers.OpenFileSaveAsync("Rando", extension);
         await Save(storageFile.Path, Setting.Instance.RandoSave);
         
     }
 
-    private async Task<StorageFile> OpenFileSave(string name, string extension)
-    {
-        var savePicker = new FileSavePicker();
-
-        // Get the current window's HWND by passing in the Window object
-        var hwnd = WindowNative.GetWindowHandle(App.Window);
-
-        // Associate the HWND with the file picker
-        InitializeWithWindow.Initialize(savePicker, hwnd);
-
-        // Use file picker like normal!
-        //folderPicker.FileTypeFilter.Add("*");
-        savePicker.FileTypeChoices.Add($"{name}", new List<string>() { $"{extension}" });
-        savePicker.SuggestedFileName = "New Document";
-
-        return await savePicker.PickSaveFileAsync();
-    }
 
     private async Task Save(string fileName, RandoSaveModel model)
     {

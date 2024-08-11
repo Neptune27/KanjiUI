@@ -594,6 +594,22 @@ namespace KBE.Models
 		}
 		#endregion
 
+
+		#region Webview
+		public bool WVDeveloperMode
+		{
+			get => Setting.WVDeveloperMode;
+			set
+			{
+				OnPropertyChanging(nameof(WVDeveloperMode));
+				Setting.WVDeveloperMode = value;
+				OnPropertyChanged(nameof(WVDeveloperMode));
+
+			}
+		}
+
+		#endregion
+
 		public void Save()
         {
             Setting.SaveSetting();

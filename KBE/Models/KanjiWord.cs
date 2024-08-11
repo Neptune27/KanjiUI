@@ -231,7 +231,10 @@ namespace KBE.Models
                     continue;
                 }
 
-                return Search(value, filters);
+                if (Search(value, filters))
+                {
+                    return true;
+                }
             }
             return false;
         }

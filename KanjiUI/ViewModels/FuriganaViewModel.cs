@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using KBE.Components.Kanji;
 using KBE.Models;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KanjiUI.ViewModels;
 
@@ -23,6 +25,16 @@ public partial class FuriganaViewModel : MasterDetailViewModel<KanjiWord>
 
 	[ObservableProperty]
 	private Visibility progressVisibility = Visibility.Collapsed;
+
+
+	public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
+
+	private void OpenNewWindow_CommandExecuted()
+	{
+
+		var window = new Shell();
+		window.Activate();
+	}
 
 	public async Task Translate(string value)
 	{

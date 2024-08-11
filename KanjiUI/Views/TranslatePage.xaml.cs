@@ -147,7 +147,7 @@ namespace KanjiUI.Views
             {
                 return;
             }
-            WeakReferenceMessenger.Default.Send(new CurrentWordSelectedMesssage(textBox.Text[textBox.SelectionStart - 1]));
+            WeakReferenceMessenger.Default.Send(new CurrentWordSelectedMesssage(textBox.Text[textBox.SelectionStart - 1].ToString()));
         }
 
         private async void OpenErrorDialog(string title, string content)

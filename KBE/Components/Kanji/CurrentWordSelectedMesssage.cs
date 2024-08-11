@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace KBE.Components.Kanji;
 
-public class CurrentWordSelectedMesssage : ValueChangedMessage<char>
+public class CurrentWordSelectedMesssage : ValueChangedMessage<string>
 {
 
-    public CurrentWordSelectedMesssage(char value) : base(value)
+    public CurrentWordSelectedMesssage(string value) : base(value)
     {
     }
 }

@@ -40,10 +40,6 @@
             transition: all ease-in-out 100ms;
         }
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-
-        }
 
         /* Handle */
         ::-webkit-scrollbar-thumb {
@@ -51,11 +47,6 @@
             border-radius: 5px;
         }
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb:hover {
-            background: 
-
-        }
 
 
 
@@ -76,9 +67,55 @@
 
         window.chrome.webview.addEventListener("message", handleMessage)
 
+
+        const sendToBackend = (str) => {
+            console.log(str);
+            
+            window.chrome.webview.postMessage(str)
+        }
+
+        const handleBodyClick = (e) => {
+            const selection = document.getSelection();
+            let range = selection.getRangeAt(0);
+            const contents = range.cloneContents()
+            const filters = [...contents.querySelectorAll("ruby")]
+                            .filter(e => e.childElementCount < 3 && e.childElementCount > 0)
+            const textList = filters.map(e => {
+                try {
+                    return e.childNodes[0].textContent
+                }
+                catch (err) {
+                    console.log(err);
+                    
+                    console.log(e);
+                    return "";
+                }
+            });
+            let text = textList.join("")
+
+            if (text.length !== 0) {
+                sendToBackend(text)
+                return
+            }
+
+
+            //Handle click
+            const {baseNode, extentNode} = selection;
+            
+            let parentNode = baseNode;
+            while (parentNode.nodeName === "RT" || parentNode.nodeName === "#text") {
+                parentNode = parentNode.parentElement;
+            }
+            if (parentNode.parentElement.nodeName === "P") {
+                parentNode = baseNode.parentElement.previousSibling
+            }
+
+            sendToBackend(parentNode.childNodes[0].textContent);
+        
+        }
     </script>
 </head>
-<body>
+<body onclick="handleBodyClick(event)">
 
     <div style="display: flex; gap: 1rem;">
         <div id="furiganaArea" class="area">

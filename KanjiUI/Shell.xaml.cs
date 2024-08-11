@@ -34,11 +34,12 @@ namespace KanjiUI
     {
         private AppWindow m_AppWindow;
 
-        public static Shell CurrentShell;
+        public static readonly List<Shell> CurrentShellList = [];
 
         public Shell()
         {
-            CurrentShell = this;
+
+            CurrentShellList.Add(this);
             Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=9222");
 
             Title = "Kanji UI";
@@ -69,7 +70,10 @@ namespace KanjiUI
             //m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
         }
 
-       
+        ~Shell()
+        {
+            CurrentShellList.Remove(this);
+        }
 
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

@@ -128,7 +128,7 @@ namespace KanjiUI.ViewModels
             }
         }
 
-        public async Task SelectKanjiByCursorInTranslate(char word)
+        public async Task SelectKanjiByCursorInTranslate(string word)
         {
             if (SettingInstance.ShowCursorKanji)
             {
@@ -141,21 +141,25 @@ namespace KanjiUI.ViewModels
 
         }
 
-        private async Task GetItemByCursor(char word)
+        private async Task GetItemByCursor(string word)
         {
+            if (word.Length != 1)
+            {
+                throw new IncorrectLengthError("This can only have length of 1");
+            }
             Debug.WriteLine($"[INFO]: Cursor: {word}");
-            var kanjis = KanjiProcessor.GetKanjis(word.ToString());
+            var kanjis = KanjiProcessor.GetKanjis(word);
             if (!kanjis.Any())
             {
                 await ResetFilter();
                 return;
             }
 
-            var item = Items.FirstOrDefault(k => k.Kanji == word.ToString());
+            var item = Items.FirstOrDefault(k => k.Kanji == word);
             if (item is null)
             {
                 await ResetFilter();
-                Current = Items.FirstOrDefault(k => k.Kanji == word.ToString(),
+                Current = Items.FirstOrDefault(k => k.Kanji == word,
                     Items[0]);
                 return;
             }
@@ -165,8 +169,7 @@ namespace KanjiUI.ViewModels
 
         public void SendCurrentWordList()
         {
-
-            Shell.CurrentShell.SetContentFrame(typeof(Rando), 2);
+            Shell.CurrentShellList.ForEach(s => s.SetContentFrame(typeof(Rando), 2));
             WeakReferenceMessenger.Default.Send(new SendKanjiMessage(Items));
         }
 

@@ -421,6 +421,22 @@
                         </Grid>
                     </Expander.Content>
                 </Expander>
+                <Expander x:Name="WebViewExpander"
+      IsExpanded="False"
+      ExpandDirection="Down"
+      VerticalAlignment="Top"
+      HorizontalAlignment="Stretch"
+      HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Developer Mode:</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel>
+                            <ToggleButton Content="Inspect Button" Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                            IsChecked="{x:Bind ViewModel.Items[0].WVDeveloperMode, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
 
             </ItemsControl>
         </ScrollViewer>
