@@ -143,8 +143,16 @@ public sealed partial class Furigana : Page
 	}
 
 
+	private string _current = string.Empty;
+
 	private async void FuriganaTextBox_LostFocus(object sender, RoutedEventArgs e)
 	{
+        if (_current == FuriganaTextBox.Text)
+        {
+			return;
+        }
+		_current = FuriganaTextBox.Text;
+
 		var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(FuriganaTextBox.Text);
 		FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
 		await ViewModel.Translate(FuriganaTextBox.Text);

@@ -267,15 +267,15 @@ public partial class FuriganaHelpers
 
 	private static readonly IReadOnlyList<string> _seperatedList = ["\n", "\r"];
 
+
 	public static async Task<List<IReadOnlyList<JapanesePhoneme>>> ToFurigana(string text, bool isMono = false)
 	{
 		//var textChunks = NewLineRegex().Split(text);
 		var textChunks = text.ToChunks(70, _seperatedList);
 
-		return await Task.Run(() =>
-		{
-			return textChunks.AsParallel().AsOrdered().Select(c => JapanesePhoneticAnalyzer.GetWords(c,isMono)).ToList();
-		});
+		return textChunks.Select(c => JapanesePhoneticAnalyzer.GetWords(c, isMono)).ToList();
+
+
 	}
 
 	public static async Task<string> ToFuriganaText(string text)

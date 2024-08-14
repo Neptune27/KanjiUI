@@ -187,7 +187,11 @@ namespace KanjiUI.Views
 
 		private async void OutputTextBox_LostFocus(object sender, RoutedEventArgs e)
 		{
-            ViewModel.OutputText = OutputTextBox.Text;
+			if (ViewModel.OutputText == OutputTextBox.Text)
+			{
+				return;
+			}
+			ViewModel.OutputText = OutputTextBox.Text;
             OutputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(OutputTextBox.Text, ViewModel.ToCodeName);
 		}
 
@@ -199,7 +203,11 @@ namespace KanjiUI.Views
 
 		private async void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
 		{
-			ViewModel.InputText = InputTextBox.Text;
+            if (ViewModel.InputText == InputTextBox.Text)
+            {
+                return;
+            }
+            ViewModel.InputText = InputTextBox.Text;
 			InputTextBox.Text = await FuriganaHelpers.GetFuriganaTextBySetting(ViewModel.InputText, ViewModel.FromCodeName);
 
 		}

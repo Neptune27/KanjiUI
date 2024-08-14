@@ -36,7 +36,7 @@ namespace KanjiUI.Views
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-        }
+		}
 
 
 
