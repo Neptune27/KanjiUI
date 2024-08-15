@@ -146,7 +146,6 @@
                          Name="InputTextBox"
                          GotFocus="InputTextBox_GotFocus"
                          LostFocus="InputTextBox_LostFocus"
-                         IsSpellCheckEnabled="False"
                          
                     />
 
