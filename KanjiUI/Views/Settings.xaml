@@ -432,8 +432,10 @@
                     </Expander.Header>
                     <Expander.Content>
                         <StackPanel>
-                            <ToggleButton Content="Inspect Button" Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                            <ToggleButton Content="Inspect Button" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
                             IsChecked="{x:Bind ViewModel.Items[0].WVDeveloperMode, Mode=TwoWay}"/>
+                            <ToggleButton Content="Unsafe Japanese Analyzer" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4" 
+                            IsChecked="{x:Bind ViewModel.Items[0].UnsafeJapaneseAnalyzer, Mode=TwoWay}"/>
                         </StackPanel>
                     </Expander.Content>
                 </Expander>

@@ -50,7 +50,7 @@ namespace KBE.Components.Settings
         public static string Directory = ".";
         public static string FilePath = $"{Directory}\\Setting\\setting.json";
 #elif DEBUG
-        public static string Directory { get; set; } = "..\\..\\..\\..";
+		public static string Directory { get; set; } = "..\\..\\..\\..";
         public static string FilePath { get; set; } = $"{Directory}\\Setting\\setting.json";
 #endif
         public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
@@ -92,6 +92,7 @@ namespace KBE.Components.Settings
         public bool ConnectedRomanji { get; set; } = true;
 
 		public bool WVDeveloperMode { get; set; } = false;
+		public bool UnsafeJapaneseAnalyzer { get; set; } = true;
 
 
 		public static Setting Instance { get; private set; } = MakeSetting();
@@ -186,6 +187,7 @@ namespace KBE.Components.Settings
                 ConnectedRomanji = true,
 
                 WVDeveloperMode = false,
+                UnsafeJapaneseAnalyzer = true,
             };
 
             System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

@@ -24,6 +24,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using KBE.Components.Kanji;
+using KUnsafe;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -46,6 +47,7 @@ public sealed partial class Furigana : Page
 		//Ensuring the singleton is created and initialized for thread-safe operations
 		//Or else when async/parallel it will produce an COMException Error
 		JapanesePhoneticAnalyzer.GetWords("");
+		JapanesePhoneticAnalyzerUnsafe.Initialize();
 
 		var dir = Directory.GetCurrentDirectory();
 		var working = Path.GetFullPath(dir + "\\" + Setting.Directory);

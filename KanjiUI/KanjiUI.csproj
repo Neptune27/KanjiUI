@@ -11,6 +11,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>None</WindowsPackageType>
     <ApplicationIcon>Assets\KanjiIcon.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <!--<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>-->
   </PropertyGroup>
   <ItemGroup>
@@ -49,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KBE\KBE.csproj" />
+    <ProjectReference Include="..\KUnsafe\KUnsafe.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Shell.xaml">

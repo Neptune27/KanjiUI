@@ -595,7 +595,7 @@ namespace KBE.Models
 		#endregion
 
 
-		#region Webview
+		#region Developer
 		public bool WVDeveloperMode
 		{
 			get => Setting.WVDeveloperMode;
@@ -604,6 +604,18 @@ namespace KBE.Models
 				OnPropertyChanging(nameof(WVDeveloperMode));
 				Setting.WVDeveloperMode = value;
 				OnPropertyChanged(nameof(WVDeveloperMode));
+
+			}
+		}
+
+		public bool UnsafeJapaneseAnalyzer
+		{
+			get => Setting.UnsafeJapaneseAnalyzer;
+			set
+			{
+				OnPropertyChanging(nameof(UnsafeJapaneseAnalyzer));
+				Setting.UnsafeJapaneseAnalyzer = value;
+				OnPropertyChanged(nameof(UnsafeJapaneseAnalyzer));
 
 			}
 		}

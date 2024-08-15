@@ -2,6 +2,7 @@
 using KBE.Components.Settings;
 using KBE.Components.Utils;
 using KBE.Models;
+using KUnsafe;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -271,9 +272,23 @@ public partial class FuriganaHelpers
 	public static async Task<List<IReadOnlyList<JapanesePhoneme>>> ToFurigana(string text, bool isMono = false)
 	{
 		//var textChunks = NewLineRegex().Split(text);
-		var textChunks = text.ToChunks(70, _seperatedList);
+		var textChunks = text.ToChunks(90, _seperatedList);
 
-		return textChunks.Select(c => JapanesePhoneticAnalyzer.GetWords(c, isMono)).ToList();
+        if (Setting.Instance.UnsafeJapaneseAnalyzer)
+        {
+			return await Task.Run(() =>
+			{
+				return textChunks.AsParallel().AsOrdered()
+					.Select(c => JapanesePhoneticAnalyzerUnsafe.GetWords(c, isMono)).ToList();
+			});
+		}
+		else
+		{
+			return textChunks.Select(c => JapanesePhoneticAnalyzer.GetWords(c, isMono)).ToList();
+
+		}
+
+
 
 
 	}
