@@ -147,8 +147,9 @@ namespace KanjiUI.ViewModels
             {
                 throw new IncorrectLengthError("This can only have length of 1");
             }
-            Debug.WriteLine($"[INFO]: Cursor: {word}");
-            var kanjis = KanjiProcessor.GetKanjis(word);
+			Setting.Logger.Information("[Home]: Cursor: {@word}", word);
+
+			var kanjis = KanjiProcessor.GetKanjis(word);
             if (!kanjis.Any())
             {
                 await ResetFilter();
@@ -303,7 +304,7 @@ namespace KanjiUI.ViewModels
 
             var resId = await processor.CreateKanjiDocument(itemsList, SettingInstance.SaveOption);
 
-            Debug.WriteLine(resId);
+            Setting.Logger.Information(resId.ToString());
 
             return resId;
         }
@@ -316,8 +317,8 @@ namespace KanjiUI.ViewModels
             var itemsList = Items.ToList();
 
             var resId = await processor.CreateFile(itemsList, SettingInstance.SaveOption);
+			Setting.Logger.Information(resId.ToString());
 
-            Debug.WriteLine(resId);
 
             return resId;
         }

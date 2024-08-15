@@ -132,7 +132,7 @@ public partial class RandoWord : ObservableObject
 
         if (correct is null)
         {
-            Debug.WriteLine("Huh, WTF is this on OnIsDoneChanged");
+			Setting.Logger.Warning("[RandoWord] Huh, WTF is this on OnIsDoneChanged");
             return;
         }
 

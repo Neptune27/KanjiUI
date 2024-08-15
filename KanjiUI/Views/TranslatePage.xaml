@@ -146,6 +146,8 @@
                          Name="InputTextBox"
                          GotFocus="InputTextBox_GotFocus"
                          LostFocus="InputTextBox_LostFocus"
+                         IsSpellCheckEnabled="False"
+                         
                     />
 
                 <TextBox Margin="20 0 0 10" Grid.Column="1"
@@ -154,6 +156,7 @@
                         AcceptsReturn="True" FontSize="22" Name="OutputTextBox"
                          GotFocus="OutputTextBox_GotFocus"
                          LostFocus="OutputTextBox_LostFocus"
+                         IsSpellCheckEnabled="False"
                         />
 
             </Grid>

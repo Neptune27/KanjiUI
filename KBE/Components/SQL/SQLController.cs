@@ -57,7 +57,7 @@ namespace KBE.Components.SQL
             }
             catch (DbUpdateException ex)
             {
-                Debug.WriteLine($"[INFO]: {ex.Message}");
+                Setting.Logger.Information("[SQL]: {@ex}", ex.Message);
             }
 
         }

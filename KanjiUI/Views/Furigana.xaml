@@ -64,6 +64,7 @@
                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                  AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
                   LostFocus="FuriganaTextBox_LostFocus" SelectionChanged="FuriganaTextBox_SelectionChanged"
+                     IsSpellCheckEnabled="False"
                  />
             <WebView2 Grid.Column="1"
                  DefaultBackgroundColor="Transparent"

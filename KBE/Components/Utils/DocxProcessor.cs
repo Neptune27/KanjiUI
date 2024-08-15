@@ -58,13 +58,12 @@ namespace KBE.Components.Utils
                     }
 
                     mainPart.Document.Save();
-                    Debug.Write("B");
+					Setting.Logger.Information("[DocxProcessor] Docx file saved at {@Location}", Location);
                     return EErrorType.NORMAL;
                 }
                 catch (IOException ex)
                 {
-                    Debug.WriteLine(ex.Message);
-                    Debug.WriteLine(ex.GetType());
+					Setting.Logger.Error("[DocxProcessor] Error at CreateKanjiDocument. Message: {@message}, Type: {@type}", ex.Message, ex.GetType());
                     return EErrorType.FILE_IN_USE;
                 }
             });

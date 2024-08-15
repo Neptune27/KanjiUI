@@ -12,6 +12,7 @@ using WinRT;
 
 namespace KUnsafe;
 
+
 public static class JapanesePhoneticAnalyzerUnsafe
 {
 	public static IObjectReference JapanesePhoneticAnalyzerObj { get; private set; } = null;

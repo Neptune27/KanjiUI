@@ -21,6 +21,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
 using System.Diagnostics;
+using KBE.Components.Settings;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -79,8 +80,8 @@ namespace KanjiUI.Views
             {
                 return;
             }
-            Debug.WriteLine($"File name: {file.Path}");
-            var resId = await ViewModel.CreateDocxCommand_Executed($"{file.Path}");
+			Setting.Logger.Information("File name: {@file}", file.Path);
+			var resId = await ViewModel.CreateDocxCommand_Executed($"{file.Path}");
             await ShowError(resId);
         }
 
@@ -92,7 +93,7 @@ namespace KanjiUI.Views
                 return;
             }
 
-            Debug.WriteLine($"File name: {file.Path}");
+			Setting.Logger.Information("File name: {@file}", file.Path);
             var resId = await ViewModel.CreateTextCommand_Executed($"{file.Path}");
             await ShowError(resId);
         }
@@ -165,7 +166,8 @@ namespace KanjiUI.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("HomePage Loaded");
+
+			Setting.Logger.Information("HomePage Loaded");
             await ViewModel.LoadData();
         }
     }

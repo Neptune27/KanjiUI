@@ -278,8 +278,20 @@ public partial class FuriganaHelpers
         {
 			return await Task.Run(() =>
 			{
-				return textChunks.AsParallel().AsOrdered()
-					.Select(c => JapanesePhoneticAnalyzerUnsafe.GetWords(c, isMono)).ToList();
+				try
+				{
+					return textChunks.AsParallel().AsOrdered()
+										.Select(c => JapanesePhoneticAnalyzerUnsafe.GetWords(c, isMono)).ToList();
+				}
+				catch (Exception ex)
+				{
+					Setting.Logger.Error("[FuriganaHelper] [ToFurigana] It's that thing again.");
+					Setting.Logger.Error("[FuriganaHelper] [ToFurigana] Error: {@message}.", ex.Message);
+					Setting.Instance.UnsafeJapaneseAnalyzer = false;
+					Setting.Instance.SaveSetting();
+					throw;
+				}
+				
 			});
 		}
 		else

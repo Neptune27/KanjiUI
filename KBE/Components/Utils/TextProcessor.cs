@@ -49,7 +49,7 @@ namespace KBE.Components.Utils
                 return EErrorType.NORMAL;
             }
             catch (IOException ex) { 
-                Debug.WriteLine(ex.ToString());
+                Setting.Logger.Error("[TextProcessor] [CreateFile] Error: {@error}",ex.ToString());
                 return EErrorType.FILE_IN_USE;
             }
 

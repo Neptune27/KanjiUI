@@ -25,6 +25,8 @@ using System.Threading;
 using Windows.Globalization;
 using WinRT;
 using System.Reflection;
+using Serilog;
+using KBE.Components.Settings;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -39,7 +41,7 @@ namespace KanjiUI
         private AppWindow m_AppWindow;
 
         public static readonly List<Shell> CurrentShellList = [];
-        public static FieldInfo JapanesePhoneticAnalyzerObj = null;
+        public static FieldInfo JapanesePhoneticAnalyzerObj;
 
 
 		public Shell()
@@ -76,9 +78,7 @@ namespace KanjiUI
 
 			//m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
 
-
-
-        }
+		}
 
 
 
@@ -119,8 +119,8 @@ namespace KanjiUI
                 ContentFrame.Navigate(Type.GetType(item.Tag.ToString()), item.Content);
             }
 
-            Debug.WriteLine($"Set Content to: {item.Tag}");
-            Debug.WriteLine($"NavView: {NavView.SelectedItem}");
+            Setting.Logger.Information("Set Content to: {@item}", item.Tag);
+			Setting.Logger.Information("NavView: {@NavView}", NavView.SelectedItem.ToString());
 
         }
 

@@ -54,7 +54,7 @@ namespace KBE.Components.Translator
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        Debug.WriteLine($"Done parsing {total} chunk");
+						Setting.Logger.Information("Done parsing {@total} chunk", total);
                         progress?.Report((int)(total / totalChunk * 100));
                     }
                 }

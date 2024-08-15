@@ -1,5 +1,8 @@
 ﻿using KBE.Enums;
 using KBE.Models;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,7 +56,14 @@ namespace KBE.Components.Settings
 		public static string Directory { get; set; } = "..\\..\\..\\..";
         public static string FilePath { get; set; } = $"{Directory}\\Setting\\setting.json";
 #endif
-        public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
+
+		public static string LogPath { get; set; } = $"{Directory}\\Data\\log.txt";
+		public static readonly Logger Logger = new LoggerConfiguration()
+							.WriteTo.Debug()
+							.WriteTo.File(LogPath)
+							.CreateLogger();
+
+		public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
 
         public int FetchSize { get; set; }
         public string DatabaseConnectDirectory { get; set; } = "";
@@ -207,7 +217,7 @@ namespace KBE.Components.Settings
         public void SaveSetting()
         {
             using StreamWriter sw = new($"{FilePath}");
-            Debug.WriteLine(JsonSerializer.Serialize(this, SaveOptions));
+            Logger.Information(JsonSerializer.Serialize(this, SaveOptions));
             sw.Write(JsonSerializer.Serialize(this, SaveOptions));
         }
 

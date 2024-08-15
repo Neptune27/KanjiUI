@@ -118,8 +118,8 @@ namespace KanjiUI.ViewModels
         {
             var fromCode = typeof(LanguageCodes).GetField(FromCodeName).GetValue(null).ToString();
             var toCode = typeof(LanguageCodes).GetField(ToCodeName).GetValue(null).ToString();
-            Debug.WriteLine(fromCode);
-            Debug.WriteLine(toCode);
+			Setting.Logger.Information("[Translate] From Code: {@code}", fromCode);
+			Setting.Logger.Information("[Translate] To Code: {@code}", toCode);
 
             TranslateProgress = 0;
             var translateProgress = new Progress<int>(percent => TranslateProgress = percent);
