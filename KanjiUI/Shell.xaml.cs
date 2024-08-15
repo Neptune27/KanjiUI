@@ -41,7 +41,6 @@ namespace KanjiUI
         private AppWindow m_AppWindow;
 
         public static readonly List<Shell> CurrentShellList = [];
-        public static FieldInfo JapanesePhoneticAnalyzerObj;
 
 
 		public Shell()
