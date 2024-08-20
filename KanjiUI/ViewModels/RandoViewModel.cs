@@ -22,10 +22,10 @@ namespace KanjiUI.ViewModels;
 public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
 {
 
-    private readonly List<KanjiWord> wordList = new();
+	private readonly List<KanjiWord> wordList = [];
 
     [ObservableProperty]
-    private ObservableCollection<RandoWord> items = new();
+	private ObservableCollection<RandoWord> items = [];
 
     public RandoViewModel()
     {
@@ -51,9 +51,17 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         OnPropertyChanged(nameof(DisplayD));
     }
 
+	public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
 
-    
-    private readonly Setting setting = Setting.Instance;
+	private void OpenNewWindow_CommandExecuted()
+	{
+
+		var window = new Shell();
+		window.Activate();
+	}
+
+
+	private readonly Setting setting = Setting.Instance;
 
     [ObservableProperty]
     private bool showAnswer = false;
@@ -212,16 +220,35 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         }
     }
 
-    private void SelectOption(string obj)
+    private void SendSelectedButtonToKanjiBrowser(int selected)
     {
-        if (ShowAnswer)
+        var kanji = selected switch
         {
+            1 => Current.A,
+            2 => Current.B,
+            3 => Current.C,
+            4 => Current.D,
+            _ => Current.Correct,
+        };
+
+		WeakReferenceMessenger.Default.Send(new CurrentWordSelectedMesssage(kanji.Kanji));
+
+	}
+
+	private void SelectOption(string obj)
+    {
+        var selectedValue = int.Parse(obj);
+
+		if (ShowAnswer)
+        {
+            SendSelectedButtonToKanjiBrowser(selectedValue);
             return;
         }
 
-        Current.Selected = int.Parse(obj);
 
-        if (setting.MoveNextAfterSelection)
+		Current.Selected = selectedValue;
+
+		if (setting.MoveNextAfterSelection)
         {
             var nextIndex = Items.IndexOf(Current) + 1;
             if (nextIndex >= Items.Count)

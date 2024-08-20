@@ -17,7 +17,8 @@
     </Page.DataContext>
 
     <Page.Resources>
-
+        <XamlUICommand x:Name="OpenNewWindowsCommand" Command="{x:Bind ViewModel.OpenNewWindowCommand}" 
+                       Description="Open new windows" Label="Open new windows"/>
     </Page.Resources>
 
     <Grid>
@@ -44,8 +45,17 @@
                         <KeyboardAccelerator Modifiers="Control" Key="R"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
-
                 
+                <AppBarButton Grid.Column="1" Command="{x:Bind OpenNewWindowsCommand,Mode=OneTime}"
+                              IsEnabled="{x:Bind ViewModel.ShowAnswer, Mode=OneWay}"
+                           Icon="NewWindow" Label="Open Kanji View" 
+                           ToolTipService.ToolTip="Control + F"
+                           AccessKey="Control + F">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="F"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+
             </CommandBar>
 
         </Grid>

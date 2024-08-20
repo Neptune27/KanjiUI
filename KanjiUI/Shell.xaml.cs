@@ -27,6 +27,7 @@ using WinRT;
 using System.Reflection;
 using Serilog;
 using KBE.Components.Settings;
+using KUnsafe;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -56,6 +57,7 @@ namespace KanjiUI
             AppWindow.SetIcon("Asset/KanjiIcon.ico");
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
+			JapanesePhoneticAnalyzerUnsafe.Initialize();
 
 
 			// Check to see if customization is supported.

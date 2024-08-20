@@ -44,10 +44,6 @@ public sealed partial class Furigana : Page
 		this.InitializeComponent();
 		NavigationCacheMode = NavigationCacheMode.Required;
 
-		//Ensuring the singleton is created and initialized for thread-safe operations
-		//Or else when async/parallel it will produce an COMException Error
-		JapanesePhoneticAnalyzer.GetWords("");
-		JapanesePhoneticAnalyzerUnsafe.Initialize();
 
 		var dir = Directory.GetCurrentDirectory();
 		var working = Path.GetFullPath(dir + "\\" + Setting.Directory);

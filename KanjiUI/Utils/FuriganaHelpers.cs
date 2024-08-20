@@ -273,7 +273,7 @@ public partial class FuriganaHelpers
 	{
 		//var textChunks = NewLineRegex().Split(text);
 		var textChunks = text.ToChunks(90, _seperatedList);
-
+	
         if (Setting.Instance.UnsafeJapaneseAnalyzer)
         {
 			return await Task.Run(() =>
@@ -296,7 +296,16 @@ public partial class FuriganaHelpers
 		}
 		else
 		{
-			return textChunks.Select(c => JapanesePhoneticAnalyzer.GetWords(c, isMono)).ToList();
+
+			try
+			{
+				return textChunks.Select(c => JapanesePhoneticAnalyzer.GetWords(c, isMono)).ToList();
+			}
+			catch (Exception ex)
+			{
+				Setting.Logger.Error("[FuriganaHelper] [ToFurigana] Error 2: {@message}.", ex.Message);
+				throw;
+			}
 
 		}
 

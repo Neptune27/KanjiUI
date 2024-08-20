@@ -17,19 +17,22 @@ public static class JapanesePhoneticAnalyzerUnsafe
 {
 	public static IObjectReference JapanesePhoneticAnalyzerObj { get; private set; } = null;
 
+
 	public static void Initialize()
 	{
-        if (JapanesePhoneticAnalyzerObj != null)
-        {
+		if (JapanesePhoneticAnalyzerObj != null)
+		{
 			return;
-        }
+		}
 
-        JapanesePhoneticAnalyzer.GetWords("");
+		JapanesePhoneticAnalyzer.GetWords("");
 		var field = typeof(JapanesePhoneticAnalyzer).GetField("___objRef_global__Windows_Globalization_IJapanesePhoneticAnalyzerStatics",
 				BindingFlags.Static |
 				BindingFlags.NonPublic);
 
 		JapanesePhoneticAnalyzerObj = (IObjectReference)field.GetValue(null);
+
+
 	}
 
 	public unsafe static IReadOnlyList<global::Windows.Globalization.JapanesePhoneme> GetWords(string input)
