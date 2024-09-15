@@ -32,7 +32,7 @@ namespace KanjiUI.ViewModels
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get => Setting.Instance; }
 
-		private readonly ObservableCollection<KanjiWord> items = [];
+        private readonly ObservableCollection<KanjiWord> items = [];
 
         private bool isLoaded = false;
 
@@ -46,8 +46,35 @@ namespace KanjiUI.ViewModels
         public ICommand DeleteKanjiCommand => new AsyncRelayCommand(DeleteItem);
 
         public ICommand SendToRandoCommand => new RelayCommand(SendCurrentWordList);
+        public ICommand SaveToClipboardCommand => new RelayCommand(SaveToClipboard);
 
-        private async Task DeleteItem()
+        private string GenerateSaveToExcel()
+        {
+            var options = SettingInstance.CopyToExcelOptions.Where(it => it.IsEnable);
+
+            var resultList = options.Select(it =>
+            {
+                var value = Current.GetValueOf(it.Name);
+                return it.Name switch
+                {
+                    nameof(KanjiWord.Kunyumi) => value.Replace(" ", "、"),
+					nameof(KanjiWord.Onyumi) => value.Replace(" ", "、"),
+                    _ => value
+				};
+            });
+            return string.Join("\t",resultList);
+        }
+
+        private void SaveToClipboard() 
+		{
+            var data = new DataPackage();
+
+            data.SetText(GenerateSaveToExcel());
+
+            Clipboard.SetContent(data);
+		}
+
+		private async Task DeleteItem()
         {
             await SQLController.DeleteKanjiAsync(Current);
             items.Remove(Current);

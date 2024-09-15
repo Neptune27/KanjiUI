@@ -28,6 +28,8 @@
                        Description="Reset current kanji (Control + D)" Label="Delete"/>
         <XamlUICommand x:Name="SendToRandoCommand" Command="{x:Bind ViewModel.SendToRandoCommand}" 
                        Description="Send to Randomizer"/>
+        <XamlUICommand x:Name="SaveToClipboard" Command="{x:Bind ViewModel.SaveToClipboardCommand}" 
+                  Description="Send to Clipboard"/>
         <!--<XamlUICommand x:Name="CreateDocxCommand" Command="{x:Bind ViewModel.CreateDocxCommand}" Description="" Label="Create Docx"/>-->
     </Page.Resources>
 
@@ -74,9 +76,9 @@
             <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
 
                 <AppBarButton Command="{StaticResource SendToRandoCommand}" Icon="Send" 
-                              Label="Send To Rando" ToolTipService.ToolTip="Reset (Control + E)">
+                              Label="Send To Rando" ToolTipService.ToolTip="Send To Randomizer (Shift + E)">
                     <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Modifiers="Control" Key="R"/>
+                        <KeyboardAccelerator Modifiers="Shift" Key="R"/>
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
 
@@ -85,6 +87,12 @@
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Save as Text" Tag="txt" Command="{x:Bind CreateTextCommand}"/>
                             <MenuFlyoutItem Text="Save as Word Document" Tag="docx" Command="{x:Bind CreateDocxCommand}"/>
+                            <MenuFlyoutItem Icon="Copy" Text="Save To Clipboard" Tag="saveToClipboard" 
+                  Command="{StaticResource SaveToClipboard}">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Shift" Key="C"/>
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
@@ -104,6 +112,7 @@
                                     <KeyboardAccelerator Modifiers="Control" Key="J"/>
                                 </MenuFlyoutItem.KeyboardAccelerators>
                             </MenuFlyoutItem>
+                          
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
@@ -114,6 +123,7 @@
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="D"/>
                     </AppBarButton.KeyboardAccelerators>
+                    
                 </AppBarButton>
                 
                 <AppBarButton Command="{x:Bind EditCommand}" Icon="Edit" 
@@ -130,13 +140,10 @@
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
 
-
-
-
             </CommandBar>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="7*"/>

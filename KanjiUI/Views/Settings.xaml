@@ -421,6 +421,36 @@
                         </Grid>
                     </Expander.Content>
                 </Expander>
+                <Expander x:Name="CopyToClipboardExpander"
+IsExpanded="False"
+ExpandDirection="Down"
+VerticalAlignment="Top"
+HorizontalAlignment="Stretch"
+HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Copy to Clipboard options:</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <ListView CanReorderItems="True" CanDrag="True" AllowDrop="True"
+                                  ItemsSource="{x:Bind ViewModel.Items[0].CopyToExcelOptions}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:CopyToExcelOption">
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Grid.Column="0"
+                                                  Content="{x:Bind Name, Mode=OneWay}"
+                                                  IsChecked="{x:Bind IsEnable, Mode=TwoWay}"
+                                                  />
+                                        <BitmapIcon Grid.Column="1" ShowAsMonochrome="True" Width="50" Height="20" UriSource="Assets/Drag.png"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Expander.Content>
+                </Expander>
                 <Expander x:Name="WebViewExpander"
       IsExpanded="False"
       ExpandDirection="Down"

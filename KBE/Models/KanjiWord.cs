@@ -176,6 +176,23 @@ namespace KBE.Models
 
         }
 
+        public string? GetValueOf(string propertyName)
+        {
+			var prop = GetType().GetProperty(propertyName);
+			if (prop is null)
+			{
+				return null;
+			}
+
+			if (prop.PropertyType != typeof(string))
+			{
+				return null;
+			}
+
+
+            return prop.GetValue(this, null) as string;
+		}
+
         public Dictionary<string,string?> GetProperties(SearchOptions sqlKanjiOption)
         {
             var sqlMember = sqlKanjiOption.GetType().GetProperties();
@@ -201,19 +218,12 @@ namespace KBE.Models
                     continue;
                 }
 
-                var prop = GetType().GetProperty(name);
-                if (prop is null)
+                var propVal = GetValueOf(name);
+                if (propVal is null)
                 {
                     continue;
                 }
 
-                if (prop.PropertyType != typeof(string))
-                {
-                    continue;
-                }
-
-
-                string? propVal = prop.GetValue(this, null) as string;
                 properties.Add(name, propVal);
             }
             return properties;

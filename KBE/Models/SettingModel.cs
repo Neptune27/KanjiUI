@@ -2,6 +2,7 @@
 using KBE.Components.Settings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,17 @@ namespace KBE.Models
     {
         private static Setting Setting => Setting.Instance;
 
+        public SettingModel()
+        {
+			CopyToExcelOptions.CollectionChanged += CopyToExcelOptions_CollectionChanged;
+        }
 
-        public int FetchSize
+		private void CopyToExcelOptions_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			Setting.CopyToExcelOptions = new(CopyToExcelOptions.Select(it => new CopyToExcel(it)));
+		}
+
+		public int FetchSize
         {
             get => Setting.FetchSize;
             set
@@ -620,7 +630,14 @@ namespace KBE.Models
 			}
 		}
 
+        #endregion
+
+        #region CopyToExcel
+        public ObservableCollection<CopyToExcelOption> 
+            CopyToExcelOptions { get; set; } = new(Setting.Instance.CopyToExcelOptions.Select(it => new CopyToExcelOption(it)));
+
 		#endregion
+
 
 		public void Save()
         {
