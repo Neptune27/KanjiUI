@@ -16,13 +16,12 @@ namespace KBE.Models
 
         public SettingModel()
         {
-			CopyToExcelOptions.CollectionChanged += CopyToExcelOptions_CollectionChanged;
         }
 
-		private void CopyToExcelOptions_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
+        ~SettingModel()
+        {
 			Setting.CopyToExcelOptions = new(CopyToExcelOptions.Select(it => new CopyToExcel(it)));
-		}
+        }
 
 		public int FetchSize
         {
@@ -641,7 +640,9 @@ namespace KBE.Models
 
 		public void Save()
         {
-            Setting.SaveSetting();
+			Setting.CopyToExcelOptions = new(CopyToExcelOptions.Select(it => new CopyToExcel(it)));
+
+			Setting.SaveSetting();
         }
 
         public void SetDefault()

@@ -428,7 +428,7 @@ VerticalAlignment="Top"
 HorizontalAlignment="Stretch"
 HorizontalContentAlignment="Stretch">
                     <Expander.Header>
-                        <TextBlock>Copy to Clipboard options:</TextBlock>
+                        <TextBlock>Copy to Clipboard options: (Need to Save)</TextBlock>
                     </Expander.Header>
                     <Expander.Content>
                         <ListView CanReorderItems="True" CanDrag="True" AllowDrop="True"

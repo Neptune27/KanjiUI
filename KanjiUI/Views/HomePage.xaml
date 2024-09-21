@@ -76,7 +76,7 @@
             <CommandBar Grid.Column="2" DefaultLabelPosition="Right">
 
                 <AppBarButton Command="{StaticResource SendToRandoCommand}" Icon="Send" 
-                              Label="Send To Rando" ToolTipService.ToolTip="Send To Randomizer (Shift + E)">
+                              Label="Send To Rando" ToolTipService.ToolTip="Send To Randomizer (Shift + R)">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Shift" Key="R"/>
                     </AppBarButton.KeyboardAccelerators>
