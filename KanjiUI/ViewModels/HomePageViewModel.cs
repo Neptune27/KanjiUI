@@ -36,9 +36,26 @@ namespace KanjiUI.ViewModels
 
         private bool isLoaded = false;
 
+        private ObservableCollection<KanjiWord> filteredItems = [];
+
+        private string previousFiltered = "";
+
         public override ObservableCollection<KanjiWord> Items => string.IsNullOrEmpty(filter?.Trim())
         ? items
-        : new ObservableCollection<KanjiWord>(items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim())));
+        : FilteredCollection();
+
+
+        private ObservableCollection<KanjiWord> FilteredCollection()
+        {
+            if (previousFiltered != Filter)
+            {
+                previousFiltered = Filter;
+                filteredItems = new ObservableCollection<KanjiWord>(items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim())));
+            }
+
+            return filteredItems;
+        }
+
 
         public ICommand OpenMaziiLinkCommand => new RelayCommand(OpenMaziiLinkCommand_Executed);
         public ICommand OpenJishoLinkCommand => new RelayCommand(OpenJishoLinkCommand_Executed);
@@ -47,6 +64,7 @@ namespace KanjiUI.ViewModels
 
         public ICommand SendToRandoCommand => new RelayCommand(SendCurrentWordList);
         public ICommand SaveToClipboardCommand => new RelayCommand(SaveToClipboard);
+
 
         private string GenerateSaveToExcel()
         {
@@ -119,8 +137,6 @@ namespace KanjiUI.ViewModels
                 return;
             }
 
-
-
             var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
             kanjiItem.ForEach(Items.Add);
 
@@ -140,6 +156,7 @@ namespace KanjiUI.ViewModels
             });
 
             Instance = this;
+
 
             Setting.Instance.OnDatabaseChanged += async () =>
             {
