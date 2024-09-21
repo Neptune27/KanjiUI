@@ -28,7 +28,7 @@ namespace KBE.Components.Settings
 	}
 
 
-	public class SearchOptions
+    public class SearchOptions
 	{
 		public bool Kanji { get; set; } = true;
 		public bool SinoVietnamese { get; set; } = true;
@@ -104,7 +104,14 @@ namespace KBE.Components.Settings
 		public bool WVDeveloperMode { get; set; } = false;
 		public bool UnsafeJapaneseAnalyzer { get; set; } = true;
 
-		public List<CopyToExcel> CopyToExcelOptions { get; set; } = CreateCopyDefault();
+        public bool SortOrderByDescending { get; set; } = false;
+		public EKanjiShowingType OrderByOption { get; set; } = EKanjiShowingType.Kanji;
+		public EKanjiShowingType FirstEnglishOption { get; set; } = EKanjiShowingType.English;
+
+        public bool GoToFirstItemWhenSubmitted { get; set; } = false;
+
+
+        public List<CopyToExcel> CopyToExcelOptions { get; set; } = CreateCopyDefault();
 
 
 		public static Setting Instance { get; private set; } = MakeSetting();
@@ -155,7 +162,6 @@ namespace KBE.Components.Settings
 
 		public delegate void OnDatabaseChangedHandler();
 
-
 		public event OnDatabaseChangedHandler? OnDatabaseChanged;
 
 		public void RaisedOnDatabaseChanged()
@@ -163,8 +169,19 @@ namespace KBE.Components.Settings
 			OnDatabaseChanged?.Invoke();
 		}
 
+        public delegate void OnSortingOrderChangedHandler();
 
-		private static List<CopyToExcel> CreateCopyDefault()
+
+        public event OnSortingOrderChangedHandler? OnSortingOrderChanged;
+
+        public void RaisedOnSortingOrderChanged()
+        {
+            OnSortingOrderChanged?.Invoke();
+        }
+
+
+
+        private static List<CopyToExcel> CreateCopyDefault()
 		{
 			return [
 					new CopyToExcel {
@@ -250,8 +267,14 @@ namespace KBE.Components.Settings
 
 				WVDeveloperMode = false,
 				UnsafeJapaneseAnalyzer = true,
-				CopyToExcelOptions = CreateCopyDefault()
-			};
+				CopyToExcelOptions = CreateCopyDefault(),
+
+				OrderByOption = EKanjiShowingType.Kanji,
+				SortOrderByDescending = false,
+
+                FirstEnglishOption = EKanjiShowingType.English,
+                GoToFirstItemWhenSubmitted = false,
+            };
 
 			System.IO.Directory.CreateDirectory($"{Directory}\\Setting");
 			System.IO.Directory.CreateDirectory($"{Directory}\\Data");

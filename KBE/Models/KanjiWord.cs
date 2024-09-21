@@ -90,7 +90,34 @@ namespace KBE.Models
             Color = EKanjiColor.DEFAULT;
         }
 
-        public string FirstEnglish => english.Split(",")[0];
+        public string FirstEnglish => GetFirst();
+
+        private string GetFirst()
+        {
+            var option = Setting.Instance.FirstEnglishOption;
+            var res = option switch
+            {
+                EKanjiShowingType.Kanji => "",
+                EKanjiShowingType.English => English,
+                EKanjiShowingType.SinoVietnamese => SinoVietnamese,
+                EKanjiShowingType.Onyumi => Onyumi,
+                EKanjiShowingType.Kunyumi => Kunyumi,
+                EKanjiShowingType.Level => Level,
+                EKanjiShowingType.Vietnamese => Vietnamese,
+                EKanjiShowingType.Strokes => Strokes,
+                EKanjiShowingType.Taught => Taught,
+                EKanjiShowingType.Radicals => Radicals,
+                _ => English,
+            };
+
+            if (string.IsNullOrWhiteSpace(res))
+            {
+                return "";
+            }
+
+            return res.Split(",")[0];
+        }
+
 
         public KanjiWord() { }
 

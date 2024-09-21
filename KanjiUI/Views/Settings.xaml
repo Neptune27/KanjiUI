@@ -78,28 +78,83 @@
                     </Expander.Content>
                 </Expander>
 
-                <Expander x:Name="FilterExpander"
+                <Expander x:Name="KanjiView"
                     IsExpanded="True"
                     ExpandDirection="Down"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch">
                     <Expander.Header>
-                        <TextBlock>Filter</TextBlock>
+                        <TextBlock>Kanji View</TextBlock>
                     </Expander.Header>
                     <Expander.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="10">
+                            <TextBlock >Filter:</TextBlock>
                             <TextBox x:Name="Filter"
+                                     HorizontalAlignment="Stretch"
                                      TextWrapping="Wrap"
                                      Text="{x:Bind ViewModel.Items[0].Filter, Mode=TwoWay}" 
-                                     Grid.Column="0"/>
-                        </Grid>
+                                     />
+
+                            <TextBlock >Sorting By:</TextBlock>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox SelectedIndex="{x:Bind ViewModel.Items[0].OrderByOption, Mode=TwoWay}" 
+                                          Grid.Column="0" 
+                                          HorizontalAlignment="Stretch">
+                                    <x:String>Kanji</x:String>
+                                    <x:String>English</x:String>
+                                    <x:String>SinoVietnamese</x:String>
+                                    <x:String>Onyumi</x:String>
+                                    <x:String>Kunyumi</x:String>
+                                    <x:String>Level</x:String>
+                                    <x:String>Vietnamese</x:String>
+                                    <x:String>Strokes</x:String>
+                                    <x:String>Radicals</x:String>
+                                    <x:String>Taught</x:String>
+                                </ComboBox>
+
+                                <ToggleButton 
+                                    Content="Descending" Grid.Column="1" 
+                                    Margin="4 0 0 0" 
+                                    IsChecked="{x:Bind ViewModel.Items[0].SortOrderByDescending, Mode=TwoWay}"
+                                    />
+                            </Grid>
+
+
+                            <TextBlock >Preview Text:</TextBlock>
+
+                            <ComboBox SelectedIndex="{x:Bind ViewModel.Items[0].FirstEnglishOption, Mode=TwoWay}" 
+                                   HorizontalAlignment="Stretch">
+                                <x:String>Kanji</x:String>
+                                <x:String>English</x:String>
+                                <x:String>SinoVietnamese</x:String>
+                                <x:String>Onyumi</x:String>
+                                <x:String>Kunyumi</x:String>
+                                <x:String>Level</x:String>
+                                <x:String>Vietnamese</x:String>
+                                <x:String>Strokes</x:String>
+                                <x:String>Radicals</x:String>
+                                <x:String>Taught</x:String>
+                            </ComboBox>
+
+                            <ToggleButton 
+                                    Content="Go To First Item When Submitted"
+                                    HorizontalAlignment="Stretch"
+                                    IsChecked="{x:Bind ViewModel.Items[0].GoToFirstItemWhenSubmitted, Mode=TwoWay}"
+                                    />
+
+                        </StackPanel>
+
                     </Expander.Content>
+
                 </Expander>
+                
+
 
                 <Expander x:Name="RandoExpander"
                     IsExpanded="True"

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using KBE.Components.Settings;
+using KBE.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -635,10 +636,64 @@ namespace KBE.Models
         public ObservableCollection<CopyToExcelOption> 
             CopyToExcelOptions { get; set; } = new(Setting.Instance.CopyToExcelOptions.Select(it => new CopyToExcelOption(it)));
 
-		#endregion
+        #endregion
+
+        public int OrderByOption
+        {
+            get => (int)Setting.OrderByOption;
+            set
+            {
+
+                OnPropertyChanging(nameof(OrderByOption));
+                Setting.OrderByOption = (EKanjiShowingType)value;
+                Setting.RaisedOnSortingOrderChanged();
+                OnPropertyChanged(nameof(OrderByOption));
+            }
+        }
+
+        public bool SortOrderByDescending
+        {
+            get => Setting.SortOrderByDescending;
+            set
+            {
+                OnPropertyChanging(nameof(SortOrderByDescending));
+                Setting.SortOrderByDescending = value;
+                Setting.RaisedOnSortingOrderChanged();
+
+                OnPropertyChanged(nameof(SortOrderByDescending));
+
+            }
+        }
+
+        public bool GoToFirstItemWhenSubmitted
+        {
+            get => Setting.GoToFirstItemWhenSubmitted;
+            set
+            {
+                OnPropertyChanging(nameof(GoToFirstItemWhenSubmitted));
+                Setting.GoToFirstItemWhenSubmitted = value;
+                Setting.RaisedOnSortingOrderChanged();
+
+                OnPropertyChanged(nameof(GoToFirstItemWhenSubmitted));
+
+            }
+        }
 
 
-		public void Save()
+        public int FirstEnglishOption
+        {
+            get => (int)Setting.FirstEnglishOption;
+            set
+            {
+
+                OnPropertyChanging(nameof(FirstEnglishOption));
+                Setting.FirstEnglishOption = (EKanjiShowingType)value;
+                Setting.RaisedOnSortingOrderChanged();
+                OnPropertyChanged(nameof(FirstEnglishOption));
+            }
+        }
+
+        public void Save()
         {
 			Setting.CopyToExcelOptions = new(CopyToExcelOptions.Select(it => new CopyToExcel(it)));
 

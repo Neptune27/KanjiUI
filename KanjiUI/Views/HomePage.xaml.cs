@@ -143,6 +143,7 @@ namespace KanjiUI.Views
         {
             //ViewModel.Filter = args.QueryText;
             _ = ViewModel.SetFilter(args.QueryText);
+
         }
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

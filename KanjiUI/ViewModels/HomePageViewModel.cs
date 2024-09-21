@@ -137,8 +137,7 @@ namespace KanjiUI.ViewModels
                 return;
             }
 
-            var kanjiItem = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
-            kanjiItem.ForEach(Items.Add);
+            await RenewItems();
 
             WeakReferenceMessenger.Default.Register<KanjiUpdateMessage>(this, (r, m) =>
             {
@@ -159,6 +158,11 @@ namespace KanjiUI.ViewModels
 
 
             Setting.Instance.OnDatabaseChanged += async () =>
+            {
+                await RenewItems();
+            };
+
+            Setting.Instance.OnSortingOrderChanged += async () =>
             {
                 await RenewItems();
             };
@@ -238,6 +242,22 @@ namespace KanjiUI.ViewModels
             return item.ApplyFilter(processedFilter, SettingInstance.SearchOptions);
         }
 
+        public void HandleGoToFirstItem()
+        {
+            if (!SettingInstance.GoToFirstItemWhenSubmitted)
+            {
+                return;
+            }
+
+            if (Items.Count == 0)
+            {
+                return;
+            }
+
+            Current = Items[0];
+
+        }
+
         public async Task SetFilter(string value)
         {
             Filter = value;
@@ -247,18 +267,22 @@ namespace KanjiUI.ViewModels
 
             if (current is null)
             {
+                HandleGoToFirstItem();
                 return;
             }
 
             foreach (var item in Items)
             {
-                if (String.Compare(current.Kanji, item.Kanji, StringComparison.Ordinal) == 0)
+                if (string.Compare(current.Kanji, item.Kanji, StringComparison.Ordinal) == 0)
                 {
                     current = item;
                     break;
                 }
             }
             Current = current;
+
+
+
         }
 
         private async Task GetFiltered()
@@ -287,14 +311,51 @@ namespace KanjiUI.ViewModels
 
         private async Task RenewItems()
         {
-            var res = await KanjiController.GetKanjiFromDatabaseAsync();
+            var res = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
             OnPropertyChanging(nameof(Items));
             items.Clear();
 
-            foreach (var kanji in res)
+            var orderByOption = SettingInstance.OrderByOption;
+
+            if (SettingInstance.SortOrderByDescending)
             {
-                items.Add(kanji);
+                var result = orderByOption switch
+                {
+                    EKanjiShowingType.Kanji => res.OrderByDescending(it => it.Kanji),
+                    EKanjiShowingType.English => res.OrderByDescending(it => it.English),
+                    EKanjiShowingType.SinoVietnamese => res.OrderByDescending(it => it.SinoVietnamese),
+                    EKanjiShowingType.Onyumi => res.OrderByDescending(it => it.Onyumi),
+                    EKanjiShowingType.Kunyumi => res.OrderByDescending(it => it.Kunyumi),
+                    EKanjiShowingType.Level => res.OrderByDescending(it => it.Level),
+                    EKanjiShowingType.Vietnamese => res.OrderByDescending(it => it.Vietnamese),
+                    EKanjiShowingType.Strokes => res.OrderByDescending(it => it.Strokes),
+                    EKanjiShowingType.Taught => res.OrderByDescending(it => it.Taught),
+                    EKanjiShowingType.Radicals => res.OrderByDescending(it => it.Radicals),
+                    _ => res.OrderByDescending(it => it.Kanji),
+                };
+                res = [.. result];
             }
+            else
+            {
+                var result = orderByOption switch
+                {
+                    EKanjiShowingType.Kanji => res.OrderBy(it => it.Kanji),
+                    EKanjiShowingType.English => res.OrderBy(it => it.English),
+                    EKanjiShowingType.SinoVietnamese => res.OrderBy(it => it.SinoVietnamese),
+                    EKanjiShowingType.Onyumi => res.OrderBy(it => it.Onyumi),
+                    EKanjiShowingType.Kunyumi => res.OrderBy(it => it.Kunyumi),
+                    EKanjiShowingType.Level => res.OrderBy(it => it.Level),
+                    EKanjiShowingType.Vietnamese => res.OrderBy(it => it.Vietnamese),
+                    EKanjiShowingType.Strokes => res.OrderBy(it => it.Strokes),
+                    EKanjiShowingType.Taught => res.OrderBy(it => it.Taught),
+                    EKanjiShowingType.Radicals => res.OrderBy(it => it.Radicals),
+                    _ => res.OrderBy(it => it.Kanji),
+                };
+                res = [.. result];
+            }
+
+
+            res.ForEach(items.Add);
 
             OnPropertyChanged(nameof(Items));
         }
