@@ -32,7 +32,22 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <CommandBar DefaultLabelPosition="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <AppBarToggleButton Grid.Column="0" IsChecked="{x:Bind ViewModel.InputBox, Mode=TwoWay}"
+                            Icon="Character" Label="Input Box" 
+                            ToolTipService.ToolTip="Input Box (Ctrl + H)"
+                            AccessKey="Control + H">
+                <AppBarToggleButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="H"/>
+                </AppBarToggleButton.KeyboardAccelerators>
+            </AppBarToggleButton>
+
+            <CommandBar Grid.Column="1" DefaultLabelPosition="Right">
 
                 <AppBarButton Grid.Column="1" Command="{x:Bind SaveAsPDFCommand,Mode=OneTime}"
                               Icon="Print" Label="Save As PDF" 
@@ -60,7 +75,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Margin="0 0 0 0" Grid.Column="0"
+            <TextBox Margin="0 0 0 0" Grid.Column="0" Visibility="{x:Bind ViewModel.InputBox, Mode=OneWay}"
                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
                  AcceptsReturn="True" FontSize="22" Name="FuriganaTextBox"
                   LostFocus="FuriganaTextBox_LostFocus" SelectionChanged="FuriganaTextBox_SelectionChanged"

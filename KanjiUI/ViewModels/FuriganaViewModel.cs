@@ -26,6 +26,9 @@ public partial class FuriganaViewModel : MasterDetailViewModel<KanjiWord>
 	[ObservableProperty]
 	private Visibility progressVisibility = Visibility.Collapsed;
 
+	[ObservableProperty]
+	private bool inputBox = true;
+
 
 	public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
 
