@@ -5,72 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
 
-        ruby { ruby-position: under; }
-        ruby ruby { ruby-position: over; }
-        rtc { ruby-position: under; }
-        * {
-            font-family: "Noto Sans JP", sans-serif;
-            font-size: xx-large;
-            
-            margin: 0;
-            padding: 0;
-        }
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
-        html {
-            color-scheme: dark light;
-        }
+ruby {
+    ruby-position: under;
+}
 
-        .ta {
-            height: 95dvh; 
-            max-height: 95dvh;
-            min-width: 30dvw; 
-            width: 30dvw; 
-            resize: none;
-        }
-        rt {
-            font-size: medium;
-        }
+    ruby ruby {
+        ruby-position: over;
+    }
 
-        p {
-            padding-bottom: 0.25rem;
-            padding-top: 0.25rem;
-        }
+rtc {
+    ruby-position: under;
+}
+
+* {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: xx-large;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    color-scheme: dark light;
+}
+
+.ta {
+    height: 95dvh;
+    max-height: 95dvh;
+    min-width: 30dvw;
+    width: 30dvw;
+    resize: none;
+}
+
+rt {
+    font-size: medium;
+}
+
+p {
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+}
 
 /*        .area {
             overflow-y: scroll; 
             max-height: 95dvh;
         }*/
 
-        /* width */
-        ::-webkit-scrollbar {
-            width: 5px;
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    -moz-transition: all ease-in-out 100ms;
+    -o-transition: all ease-in-out 100ms;
+    -webkit-transition: all ease-in-out 100ms;
+    transition: all ease-in-out 100ms;
+}
 
-            -moz-transition: all ease-in-out 100ms;
-            -o-transition: all ease-in-out 100ms;
-            -webkit-transition: all ease-in-out 100ms;
-            transition: all ease-in-out 100ms;
-        }
-
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #a0a0a0;
-            border-radius: 5px;
-        }
+    ::-webkit-scrollbar:horizontal {
+        height: 5px;
+    }
 
 
+/* Handle */
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:horizontal {
+    background: #a0a0a0;
+    border-radius: 5px;
+}
 
 
 
-        .area {
-            padding: 1rem;
-        }
+
+
+.area {
+    padding: 1rem;
+}
+
 
     </style>
     <script>
