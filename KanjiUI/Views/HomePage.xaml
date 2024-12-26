@@ -150,6 +150,7 @@
             </Grid.ColumnDefinitions>
 
             <ListView Grid.Column="0"
+                      Name="KanjiListView"
                       ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
                       SelectedItem="{x:Bind ViewModel.Current, Mode=TwoWay}"
                       FontSize="32"

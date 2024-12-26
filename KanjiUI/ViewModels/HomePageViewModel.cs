@@ -271,18 +271,19 @@ namespace KanjiUI.ViewModels
                 return;
             }
 
-            foreach (var item in Items)
+            Current = FindRefInItems(current);
+
+        }
+
+        private KanjiWord FindRefInItems(KanjiWord kanji)
+        {
+
+            if (kanji == null)
             {
-                if (string.Compare(current.Kanji, item.Kanji, StringComparison.Ordinal) == 0)
-                {
-                    current = item;
-                    break;
-                }
+                return null;
             }
-            Current = current;
 
-
-
+            return Items.FirstOrDefault(it => it.Kanji == kanji.Kanji, null);
         }
 
         private async Task GetFiltered()
@@ -311,9 +312,11 @@ namespace KanjiUI.ViewModels
 
         private async Task RenewItems()
         {
+            previousFiltered = "";
+            var current = Current;
+
             var res = await KanjiController.GetKanjiFromDatabaseAsync().ConfigureAwait(false);
             OnPropertyChanging(nameof(Items));
-            items.Clear();
 
             var orderByOption = SettingInstance.OrderByOption;
 
@@ -354,11 +357,16 @@ namespace KanjiUI.ViewModels
                 res = [.. result];
             }
 
+            items.Clear();
 
             res.ForEach(items.Add);
 
             OnPropertyChanged(nameof(Items));
+
+            //Current = FindRefInItems(current);
         }
+
+
 
         private async Task ResetItem()
         {

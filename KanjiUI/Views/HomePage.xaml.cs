@@ -143,6 +143,7 @@ namespace KanjiUI.Views
         {
             //ViewModel.Filter = args.QueryText;
             _ = ViewModel.SetFilter(args.QueryText);
+            KanjiListView.Focus(FocusState.Programmatic);
 
         }
 

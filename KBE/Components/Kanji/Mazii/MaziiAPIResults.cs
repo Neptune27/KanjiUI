@@ -12,12 +12,17 @@
 //var a = JsonSerializer.Deserialize<KBE.MaziiAPI>(tmp);
 ////var d = JsonSerializer.Deserialize<KBE.MaziiAPIResults>(a.results[0].ToString());
 
+using System.Text.Json.Serialization;
+
 namespace KBE.Components.Kanji.Mazii
 {
     public class MaziiAPIResults
     {
         public List<MaziiCompDetail> compDetail { get; set; } = [];
+
+        [JsonConverter(typeof(EmptyStringToArrayConverter<List<string>>))]
         public List<string> level { get; set; } = [];
+
         public string kun { get; set; } = "";
         public string on { get; set; } = "";
         public string mean { get; set; } = "";

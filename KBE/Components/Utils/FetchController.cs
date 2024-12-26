@@ -96,11 +96,13 @@ namespace KBE.Components.Utils
             foreach (var str in strings)
             {
                 fetcher.Urls.Add($"https://mazii.net/api/search");
-                var dict = new Dictionary<string, string>();
-                dict.Add("dict", "javi");
-                dict.Add("page", "1");
-                dict.Add("query", $"{str}");
-                dict.Add("type", "kanji");
+                var dict = new Dictionary<string, string>
+                {
+                    { "dict", "javi" },
+                    { "page", "1" },
+                    { "query", $"{str}" },
+                    { "type", "kanji" }
+                };
                 fetcher.Values.Add(dict);
             }
             return await fetcher.FetchURLs(progress);

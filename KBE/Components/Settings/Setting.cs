@@ -63,7 +63,7 @@ namespace KBE.Components.Settings
 												.WriteTo.File(LogPath)
 												.CreateLogger();
 
-		public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true };
+		public static JsonSerializerOptions SaveOptions { get; set; } = new() { WriteIndented = true, TypeInfoResolver = SettingJsonContext.Default };
 
 		public int FetchSize { get; set; }
 		public string DatabaseConnectDirectory { get; set; } = "";
@@ -123,6 +123,8 @@ namespace KBE.Components.Settings
 
 		static string ReadFromFile()
 		{
+
+
 			string output = "";
 			try
 			{
@@ -144,7 +146,7 @@ namespace KBE.Components.Settings
 		{
 			try
 			{
-				Setting? setting = JsonSerializer.Deserialize<Setting>(ReadFromFile(), SettingJsonContext.Default.Setting);
+				Setting? setting = JsonSerializer.Deserialize(ReadFromFile(), SettingJsonContext.Default.Setting);
 
 				return setting ?? throw new NullReferenceException();
 			}
@@ -293,8 +295,10 @@ namespace KBE.Components.Settings
 		public void SaveSetting()
 		{
 			using StreamWriter sw = new($"{FilePath}");
-			Logger.Information(JsonSerializer.Serialize(this, SaveOptions));
-			sw.Write(JsonSerializer.Serialize(this, SaveOptions));
+			var saveResult = JsonSerializer.Serialize(this, SaveOptions);
+
+            Logger.Information(saveResult);
+			sw.Write(saveResult);
 		}
 
 	}

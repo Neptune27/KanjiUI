@@ -51,7 +51,7 @@
         <Grid Grid.Row="0">
             <CommandBar DefaultLabelPosition="Right" Background="Transparent">
                 <AppBarButton Command="{x:Bind SaveCommand}" Icon="Save" Label="Save"/>
-                <AppBarButton Command="{x:Bind ResetCommand}" Icon="Refresh" Label="Reset to Defalut"/>
+                <AppBarButton Command="{x:Bind ResetCommand}" Icon="Refresh" Label="Reset to Default"/>
             </CommandBar>
         </Grid>
             

@@ -117,30 +117,41 @@ namespace KBE.Components.Kanji
             return kanji;
         }
 
-        private static MaziiAPI MaziiErrorTemplate() {
-            return new() { 
+        private static MaziiAPI MaziiErrorTemplate()
+        {
+            return new()
+            {
                 status = 404,
-                results = [new() { mean = "N/A"}]
+                results = [new() { mean = "N/A" }]
             };
         }
 
         public static MaziiAPIResults ProcessMazii(string maziiRaw)
         {
-            var maziiObj = JsonSerializer.Deserialize<MaziiAPI>(maziiRaw) ?? throw new Exception($"{maziiRaw} not found");
-            if (maziiObj.status != 200)
+            try
             {
-                return MaziiErrorTemplate().results[0];
-            }
-            if (maziiObj.results.Length == 0)
-            {
-                return MaziiErrorTemplate().results[0];
-            }
+                var maziiObj = JsonSerializer.Deserialize(maziiRaw, MaziiJsonContext.Default.MaziiAPI) ?? throw new Exception($"{maziiRaw} not found");
+                if (maziiObj.status != 200)
+                {
+                    return MaziiErrorTemplate().results[0];
+                }
+                if (maziiObj.results.Length == 0)
+                {
+                    return MaziiErrorTemplate().results[0];
+                }
 
-            return maziiObj switch
+                return maziiObj switch
+                {
+                    null => throw new Exception("Parse Error"),
+                    _ => maziiObj.results[0]
+                };
+            }
+            catch (Exception ex)
             {
-                null => throw new Exception("Parse Error"),
-                _ => maziiObj.results[0]
-            };
+
+                Setting.Logger.Error(ex.Message);
+                throw;
+            }
         }
         #endregion
     }
