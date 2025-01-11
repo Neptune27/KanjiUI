@@ -194,12 +194,12 @@
                         </Paragraph>
 
                         <Paragraph>
-                            訓:
+                            音:
                             <Run Text="{x:Bind ViewModel.Current.Onyumi, Mode=OneWay}"/>
                         </Paragraph>
 
                         <Paragraph>
-                            音:
+                            訓:
                             <Run Text="{x:Bind ViewModel.Current.Kunyumi, Mode=OneWay}"/>
                         </Paragraph>
 

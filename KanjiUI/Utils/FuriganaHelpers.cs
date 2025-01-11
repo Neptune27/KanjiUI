@@ -177,15 +177,16 @@ public record JapanesePhonemeWithRomanji
 					""";
         }
 
-		return res + "</ruby></p>";
-		//return $"""
-		//	<ruby>
-		//	    <ruby>{DisplayText}
-		//	        <rt>{YomiText}</rt>
-		//	    </ruby>
-		//	    <rt>{RomanjiText}</rt>
-		//	</ruby>
-		//	""";
+
+        //  Example
+        //	<ruby>
+        //	    <ruby>{DisplayText}
+        //	        <rt>{YomiText}</rt>
+        //	    </ruby>
+        //	    <rt>{RomanjiText}</rt>
+        //	</ruby>
+        return res + "</ruby></p>";
+
 	}
 
 
@@ -266,13 +267,13 @@ public partial class FuriganaHelpers
 		return await ToFuriganaText(text);
 	}
 
-	private static readonly IReadOnlyList<string> _seperatedList = ["\n", "\r"];
+	private static readonly IReadOnlyList<string> _separatedList = ["\n", "\r"];
 
 
 	public static async Task<List<IReadOnlyList<JapanesePhoneme>>> ToFurigana(string text, bool isMono = false)
 	{
 		//var textChunks = NewLineRegex().Split(text);
-		var textChunks = text.ToChunks(90, _seperatedList);
+		var textChunks = text.ToChunks(90, _separatedList);
 	
         if (Setting.Instance.UnsafeJapaneseAnalyzer)
         {
@@ -330,7 +331,7 @@ public partial class FuriganaHelpers
 		//Then what's the point of using that interface then.
 		//I thought after the api call for Japanese Phoneme it'll convert to freaking List
 		//and not just a raw array masquerade as a IReadOnlyList, why???. And this is from Microsoft too.
-		//My dissappointment is immeasurable and my day is ruined because I have to do this.
+		//My disappointment is immeasurable and my day is ruined because I have to do this.
 		//Freaking Windows.Globalization... Why???
 		foreach (var chunk in withRomanjis)
 		{
