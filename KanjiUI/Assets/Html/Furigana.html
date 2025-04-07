@@ -6,86 +6,82 @@
     <title>Document</title>
     <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
-ruby {
-    ruby-position: under;
-}
+        ruby {
+            ruby-position: under;
+        }
 
-    ruby ruby {
-        ruby-position: over;
-    }
+            ruby ruby {
+                ruby-position: over;
+            }
 
-rtc {
-    ruby-position: under;
-}
+        rtc {
+            ruby-position: under;
+        }
 
-* {
-    font-family: "Noto Sans JP", sans-serif;
-    font-size: xx-large;
-    margin: 0;
-    padding: 0;
-}
+        * {
+            font-family: "Noto Sans JP", sans-serif;
+            font-size: xx-large;
+            margin: 0;
+            padding: 0;
+            line-height: 2.5rem;
+        }
 
-html {
-    color-scheme: dark light;
-}
+        html {
+            color-scheme: dark light;
+        }
 
-.ta {
-    height: 95dvh;
-    max-height: 95dvh;
-    min-width: 30dvw;
-    width: 30dvw;
-    resize: none;
-}
+        .ta {
+            height: 95dvh;
+            max-height: 95dvh;
+            min-width: 30dvw;
+            width: 30dvw;
+            resize: none;
+        }
 
-rt {
-    font-size: medium;
-}
+        rt {
+            font-size: medium;
+        }
 
-p {
-    padding-bottom: 0.25rem;
-    padding-top: 0.25rem;
-}
+        p {
+            padding-bottom: 0.25rem;
+            padding-top: 0.25rem;
+        }
 
-/*        .area {
-            overflow-y: scroll; 
+        /*        .area {
+            overflow-y: scroll;
             max-height: 95dvh;
         }*/
 
-/* width */
-::-webkit-scrollbar {
-    width: 5px;
-    -moz-transition: all ease-in-out 100ms;
-    -o-transition: all ease-in-out 100ms;
-    -webkit-transition: all ease-in-out 100ms;
-    transition: all ease-in-out 100ms;
-}
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+            -moz-transition: all ease-in-out 100ms;
+            -o-transition: all ease-in-out 100ms;
+            -webkit-transition: all ease-in-out 100ms;
+            transition: all ease-in-out 100ms;
+        }
 
-    ::-webkit-scrollbar:horizontal {
-        height: 5px;
-    }
-
-
-/* Handle */
-::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:horizontal {
-    background: #a0a0a0;
-    border-radius: 5px;
-}
+            ::-webkit-scrollbar:horizontal {
+                height: 5px;
+            }
 
 
+        /* Handle */
+        ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:horizontal {
+            background: #a0a0a0;
+            border-radius: 5px;
+        }
 
 
-
-.area {
-    padding: 1rem;
-}
-
-
+        .area {
+            padding: 1rem;
+        }
     </style>
     <script>
 
@@ -99,7 +95,7 @@ p {
 
         const sendToBackend = (str) => {
             console.log(str);
-            
+
             window.chrome.webview.postMessage(str)
         }
 
@@ -108,14 +104,14 @@ p {
             let range = selection.getRangeAt(0);
             const contents = range.cloneContents()
             const filters = [...contents.querySelectorAll("ruby")]
-                            .filter(e => e.childElementCount < 3 && e.childElementCount > 0)
+                .filter(e => e.childElementCount < 3 && e.childElementCount > 0)
             const textList = filters.map(e => {
                 try {
                     return e.childNodes[0].textContent
                 }
                 catch (err) {
                     console.log(err);
-                    
+
                     console.log(e);
                     return "";
                 }
@@ -135,8 +131,8 @@ p {
                 return
             }
 
-            const {baseNode, extentNode} = selection;
-            
+            const { baseNode, extentNode } = selection;
+
             let parentNode = baseNode;
             while (parentNode.nodeName === "RT" || parentNode.nodeName === "#text") {
                 parentNode = parentNode.parentElement;
@@ -146,7 +142,7 @@ p {
             }
 
             sendToBackend(parentNode.childNodes[0].textContent);
-        
+
         }
     </script>
 </head>
@@ -154,7 +150,7 @@ p {
 
     <div style="display: flex; gap: 1rem;">
         <div id="furiganaArea" class="area">
-            
+
         </div>
     </div>
 </body>

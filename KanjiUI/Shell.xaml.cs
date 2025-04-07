@@ -55,6 +55,7 @@ namespace KanjiUI
 
 
             AppWindow.SetIcon("Asset/KanjiIcon.ico");
+            //AppWindow.SetTitleBarIcon("Asset/KanjiIcon.ico");
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
 			JapanesePhoneticAnalyzerUnsafe.Initialize();
