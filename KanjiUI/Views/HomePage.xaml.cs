@@ -172,5 +172,10 @@ namespace KanjiUI.Views
 			Setting.Logger.Information("HomePage Loaded");
             await ViewModel.LoadData();
         }
+
+        private void KanjiListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.SelectedItems = KanjiListView.SelectedItems.Cast<KanjiWord>();
+        }
     }
 }

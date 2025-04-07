@@ -154,6 +154,8 @@
                       ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
                       SelectedItem="{x:Bind ViewModel.Current, Mode=TwoWay}"
                       FontSize="32"
+                      SelectionMode="Extended"
+                      SelectionChanged="KanjiListView_SelectionChanged"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:KanjiWord">

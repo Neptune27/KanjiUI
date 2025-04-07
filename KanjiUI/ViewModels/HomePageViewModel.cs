@@ -28,7 +28,6 @@ namespace KanjiUI.ViewModels
     internal partial class HomePageViewModel : MasterDetailViewModel<KanjiWord>
     {
 
-
         private static HomePageViewModel Instance { get; set; }
         private static Setting SettingInstance { get => Setting.Instance; }
 
@@ -50,12 +49,14 @@ namespace KanjiUI.ViewModels
             if (previousFiltered != Filter)
             {
                 previousFiltered = Filter;
-                filteredItems = new ObservableCollection<KanjiWord>(items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim())));
+                filteredItems = [.. items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim()))];
             }
 
             return filteredItems;
         }
 
+
+        public IEnumerable<KanjiWord> SelectedItems { get; set; } = [];
 
         public ICommand OpenMaziiLinkCommand => new RelayCommand(OpenMaziiLinkCommand_Executed);
         public ICommand OpenJishoLinkCommand => new RelayCommand(OpenJishoLinkCommand_Executed);
@@ -66,21 +67,38 @@ namespace KanjiUI.ViewModels
         public ICommand SaveToClipboardCommand => new RelayCommand(SaveToClipboard);
 
 
-        private string GenerateSaveToExcel()
+        private string KanjiToExcel(KanjiWord kanji)
         {
             var options = SettingInstance.CopyToExcelOptions.Where(it => it.IsEnable);
 
             var resultList = options.Select(it =>
             {
-                var value = Current.GetValueOf(it.Name);
+                var value = kanji.GetValueOf(it.Name);
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    return "";
+                }
+
+                if (value[0] == '-')
+                {
+                    value = '\'' + value;
+                }
+
                 return it.Name switch
                 {
                     nameof(KanjiWord.Kunyumi) => value.Replace(" ", "、"),
-					nameof(KanjiWord.Onyumi) => value.Replace(" ", "、"),
+                    nameof(KanjiWord.Onyumi) => value.Replace(" ", "、"),
                     _ => value
-				};
+                };
             });
-            return string.Join("\t",resultList);
+            return string.Join("\t", resultList);
+        }
+
+        private string GenerateSaveToExcel()
+        {
+            var results = SelectedItems.Select(KanjiToExcel);
+            return string.Join("\n", results);
         }
 
         private void SaveToClipboard() 
