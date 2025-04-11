@@ -69,20 +69,28 @@ internal partial class VerbPerformViewModel : MasterDetailViewModel<VerbConjure>
         VerbResult polite = new()
         {
             CorrectAnswer = Current.IsPolite ? "✓" : "X",
+            Answer = "✓",
             VerbType = "Polite",
         };
+        polite.AutoColor();
+
 
         VerbResult past = new()
         {
             CorrectAnswer = Current.IsPast ? "✓" : "X",
+            Answer = "✓",
             VerbType = "Past",
         };
+        past.AutoColor();
+
 
         VerbResult negative = new()
         {
             CorrectAnswer = Current.IsNegative ? "✓" : "X",
+            Answer = "✓",
             VerbType = "Negative",
         };
+        negative.AutoColor();
 
         VerbResults.Add(form);
         VerbResults.Add(conjure);

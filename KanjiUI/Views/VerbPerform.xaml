@@ -77,7 +77,7 @@
                                 </Border>
                                 <Border Padding="10"
                                     Grid.Column="1"
-                                    Background="Green"
+                                    Background="{x:Bind AnswerColor, Mode=OneWay}"
                                     >
                                     <TextBlock 
                                     Text="{x:Bind CorrectAnswer}" />

@@ -57,7 +57,7 @@ public partial class VerbConjure(JapaneseVerb baseVerb) : ObservableObject
     private string content = baseVerb.Content;
 
     [ObservableProperty]
-    private VerbType baseType;
+    private VerbType baseType = baseVerb.BaseType;
 
     [ObservableProperty]
     private bool submitted;
