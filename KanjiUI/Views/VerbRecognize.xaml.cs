@@ -27,10 +27,5 @@ namespace KanjiUI.Views
         {
             this.InitializeComponent();
         }
-
-        private void ToggleButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -30,7 +30,6 @@ internal partial class VerbRecognizeViewModel : MasterDetailViewModel<VerbConjur
         Generate();
     }
 
-
     public bool IsFormChecked(string option)
     {
         return Current.FormType.ToString() == option;
@@ -40,7 +39,6 @@ internal partial class VerbRecognizeViewModel : MasterDetailViewModel<VerbConjur
     {
         return Current.ConjureType.ToString() == option;
     }
-
 
     public ICommand SelectFormCommand => new RelayCommand<string>(SelectForm);
     public ICommand SubmitCommand => new RelayCommand(Submit);
@@ -71,16 +69,16 @@ internal partial class VerbRecognizeViewModel : MasterDetailViewModel<VerbConjur
 
         VerbResult form = new()
         {
-            CorrectAnswer = ShowVerb.FormType.ToString(),
-            Answer = Current.FormType.ToString(),
+            CorrectAnswer = ShowVerb.FormType.ToDisplay(),
+            Answer = Current.FormType.ToDisplay(),
             VerbType = "Form",
         };
         form.AutoColor();
 
         VerbResult conjure = new()
         {
-            CorrectAnswer = ShowVerb.ConjureType.ToString(),
-            Answer = Current.ConjureType.ToString(),
+            CorrectAnswer = ShowVerb.ConjureType.ToDisplay(),
+            Answer = Current.ConjureType.ToDisplay(),
             VerbType = "Conjugation",
         };
         conjure.AutoColor();
@@ -121,8 +119,8 @@ internal partial class VerbRecognizeViewModel : MasterDetailViewModel<VerbConjur
 
     public void Generate()
     {
-        Current = VerbConjure.ConjuredList.PickRandom();
-        ShowVerb = new VerbConjure(Current.Verb.Clone());
+        Current = VerbConjure.ConjuredList.PickRandom().CloneWithoutSubmit();
+        ShowVerb = Current.CloneWithoutSubmit();
         ShowVerb.Randomized();
         RequestUpdate();
         OnPropertyChanged(nameof(IsEnable));

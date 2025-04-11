@@ -5,11 +5,121 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:KanjiUI.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:viewmodels="using:KanjiUI.ViewModels" 
+    xmlns:specialModels="using:KanjiUI.SpecialModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:VerbPerformViewModel}"
     mc:Ignorable="d"
     >
-
+    <Page.DataContext>
+        <viewmodels:VerbPerformViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+    
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock HorizontalAlignment="Center" 
+                       Foreground="{x:Bind ViewModel.DisplayColor, Mode=OneWay}"
+                   FontSize="42" Text="{x:Bind ViewModel.Display, Mode=OneWay}"/>
+            <TextBlock HorizontalAlignment="Center" 
+                  FontSize="21" Text="{x:Bind ViewModel.Furigana, Mode=OneWay}"/>
+            <TextBlock HorizontalAlignment="Center" 
+                   FontSize="21" Text="{x:Bind ViewModel.Current.BaseType, Mode=OneWay}"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Margin="0 20 0 0">
+            <ItemsControl>
+                <ListView 
+                        Background="{ThemeResource AccentAAFillColorDisabled}" Margin="5 0"
+                          ItemsSource="{x:Bind ViewModel.VerbResults}"
+                              Padding="0 0 0 16"
+                          HorizontalAlignment="Center"
+                          >
+                    <ListView.Header>
+                        <Grid Padding="16,12"
+                            ColumnSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="180" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Padding="5">Conjugate to</TextBlock>
+
+                            <TextBlock Grid.Row="1" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Padding="5 0"
+                           Text="Type" />
+                            <TextBlock Grid.Column="1" Grid.Row="1"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" Padding="5 0"
+                           Text="To" />
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="specialModels:VerbResult">
+                            <Grid ColumnSpacing="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="180" />
+                                </Grid.ColumnDefinitions>
+                                <Border Padding="10"
+                                    Grid.Column="0"
+                                    Background="Green"
+                                    >
+                                    <TextBlock 
+                                    Text="{x:Bind VerbType}" />
+                                </Border>
+                                <Border Padding="10"
+                                    Grid.Column="1"
+                                    Background="Green"
+                                    >
+                                    <TextBlock 
+                                    Text="{x:Bind CorrectAnswer}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource DefaultListViewItemStyle}"
+                   TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                </ListView>
+            </ItemsControl>
+        </ScrollViewer>
+        <Grid Grid.Row="2"
+            ColumnSpacing="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                IsEnabled="{x:Bind ViewModel.IsEnable(), Mode=OneWay}"
+                Text="{x:Bind ViewModel.Input, Mode=TwoWay}"
+                KeyDown="TextBox_KeyDown"
+                />
+            <Button 
+                Grid.Column="1"
+                IsEnabled="{x:Bind ViewModel.IsEnable(), Mode=OneWay}"
+                Command="{x:Bind ViewModel.SubmitCommand}"
+                            >Submit</Button>
+            <Button 
+                Grid.Column="2"
+                Command="{x:Bind ViewModel.ContinueCommand}"
+                >Continue</Button>
+        </Grid>
+        
+        
 
     </Grid>
 </Page>

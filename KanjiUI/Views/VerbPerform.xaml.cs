@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,6 +27,16 @@ namespace KanjiUI.Views
         public VerbPerform()
         {
             this.InitializeComponent();
+        }
+
+        private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                ViewModel.SubmitCommand.Execute(null);
+
+            }
+
         }
     }
 }

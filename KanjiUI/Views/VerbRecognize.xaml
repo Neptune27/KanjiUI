@@ -202,8 +202,11 @@
                         >Continue</Button>
                 </StackPanel>
                     
-                    <ListView Background="{ThemeResource AccentAAFillColorDisabled}" Margin="5 0"
+                    <ListView 
+                        Visibility="{x:Bind ViewModel.Current.Submitted, Mode=OneWay}"
+                        Background="{ThemeResource AccentAAFillColorDisabled}" Margin="5 0"
                           ItemsSource="{x:Bind ViewModel.VerbResults}"
+                              Padding="0 0 0 16"
                           HorizontalAlignment="Center"
                           >
                     <ListView.Header>

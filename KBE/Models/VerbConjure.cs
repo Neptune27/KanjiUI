@@ -39,7 +39,12 @@ public partial class VerbConjure(JapaneseVerb baseVerb) : ObservableObject
 
     public static void GenerateConjuredList()
     {
-        ConjuredList.AddRange(CuratedJapaneseVerbs.Select(v => new VerbConjure(v)));
+        ConjuredList.AddRange(CuratedJapaneseVerbs.Select(v => new VerbConjure(v.Clone())));
+    }
+
+    public VerbConjure CloneWithoutSubmit()
+    {
+        return new VerbConjure(Verb.Clone());
     }
 
 

@@ -324,7 +324,17 @@ public partial class FuriganaHelpers
 		return string.Join("\n",(await ToFurigana(text)).AsParallel().AsOrdered().Select(ToFuriganaTextChunk));
 	}
 
-	public static async Task<string> ToFuriganaRomanjiHtml(string text)
+    public static async Task<string> ToFuriganaKata(string text)
+    {
+        return string.Join("\n", (await ToFurigana(text)).AsParallel().AsOrdered().Select(ToFuriganaKataChunk));
+    }
+
+    //public static async Task<string> ToFuriganaRomanji(string text)
+    //{
+    //    return string.Join("\n", (await ToFurigana(text)).AsParallel().AsOrdered().Select(ToFuriganaKataChunk));
+    //}
+
+    public static async Task<string> ToFuriganaRomanjiHtml(string text)
 	{
 		var withRomanjis = await ToFurigana(text, true);
 		
@@ -347,6 +357,11 @@ public partial class FuriganaHelpers
         }
 
 		return string.Join("",JapanesePhonemeWithRomanji.ToHtml(htmlList));
+	}
+
+	private static string ToFuriganaKataChunk(IReadOnlyList<JapanesePhoneme> yomiChunks)
+	{
+		return string.Join("", yomiChunks.Select(c => c.YomiText));
 	}
 
 
