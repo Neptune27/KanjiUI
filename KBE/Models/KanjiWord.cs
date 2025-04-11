@@ -65,6 +65,7 @@ namespace KBE.Models
 
         private string? color = null;
 
+
         [NotMapped]
         public string? Color { 
             get { return color; }
@@ -142,10 +143,10 @@ namespace KBE.Models
 
         public static List<KanjiWord> GenerateDummies()
         {
-            return new() {
+            return [
                 new() {english= "one, one radical (no.1)", kanji= "一", level="5", sinoVietnamese="NHẤT",strokes="1 strokes", taught="Jōyō kanji, taught in grade 1", radicals="one 一", parts="一", onyumi="ひと- ひと.つ", kunyumi="イチ イツ" ,vietnamese="Một, là số đứng đầu các số đếm. Phàm vật gì chỉ có một đều gọi là Nhất cả.##Cùng. Như sách Trung Dung nói : Cập kì thành công nhất dã [及其成工一也] nên công cùng như nhau vậy.##Dùng về lời nói hoặc giả thế chăng. Như vạn nhất [萬一] muôn một, nhất đán [一旦] một mai, v.v.##Bao quát hết thẩy. Như nhất thiết [一切] hết thẩy, nhất khái [一概] một mực như thế cả, v.v.##Chuyên môn về một mặt. Như nhất vị [一味] một mặt, nhất ý [一意] một ý, v.v." },
                 new() {english= "seven", kanji= "七" }
-            };
+            ];
         }
 
         public static KanjiWord GenerateDummy()
@@ -187,7 +188,7 @@ namespace KBE.Models
 
         public string[] ToList()
         {
-            return new string[11] { kanji, sinoVietnamese, onyumi, kunyumi, level, english, vietnamese, strokes, radicals, parts, taught };
+            return [kanji, sinoVietnamese, onyumi, kunyumi, level, english, vietnamese, strokes, radicals, parts, taught];
         }
 
         public static KanjiWord ToKanjiWord(string[] strings)

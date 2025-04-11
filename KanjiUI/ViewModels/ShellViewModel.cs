@@ -9,7 +9,7 @@ using KBE.Models;
 
 namespace KanjiUI.ViewModels
 {
-    public class ShellViewModel : MasterDetailViewModel<Object>
+    public partial class ShellViewModel : MasterDetailViewModel<Object>
     {
         public static ObservableCollection<KanjiWord> KanjiWords = new();
 

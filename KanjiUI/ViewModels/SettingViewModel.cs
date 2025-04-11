@@ -12,7 +12,7 @@ using KBE.Models;
 
 namespace KanjiUI.ViewModels
 {
-    internal class SettingViewModel : MasterDetailViewModel<SettingModel>
+    internal partial class SettingViewModel : MasterDetailViewModel<SettingModel>
     {
 
         public SettingViewModel() {

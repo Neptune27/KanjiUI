@@ -109,6 +109,9 @@ namespace KBE.Components.Settings
 		public EKanjiShowingType FirstEnglishOption { get; set; } = EKanjiShowingType.English;
 
         public bool GoToFirstItemWhenSubmitted { get; set; } = false;
+        public int MajorVersion { get; set; } = 1;
+        public int MinorVersion { get; set; } = 6;
+        public int PatchVersion { get; set; } = 0;
 
 
         public List<CopyToExcel> CopyToExcelOptions { get; set; } = CreateCopyDefault();
@@ -276,6 +279,10 @@ namespace KBE.Components.Settings
 
                 FirstEnglishOption = EKanjiShowingType.English,
                 GoToFirstItemWhenSubmitted = false,
+
+				MajorVersion = 1,
+				MinorVersion = 6,
+				PatchVersion = 0
             };
 
 			System.IO.Directory.CreateDirectory($"{Directory}\\Setting");

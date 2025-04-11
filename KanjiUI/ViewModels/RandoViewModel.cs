@@ -32,7 +32,7 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
         WeakReferenceMessenger.Default.Register<SendKanjiMessage>(this, (r, m) =>
         {
             wordList.Clear();
-            wordList.AddRange(m.Value.ToList());
+            wordList.AddRange([.. m.Value]);
             Reset();
         });
 

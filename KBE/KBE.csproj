@@ -19,4 +19,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DoushiKatsu\DoushiKatsu.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -52,6 +52,7 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Rando" Tag="KanjiUI.Views.Rando" Icon="Help"></NavigationViewItem>
+                <NavigationViewItem Content="Verb Conjugation" Tag="KanjiUI.Views.VerbConjunction" Icon="DisconnectDrive"></NavigationViewItem>
                 <NavigationViewItem Content="Furigana Reader" Tag="KanjiUI.Views.Furigana" Icon="Character"></NavigationViewItem>
 
 
