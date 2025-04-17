@@ -27,6 +27,8 @@ namespace KanjiUI.Views
         public VerbPerform()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Required;
+
         }
 
         private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)

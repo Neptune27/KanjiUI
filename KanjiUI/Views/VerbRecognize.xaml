@@ -33,10 +33,10 @@
 
         <ScrollViewer Grid.Row="1" Margin="0 20 0 0">
             <ItemsControl>
-                <Grid>
+                <Grid HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="400"/>
                     </Grid.ColumnDefinitions>
 
                     <Expander Grid.Column="0" x:Name="FormExpander"

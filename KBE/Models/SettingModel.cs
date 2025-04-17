@@ -24,6 +24,9 @@ namespace KBE.Models
 			Setting.CopyToExcelOptions = new(CopyToExcelOptions.Select(it => new CopyToExcel(it)));
         }
 
+        [ObservableProperty]
+        private VerbConjureSettingModel verbConjureSetting = new();
+
 		public int FetchSize
         {
             get => Setting.FetchSize;

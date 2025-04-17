@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DoushiKatsu;
+using KBE.Components.Settings;
 using KBE.Components.Utils;
 using System;
 using System.Collections.Generic;
@@ -196,6 +197,46 @@ public partial class VerbConjure(JapaneseVerb baseVerb) : ObservableObject
 
     }
 
+    private bool IsConjureSelected(ConjureType conjureType)
+    {
+        var conjureSetting = Setting.Instance.VerbConjureSetting.Conjure;
+
+        return conjureType switch
+        {
+            ConjureType.NONE => conjureSetting.None,
+            ConjureType.CONDITIONAL_BA => conjureSetting.Ba,
+            ConjureType.CONDITIONAL_TARA => conjureSetting.Tara,
+            ConjureType.IMPERATIVE => conjureSetting.Imperative,
+            ConjureType.VOLITIONAL => conjureSetting.Volitional,
+            ConjureType.CONJUNCTIVE => conjureSetting.Conjunctive,
+            ConjureType.TE => conjureSetting.Te,
+            ConjureType.SOU => conjureSetting.Sou,
+            ConjureType.TAI => conjureSetting.Tai,
+            ConjureType.ZU => conjureSetting.Zu,
+            ConjureType.TARI => conjureSetting.Tari,
+            _ => false,
+        };
+    }
+
+    private bool IsFormSelected(FormType formType)
+    {
+        var formSetting = Setting.Instance.VerbConjureSetting.Form;
+
+        return formType switch
+        {
+            FormType.DICTIONARY => formSetting.Dictionary,
+            FormType.POTENTIAL => formSetting.Potential,
+            FormType.POTENTIAL_SHORT => formSetting.PotentialShort,
+            FormType.PASSIVE => formSetting.Passive,
+            FormType.CAUSATIVE => formSetting.Causative,
+            FormType.CAUSATIVE_SHORT => formSetting.CausativeShort,
+            FormType.CAUSATIVE_PASSIVE => formSetting.CausativePassive,
+            FormType.CAUSATIVE_PASSIVE_SHORT => formSetting.CausativePassiveShort,
+            _ => false,
+        };
+    }
+
+
     public void Randomized()
     {
         Random random = new();
@@ -204,8 +245,8 @@ public partial class VerbConjure(JapaneseVerb baseVerb) : ObservableObject
         var isPolite = random.Next(100) < 50;
         var isPast = random.Next(100) < 50;
 
-        var conjureType = Enum.GetValues<ConjureType>().PickRandom();
-        var formType = Enum.GetValues<FormType>().PickRandom();
+        var conjureType = Enum.GetValues<ConjureType>().Where(IsConjureSelected).PickRandom();
+        var formType = Enum.GetValues<FormType>().Where(IsFormSelected).PickRandom();
         //var conjureType = Enum.GetValues<ConjureType>().PickRandom();
 
         ConjureType = conjureType;

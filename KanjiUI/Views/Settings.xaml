@@ -327,6 +327,120 @@
                 </Expander>
 
 
+                <Expander x:Name="VerbConjureExpander"
+                    IsExpanded="True"
+                    ExpandDirection="Down"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock>Verb Conjuration Settings:</TextBlock>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock>Form</TextBlock>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.Dictionary, Mode=TwoWay}"
+                                    >Dictionary</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.Potential, Mode=TwoWay}"
+                                    >Potential</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.PotentialShort, Mode=TwoWay}"
+                                    >Potential (short)</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.Passive, Mode=TwoWay}"
+                                    >Passive</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.Causative, Mode=TwoWay}"
+                                    >Causative</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.CausativeShort, Mode=TwoWay}"
+                                    >Causative (Short)</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.CausativePassive, Mode=TwoWay}"
+                                    >Causative-Passive</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Form.CausativePassiveShort, Mode=TwoWay}"
+                                    >Causative-Passive (Short)</CheckBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="2">
+                                <TextBlock>Conjure</TextBlock>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.None, Mode=TwoWay}"
+                                    >None</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Ba, Mode=TwoWay}"
+                                    >Conditional (ば)</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Tara, Mode=TwoWay}"
+                                    >Conditional (たら)</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Imperative, Mode=TwoWay}"
+                                    >Imperative</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Volitional, Mode=TwoWay}"
+                                    >Volitional</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Conjunctive, Mode=TwoWay}"
+                                    >Conjunctive (ます-stem)</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Te, Mode=TwoWay}"
+                                    >て</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Sou, Mode=TwoWay}"
+                                    >そう</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Tai, Mode=TwoWay}"
+                                    >たい</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Zu, Mode=TwoWay}"
+                                    >ず</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Conjure.Tari, Mode=TwoWay}"
+                                    >たり</CheckBox>
+                                
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Column="2" Spacing="2">
+                                <TextBlock>Modifier</TextBlock>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.None, Mode=TwoWay}"
+                                    >None</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.Casual, Mode=TwoWay}"
+                                    >Casual</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.Polite, Mode=TwoWay}"
+                                    >Polite</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.NonPast, Mode=TwoWay}"
+                                    >Non Past</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.Past, Mode=TwoWay}"
+                                    >Past</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.NonNegative, Mode=TwoWay}"
+                                    >Non Negative</CheckBox>
+                                <CheckBox 
+                                    IsChecked="{x:Bind ViewModel.Items[0].VerbConjureSetting.Modifier.Negative, Mode=TwoWay}"
+                                    >Negative</CheckBox>
+                            </StackPanel>
+                        </Grid>
+                        
+                    </Expander.Content>
+                </Expander>
+
+
                 <Expander x:Name="FSExpander"
                     IsExpanded="False"
                     ExpandDirection="Down"

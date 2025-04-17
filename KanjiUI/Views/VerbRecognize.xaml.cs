@@ -26,6 +26,8 @@ namespace KanjiUI.Views
         public VerbRecognize()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Required;
+
         }
     }
 }

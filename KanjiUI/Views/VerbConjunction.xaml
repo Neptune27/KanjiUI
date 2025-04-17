@@ -20,7 +20,6 @@
         <SelectorBar Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" x:Name="SelectorBar" SelectionChanged="SelectorBar_SelectionChanged">
             <SelectorBarItem x:Name="SelectorBarItemRecognize" Text="Recognize" IsSelected="True"/>
             <SelectorBarItem x:Name="SelectorBarItemPerform" Text="Perform" />
-            <SelectorBarItem x:Name="SelectorBarItemSetting" Text="Settings" Icon="Setting"/>
         </SelectorBar>
 
 

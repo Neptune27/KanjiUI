@@ -44,7 +44,7 @@
                         <Grid Padding="16,12"
                             ColumnSpacing="4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="180" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -65,7 +65,7 @@
                         <DataTemplate x:DataType="specialModels:VerbResult">
                             <Grid ColumnSpacing="4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="120" />
                                     <ColumnDefinition Width="180" />
                                 </Grid.ColumnDefinitions>
                                 <Border Padding="10"
