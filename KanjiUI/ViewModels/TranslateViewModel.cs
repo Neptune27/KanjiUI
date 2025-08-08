@@ -128,7 +128,7 @@ namespace KanjiUI.ViewModels
             try
             {
                 if (TranslatorSource == "Google Translator") {
-                    OutputText = await GoogleTranslate.Translate(InputText, fromCode, toCode, translateProgress);
+                    OutputText = await GoogleTranslate.TranslatePA(InputText, fromCode, toCode, translateProgress);
 
                 }
                 else

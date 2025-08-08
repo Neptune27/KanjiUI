@@ -40,12 +40,29 @@ public partial class VerbConjure(JapaneseVerb baseVerb) : ObservableObject
 
     public static void GenerateConjuredList()
     {
+        //ConjuredList.Add(new VerbConjure(new("合う", VerbType.ICHIDAN)));
         ConjuredList.AddRange(CuratedJapaneseVerbs.Select(v => new VerbConjure(v.Clone())));
     }
 
     public VerbConjure CloneWithoutSubmit()
     {
-        return new VerbConjure(Verb.Clone());
+        if (CuratedGodanString.Contains(Verb.DictionaryForm))
+        {
+            return new VerbConjure(new(Verb.DictionaryForm, VerbType.GODAN));
+        }
+        if (CuratedIchidanString.Contains(Verb.DictionaryForm))
+        {
+            return new VerbConjure(new(Verb.DictionaryForm, VerbType.ICHIDAN));
+        }
+        if (Verb.DictionaryForm == "する")
+        {
+            return new VerbConjure(new(Verb.DictionaryForm, VerbType.SURU));
+        }
+        if (Verb.DictionaryForm == "来る")
+        {
+            return new VerbConjure(new(Verb.DictionaryForm, VerbType.KURU));
+        }
+        throw new Exception("WTF");
     }
 
 

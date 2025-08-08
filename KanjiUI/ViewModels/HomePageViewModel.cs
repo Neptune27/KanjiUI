@@ -51,7 +51,7 @@ namespace KanjiUI.ViewModels
                 previousFiltered = Filter;
                 filteredItems = [.. items.AsParallel().AsOrdered().Where(i => ApplyFilter(i, filter?.Trim()))];
             }
-
+            
             return filteredItems;
         }
 
