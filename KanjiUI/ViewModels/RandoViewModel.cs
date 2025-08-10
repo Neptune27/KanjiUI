@@ -148,48 +148,64 @@ public partial class RandoViewModel : MasterDetailViewModel<RandoWord>
 
         var shuffleList = wordList.Shuffle();
 
-        var correctWord = shuffleList.ToList();
+        var correctWords = shuffleList.ToList();
 
         if (setting.TotalRandomLength != 0)
         {
             var wordToTake = setting.TotalRandomLength > shuffleList.Count() ? shuffleList.Count() : setting.TotalRandomLength;
-            correctWord = shuffleList.Take(wordToTake).ToList();
+            correctWords = [.. shuffleList.Take(wordToTake)];
         }
 
-        for (int i = 0; i < correctWord.Count; i++)
+        if (correctWords.Count == 1)
         {
-            var currentWord = correctWord[i];
-            var listWithoutCorrectWord = shuffleList.AsParallel().Where(i => !ReferenceEquals(i, currentWord));
-            RandoWord randoWord;
+            var currentWord = correctWords[0];
+            RandoWord randoWord = new(currentWord, currentWord, currentWord, currentWord, currentWord);
 
-            if (!listWithoutCorrectWord.Any())
-            {
-                randoWord = new(currentWord, currentWord, currentWord, currentWord, currentWord);
-            }
-            else if (listWithoutCorrectWord.Count() < 4)
-            {
-                List<KanjiWord> randoWords = new() { currentWord, listWithoutCorrectWord.PickRandom(), 
-                listWithoutCorrectWord.PickRandom(), listWithoutCorrectWord.PickRandom()};
-                randoWords = randoWords.Shuffle().ToList();
-                randoWord = new(randoWords[0], randoWords[1], randoWords[2], randoWords[3], currentWord);
-            }
-            else
-            {
-                List<KanjiWord> randoWords = new()
-                {
-                    currentWord
-                };
-                randoWords.AddRange(listWithoutCorrectWord.PickRandom(3));
-                randoWords = randoWords.Shuffle()
-                                       .ToList();
-                randoWord = new(randoWords[0], randoWords[1], randoWords[2], randoWords[3], currentWord);
-            }
-
-            randoWord.Name = $"Q{i+1}";
+            randoWord.Name = $"Q1";
             Items.Add(randoWord);
-
         }
 
+        else if (correctWords.Count <= 4)
+        {
+
+            Items.AddRange(correctWords.Select((currentWord, index) =>
+            {
+
+                List<KanjiWord> randoWords =
+                [
+                    currentWord,
+                    shuffleList.PickWithout(currentWord),
+                    shuffleList.PickWithout(currentWord),
+                    shuffleList.PickWithout(currentWord)
+                ];
+                randoWords = [.. randoWords.Shuffle()];
+                RandoWord randoWord = new(randoWords[0], randoWords[1], randoWords[2], randoWords[3], currentWord)
+                {
+                    Name = $"Q{index + 1}"
+                };
+                return randoWord;
+            }));
+        }
+        else
+        {
+            var generated = correctWords.AsParallel().AsOrdered().Select((currentWord, index) => {
+                //Make it not in repeat
+                List<KanjiWord> randoWords =
+                [
+                    currentWord,
+                    .. shuffleList.PickWithoutRange(3, currentWord),
+                ];
+                randoWords = [.. randoWords.Shuffle()];
+                RandoWord randoWord = new(randoWords[0], randoWords[1], randoWords[2], randoWords[3], currentWord)
+                {
+                    Name = $"Q{index + 1}"
+                };
+                return randoWord;
+            }).ToList();
+
+            Items.AddRange(generated);
+        }
+            
         OnPropertyChanged(nameof(Items));
 
     }

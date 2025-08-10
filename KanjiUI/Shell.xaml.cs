@@ -32,156 +32,170 @@ using KUnsafe;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace KanjiUI
+namespace KanjiUI;
+
+/// <summary>
+/// An empty window that can be used on its own or navigated to within a Frame.
+/// </summary>
+public partial class Shell : Window
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public partial class Shell : Window
+    private AppWindow m_AppWindow;
+
+    public static readonly List<Shell> CurrentShellList = [];
+
+
+
+    public Shell()
     {
-        private AppWindow m_AppWindow;
 
-        public static readonly List<Shell> CurrentShellList = [];
+        CurrentShellList.Add(this);
+        Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=9222");
 
-
-		public Shell()
-        {
-
-            CurrentShellList.Add(this);
-            Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=9222");
-
-            Title = "Kanji UI";
-            this.InitializeComponent();
+        Title = "Kanji UI";
+        this.InitializeComponent();
 
 
-            AppWindow.SetIcon("Assets/KanjiIcon.ico");
-            //AppWindow.SetTitleBarIcon("Assets/KanjiIcon.ico");
-            //AppWindow.SetTaskbarIcon("Assets/KanjiIcon.ico");
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(AppTitleBar);
-			JapanesePhoneticAnalyzerUnsafe.Initialize();
+        AppWindow.SetIcon("Assets/KanjiIcon.ico");
+        //AppWindow.SetTitleBarIcon("Assets/KanjiIcon.ico");
+        //AppWindow.SetTaskbarIcon("Assets/KanjiIcon.ico");
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
+        JapanesePhoneticAnalyzerUnsafe.Initialize();
 
 
-			// Check to see if customization is supported.
-			// Currently only supported on Windows 11.
-			//m_AppWindow = GetAppWindowForCurrentWindow();
-			//if (AppWindowTitleBar.IsCustomizationSupported())
-			//{
-			//    var titleBar = m_AppWindow.TitleBar;
-			//    // Hide default title bar.
-			//    titleBar.ExtendsContentIntoTitleBar = true;
-			//}
-			//else
-			//{
-			//    // Title bar customization using these APIs is currently
-			//    // supported only on Windows 11. In other cases, hide
-			//    // the custom title bar element.
-			//    AppTitleBar.Visibility = Visibility.Collapsed;
-			//}
+        ViewModel.Frame = this.ContentFrame;
 
-			//m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
+        this.ContentFrame.Navigated += ContentFrame_Navigated;
 
-		}
+        // Check to see if customization is supported.
+        // Currently only supported on Windows 11.
+        //m_AppWindow = GetAppWindowForCurrentWindow();
+        //if (AppWindowTitleBar.IsCustomizationSupported())
+        //{
+        //    var titleBar = m_AppWindow.TitleBar;
+        //    // Hide default title bar.
+        //    titleBar.ExtendsContentIntoTitleBar = true;
+        //}
+        //else
+        //{
+        //    // Title bar customization using these APIs is currently
+        //    // supported only on Windows 11. In other cases, hide
+        //    // the custom title bar element.
+        //    AppTitleBar.Visibility = Visibility.Collapsed;
+        //}
 
-
-
-
-		~Shell()
-        {
-            CurrentShellList.Remove(this);
-        }
-
-
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-        {
-            SetContentFrame(args.SelectedItemContainer as NavigationViewItem);
-
-            //Debug.WriteLine(Type.GetType(item.Tag.ToString()));
-        }
-
-
-        private void SetContentFrame(NavigationViewItem item)
-        {
-            if (item == null)
-            {
-                return;
-            }
-
-            if (item.Tag == null)
-            {
-                return;
-            }
-
-
-            if (item.Tag.ToString() == "Settings")
-            {
-                ContentFrame.Navigate(typeof(Settings));
-            }
-            else
-            {
-                ContentFrame.Navigate(Type.GetType(item.Tag.ToString()), item.Content);
-            }
-
-            Setting.Logger.Information("Set Content to: {@item}", item.Tag);
-			Setting.Logger.Information("NavView: {@NavView}", NavView.SelectedItem.ToString());
-
-        }
-
-        public void SetContentFrame(Type type, int index)
-        {
-            ContentFrame.Navigate(type);
-            NavView.SelectedItem = NavView.MenuItems[index];
-        }
-
-
-        private void NavigationView_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetCurrentNavigationViewItem(GetNavigationViewItems(typeof(HomePage)).First());
-            var settings = NavView.SettingsItem as NavigationViewItem;
-            settings.Tag = "Settings";
-        }
-
-        public void SetCurrentNavigationViewItem(NavigationViewItem item)
-        {
-            if (item == null)
-            {
-                return;
-            }
-
-            if (item.Tag == null)
-            {
-                return;
-            }
-            //var tmp = Type.GetType(item.Tag.ToString());
-            //var tmp2 = item.Content;
-
-            ContentFrame.Navigate(Type.GetType(item.Tag.ToString()), item.Content);
-            NavView.SelectedItem = item;
-        }
-
-
-        public List<NavigationViewItem> GetNavigationViewItems(Type type)
-        {
-            return GetNavigationViewItems().Where(i => i.Tag.ToString() == type.FullName).ToList();
-        }
-
-        public List<NavigationViewItem> GetNavigationViewItems()
-        {
-            List<NavigationViewItem> result = new();
-            var items = NavView.MenuItems.Select(i => (NavigationViewItem)i).ToList();
-            items.AddRange(NavView.FooterMenuItems.Select(i => (NavigationViewItem)i));
-            result.AddRange(items);
-
-            foreach (NavigationViewItem mainItem in items)
-            {
-                result.AddRange(mainItem.MenuItems.Select(i => (NavigationViewItem)i));
-            }
-
-            return result;
-        }
-
-
- 
+        //m_AppWindow.SetIcon("Assets/KanjiIcon.ico");
 
     }
+
+    private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+    {
+        var pageTypeName = e.SourcePageType.FullName;
+        var match = NavView.MenuItems
+            .OfType<NavigationViewItem>()
+            .FirstOrDefault(n => n.Tag?.ToString() == pageTypeName);
+
+        if (match != null)
+            NavView.SelectedItem = match;
+    }
+
+    ~Shell()
+    {
+        CurrentShellList.Remove(this);
+    }
+
+
+    private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        SetContentFrame(args.SelectedItemContainer as NavigationViewItem);
+
+        //Debug.WriteLine(Type.GetType(item.Tag.ToString()));
+    }
+
+
+    private void SetContentFrame(NavigationViewItem item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (item.Tag == null)
+        {
+            return;
+        }
+
+
+        if (item.Tag.ToString() == "Settings")
+        {
+            ContentFrame.Navigate(typeof(Settings));
+        }
+        else
+        {
+            ContentFrame.Navigate(Type.GetType(item.Tag.ToString()), item.Content);
+        }
+
+        Setting.Logger.Information("Set Content to: {@item}", item.Tag);
+        Setting.Logger.Information("NavView: {@NavView}", NavView.SelectedItem.ToString());
+
+        this.ViewModel.TriggerFrameCheck();
+
+    }
+
+    public void SetContentFrame(Type type, int index)
+    {
+        ContentFrame.Navigate(type);
+        NavView.SelectedItem = NavView.MenuItems[index];
+    }
+
+
+    private void NavigationView_Loaded(object sender, RoutedEventArgs e)
+    {
+        SetCurrentNavigationViewItem(GetNavigationViewItems(typeof(HomePage)).First());
+        var settings = NavView.SettingsItem as NavigationViewItem;
+        settings.Tag = "Settings";
+    }
+
+    public void SetCurrentNavigationViewItem(NavigationViewItem item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (item.Tag == null)
+        {
+            return;
+        }
+        //var tmp = Type.GetType(item.Tag.ToString());
+        //var tmp2 = item.Content;
+
+        ContentFrame.Navigate(Type.GetType(item.Tag.ToString()), item.Content);
+        NavView.SelectedItem = item;
+    }
+
+
+    public List<NavigationViewItem> GetNavigationViewItems(Type type)
+    {
+        return GetNavigationViewItems().Where(i => i.Tag.ToString() == type.FullName).ToList();
+    }
+
+    public List<NavigationViewItem> GetNavigationViewItems()
+    {
+        List<NavigationViewItem> result = new();
+        var items = NavView.MenuItems.Select(i => (NavigationViewItem)i).ToList();
+        items.AddRange(NavView.FooterMenuItems.Select(i => (NavigationViewItem)i));
+        result.AddRange(items);
+
+        foreach (NavigationViewItem mainItem in items)
+        {
+            result.AddRange(mainItem.MenuItems.Select(i => (NavigationViewItem)i));
+        }
+
+        return result;
+    }
+
+
+
+
 }
