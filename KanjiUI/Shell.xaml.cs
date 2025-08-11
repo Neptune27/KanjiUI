@@ -196,6 +196,12 @@ public partial class Shell : Window
     }
 
 
+    private async void AppBarButton_Click(object sender, RoutedEventArgs e)
+    {
+        AnimatedIcon.SetState(BackAnimatedIcon, "Pressed");
 
+        await Task.Delay(200);
 
+        AnimatedIcon.SetState(BackAnimatedIcon, "Normal");
+    }
 }

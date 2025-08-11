@@ -296,7 +296,7 @@ public class Setting
             SearchOptions = new SearchOptions(),
             SaveOption = new(),
             LossySearch = true,
-            Filter = "◇『』　、。」「～←…・々→〜",
+            Filter = "◇『』　、。」「～←…・々→〜《》〟",
 
             GoogleTranslateFromCodeName = "Japanese",
             GoogleTranslateToCodeName = "English",
@@ -333,7 +333,7 @@ public class Setting
 
             MajorVersion = 1,
             MinorVersion = 6,
-            PatchVersion = 0,
+            PatchVersion = 2,
             VerbConjureSetting = new()
         };
 

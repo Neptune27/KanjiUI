@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:viewmodels="using:KanjiUI.ViewModels" 
-    
-    
+    xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     >
     <Window.SystemBackdrop>
         <MicaBackdrop/>
@@ -36,7 +35,22 @@
             </Grid.ColumnDefinitions>
             <AppBarButton Grid.Column="0" Width="44" Height="44"
                           Margin="1,0,0,0"
-                          Command="{x:Bind ViewModel.GoBackCommand}" IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}" Icon="Back"/>
+                          Command="{x:Bind ViewModel.GoBackCommand}" 
+                          IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}"
+                          Click="AppBarButton_Click"
+                          >
+                <AppBarButton.Icon>
+                    <AnimatedIcon x:Name="BackAnimatedIcon">
+                        <AnimatedIcon.Source>
+                            <animatedvisuals:AnimatedBackVisualSource/>
+                        </AnimatedIcon.Source>
+                        <AnimatedIcon.FallbackIconSource>
+                            <SymbolIconSource Symbol="Back"/>
+                        </AnimatedIcon.FallbackIconSource>
+                    </AnimatedIcon>
+
+                </AppBarButton.Icon>
+            </AppBarButton>
             <BitmapIcon UriSource="/Assets/KanjiIcon.png" Grid.Column="1" 
                         Height="20" Width="20" Margin="6 0 0 0"/>
             <TextBlock x:Name="TitleTextBlock" Grid.Column="2"
