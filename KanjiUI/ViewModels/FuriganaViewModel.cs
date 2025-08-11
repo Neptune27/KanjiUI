@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using KBE.Components.Kanji;
+using KBE.Components.Settings;
 using KBE.Models;
 using Microsoft.UI.Xaml;
 using System;
@@ -29,10 +30,21 @@ public partial class FuriganaViewModel : MasterDetailViewModel<KanjiWord>
 	[ObservableProperty]
 	private bool inputBox = true;
 
+	[ObservableProperty]
+	public partial SettingModel SettingModel { get; set; } = new();
 
-	public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
 
-	private void OpenNewWindow_CommandExecuted()
+    public ICommand OpenNewWindowCommand => new RelayCommand(OpenNewWindow_CommandExecuted);
+    public ICommand ForceUpdateCommand => new RelayCommand(ForceUpdate_CommandExecuted);
+
+	public event Action ForceUpdate;
+
+    private void ForceUpdate_CommandExecuted()
+    {
+		ForceUpdate?.Invoke();
+    }
+
+    private void OpenNewWindow_CommandExecuted()
 	{
 
 		var window = new Shell();

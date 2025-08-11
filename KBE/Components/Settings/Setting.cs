@@ -333,7 +333,7 @@ public class Setting
 
             MajorVersion = 1,
             MinorVersion = 6,
-            PatchVersion = 2,
+            PatchVersion = 3,
             VerbConjureSetting = new()
         };
 

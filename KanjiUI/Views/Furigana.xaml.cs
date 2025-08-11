@@ -52,6 +52,8 @@ public sealed partial class Furigana : Page
 		timer.Tick += SearchInHome;
 
 		InitializeAsync();
+
+		ViewModel.ForceUpdate += UpdateHtml;
 	}
 
 	private string _selectedText = string.Empty;
@@ -151,12 +153,19 @@ public sealed partial class Furigana : Page
         }
 		_current = FuriganaTextBox.Text;
 
-		var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(FuriganaTextBox.Text);
-		FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
-		await ViewModel.Translate(FuriganaTextBox.Text);
 
+		UpdateHtml();
 
 	}
+
+
+	private async void UpdateHtml()
+	{
+		var a = Setting.Instance;
+        var converted = await FuriganaHelpers.ToFuriganaRomanjiHtml(FuriganaTextBox.Text);
+        FuriganaWV.CoreWebView2.PostWebMessageAsString(converted);
+        await ViewModel.Translate(FuriganaTextBox.Text);
+    }
 
 	private void FuriganaTextBox_SelectionChanged(object sender, RoutedEventArgs e)
 	{

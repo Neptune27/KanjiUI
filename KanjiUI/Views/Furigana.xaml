@@ -34,8 +34,27 @@
         <Grid Grid.Row="0">
             <CommandBar DefaultLabelPosition="Right">
 
+                <AppBarButton Label="Furigana" Icon="Character">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <ToggleMenuFlyoutItem Text="Hiragana" IsChecked="{x:Bind ViewModel.SettingModel.FuriganaHiragana, Mode=TwoWay}" 
+                                                  Command="{x:Bind ViewModel.ForceUpdateCommand, Mode=OneWay}">
+                                <ToggleMenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Shift" Key="H"/>
+                                </ToggleMenuFlyoutItem.KeyboardAccelerators>
+                            </ToggleMenuFlyoutItem>
+                            <ToggleMenuFlyoutItem Text="Romanji" IsChecked="{x:Bind ViewModel.SettingModel.FuriganaRomanji, Mode=TwoWay}" 
+                                                  Command="{x:Bind ViewModel.ForceUpdateCommand, Mode=OneWay}">
+                                <ToggleMenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Shift" Key="R"/>
+                                </ToggleMenuFlyoutItem.KeyboardAccelerators>
+                            </ToggleMenuFlyoutItem>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                
                 <AppBarToggleButton Grid.Column="0" IsChecked="{x:Bind ViewModel.InputBox, Mode=TwoWay}"
-                            Icon="Character" Label="Input Box" 
+                            Icon="DockBottom" Label="Input Box" 
                             ToolTipService.ToolTip="Input Box (Ctrl + H)"
                             AccessKey="Control + H">
                     <AppBarToggleButton.KeyboardAccelerators>
